@@ -7,15 +7,14 @@
 --]]
 
 
-
 local currentDate = os.date("*t");
 local startSource = fibaro:getSourceTrigger();
 if (
- ( ((currentDate.wday >= 2 and currentDate.wday <= 6) and string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "06:25") )
+ ( currentDate.wday >= 2 and currentDate.wday <= 6 and (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min)) == "06:25" )
 or
- ( ((currentDate.wday == 1 or currentDate.wday == 7) and string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "07:00") )
+ ( (currentDate.wday == 1 or currentDate.wday == 7) and (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) ) == "07:00" )
 or
- ( ((currentDate.wday == 1 or currentDate.wday == 2 or currentDate.wday == 3 or currentDate.wday == 4 or currentDate.wday == 5 or currentDate.wday == 6 or currentDate.wday == 7) and os.date("%H:%M", os.time()+30*60) == fibaro:getValue(1, "sunsetHour")) )
+ ( os.date("%H:%M", os.time()+30*60) == fibaro:getValue(1, "sunsetHour") )
 or
  ( tonumber(fibaro:getValue(54, "sceneActivation")) == 20 )
 or (startSource["type"] == "other")
