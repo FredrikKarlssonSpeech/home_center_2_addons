@@ -1,23 +1,30 @@
 --[[
-%% autostart
 %% properties
 54 sceneActivation
-%% events
 %% globals
 --]]
 
 
 local currentDate = os.date("*t");
+local acceptWindow = 2* 60 ; -- 2 minutes : os.difftime returns seconds.
+local sleepAfter = acceptWindow ;
+
+local weekMorningTriggerTime = currentDate;
+weekMorningTriggerTime["hour"] = 6;
+weekMorningTriggerTime["min"] = 30;
+local weekendMorningTriggerTime = currentDate;
+weekendMorningTriggerTime["hour"] = 8;
+weekendMorningTriggerTime["min"] = 0;
+
 local startSource = fibaro:getSourceTrigger();
 if (
- ( currentDate.wday >= 2 and currentDate.wday <= 6 and (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min)) == "06:25" )
+  (tonumber(fibaro:getValue(54, "sceneActivation")) == 20)
+ or
+ (currentDate.wday >= 2 and currentDate.wday <= 6 and (math.abs(os.difftime(os.time(currentDate),os.time(weekMorningTriggerTime) ) ) < acceptWindow ) )
+ or
+ (currentDate.wday >= 2 and currentDate.wday <= 6 and (math.abs(os.difftime(os.time(currentDate),os.time(weekendMorningTriggerTime) ) ) < acceptWindow))
 or
- ( (currentDate.wday == 1 or currentDate.wday == 7) and (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) ) == "07:00" )
-or
- ( os.date("%H:%M", os.time()+30*60) == fibaro:getValue(1, "sunsetHour") )
-or
- ( tonumber(fibaro:getValue(54, "sceneActivation")) == 20 )
-or (startSource["type"] == "other")
+(startSource["type"] == "other")
 )
 then
     fibaro:call(43, "turnOn");
