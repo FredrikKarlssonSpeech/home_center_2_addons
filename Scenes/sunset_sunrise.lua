@@ -4,12 +4,15 @@
 %% globals
 --]]
 
+
 --- A function that creates a os.date table from the time of sunset the same day.
 -- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
 -- call made exactly the minute corresponding to the sunset hour.
+-- @param time A text representation (e.g. "08:10") of the time of today to concert to a os.date date table.
 -- @return a table with year, month,day, hour min, sec and isdst fields.
+-- @see os.date
 
-function tableFromTime (time)
+function timestringToTable (time)
     -- Get an iterator that extracts date fields
     local g =  string.gmatch(time, "%d+");
 
@@ -22,37 +25,29 @@ function tableFromTime (time)
     return(sunsetDateTable)
 end
 
-function sunsetTodayTable ()
-    local sunsetHour = fibaro:getValue(1,'sunsetHour');
-    return(tableFromTime(sunsetHour))
-end
 
-function tableToOSTime (t)
+function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
     return(outTime);
 end
 
-function sunsetDiff()
+--- A function that tests whether the current time is within a specified time window from a given time.
+-- In order to work well with the output of fibaro:call(1,"sunsetHour") and similar use cases, time is specified in the
+-- form of a string ("08:10" for ten minutes past eight in the morning) in a 24 hour clock format, and an offset (in minutes).
+-- When called as isTime("08:10",0,10) the function will return 'true' from 08:09:50 to 08:10:10, and 'false' outside of this time range.
+-- A call isTime("08:10",45,10) will return 'true' from 08:54:50 to 08:55:10, and 'false' earlier or later than this.
+-- @param timeString The textual specification of the time to test against (e.g. "08:10").
+-- @param offsetMinues The number of minutes to add to the 'timeString' time.
+-- @param secondsWindo The size of the time window (in secons) in which the function will return 'true'. A zero (0) will cause the function to return 'true' only at 08:10:00 (and not 08:10:01) when called as isTime("08:10",0,0) so calls like that should be avoided.
+
+function isTime (timeString, offsetMinutes, secondsWindow)
+    local timeTable = timestringToTable(timeString);
+    local timeEpoch = tableToEpochtime (timeTable);
+    local timeWithOffset = timeEpoch + (offsetMinutes * 60);
     local now = os.time();
-    local st = sunsetTodayTable();
---    local sun = os.time{year=st.year, month=st.month,day=st.day,hour=st.hour,min=st.min,sec=st.sec,isdst=st.isdst};
-    local sun = tableToOSTime(st);
-    return ( os.difftime(sun,now) )
+    return ( math.abs(timeWithOffset - now) <= secondsWindow )
 end
 
 
-function isWinthinSunsetTimewindow (seconds)
-    local sunsetDateTable = sunsetTodayTable()
-    local ret = false
-    if math.abs(os.difftime(os.time(), os.time(sunsetDateTable)) <= seconds) then
-        ret= true
-    end
-    return (ret);
-end
 
-function printTable (t)
-    for k, v in pairs(t) do
-        fibaro:debug(k.." ".. tostring(v))
-    end
-end
