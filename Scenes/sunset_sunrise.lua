@@ -36,6 +36,9 @@ end
 -- In order to work well with the output of fibaro:call(1,"sunsetHour") and similar use cases, time is specified in the
 -- form of a string ("08:10" for ten minutes past eight in the morning) in a 24 hour clock format, and an offset (in minutes).
 -- When called as isTime("08:10",0,10) the function will return 'true' from 08:09:50 to 08:10:10, and 'false' outside of this time range.
+-- Please note that the function will return true every time it is checked within the time range, so the calling function
+-- needs to make sure that there is an appropriate delay between checks.
+--
 -- A call isTime("08:10",45,10) will return 'true' from 08:54:50 to 08:55:10, and 'false' earlier or later than this.
 -- @param timeString The textual specification of the time to test against (e.g. "08:10").
 -- @param offsetMinues The number of minutes to add to the 'timeString' time.
@@ -49,5 +52,20 @@ function isTime (timeString, offsetMinutes, secondsWindow)
     return ( math.abs(timeWithOffset - now) <= secondsWindow )
 end
 
-
+--- A function that checks whether the current time is within a range given as two text strings.
+-- This function is often more convenient than 'isTime' as you don't have to calculate the time and offset yourself.
+-- Please note that the function will return true every time it is checked within the time range, so the calling function
+-- needs to make sure that there is an appropriate delay between checks.
+--
+-- @param startTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the start of the time range.
+-- @param endTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the end of the time range.
+-- @return
+function isInTimeRange (startTimeString, endTimeString)
+    local startTimeTable = timestringToTable(startTimeString);
+    local endTimeTable = timestringToTable(endTimeString);
+    local startTimeEpoch = tableToEpochtime (startTimeTable);
+    local endTimeEpoch = tableToEpochtime (endTimeTable);
+    local now = os.time();
+    return ( (startTime <= now ) and (endTime >= now))
+end
 
