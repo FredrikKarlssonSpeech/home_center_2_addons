@@ -8,7 +8,7 @@
 --- A function that creates a os.date table from the time of sunset the same day.
 -- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
 -- call made exactly the minute corresponding to the sunset hour.
--- @param time A text representation (e.g. "08:10") of the time of today to concert to a os.date date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS".
+-- @param time A text representation (e.g. "08:10") of the time of today to concert to a os.date date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
 -- @return a table with year, month,day, hour min, sec and isdst fields.
 -- @see os.date
 
@@ -18,8 +18,8 @@ function timestringToTable (time)
     local g =  string.gmatch(time, "%d+");
 
     local hour = g() ;
-    local minute = g() or dateTable["min"];
-    local second = g() or dateTable["sec"];
+    local minute = g() or 0;
+    local second = g() or 0;
     -- Insert sunset inforation istead
     dateTable["hour"] = hour;
     dateTable["min"] = minute;
@@ -45,6 +45,7 @@ end
 -- @param timeString The textual specification of the time to test against (e.g. "08:10").
 -- @param offsetMinues The number of minutes to add to the 'timeString' time.
 -- @param secondsWindo The size of the time window (in secons) in which the function will return 'true'. A zero (0) will cause the function to return 'true' only at 08:10:00 (and not 08:10:01) when called as isTime("08:10",0,0) so calls like that should be avoided.
+-- @return A boolean (true or false) indicating whether the current time is within the specificed time range.
 
 function isTime (timeString, offsetMinutes, secondsWindow)
     local timeTable = timestringToTable(timeString);
@@ -59,9 +60,10 @@ end
 -- Please note that the function will return true every time it is checked within the time range, so the calling function
 -- needs to make sure that there is an appropriate delay between checks.
 --
--- @param startTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the start of the time range.
+-- @param startTimeString a time specification in the form of "HH:MM" (e.g. "08:10") indicating the start of the time range.
 -- @param endTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the end of the time range.
--- @return
+-- @return A boolean (true or false) indicating whether the current time is within the specificed time range.
+
 function isInTimeRange (startTimeString, endTimeString)
     local startTimeTable = timestringToTable(startTimeString);
     local endTimeTable = timestringToTable(endTimeString);
