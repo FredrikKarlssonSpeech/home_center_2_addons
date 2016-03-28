@@ -8,21 +8,23 @@
 --- A function that creates a os.date table from the time of sunset the same day.
 -- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
 -- call made exactly the minute corresponding to the sunset hour.
--- @param time A text representation (e.g. "08:10") of the time of today to concert to a os.date date table.
+-- @param time A text representation (e.g. "08:10") of the time of today to concert to a os.date date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS".
 -- @return a table with year, month,day, hour min, sec and isdst fields.
 -- @see os.date
 
 function timestringToTable (time)
+    local dateTable = os.date("*t");
     -- Get an iterator that extracts date fields
     local g =  string.gmatch(time, "%d+");
 
-    local hour = g();
-    local minute = g() ;
-    local sunsetDateTable = os.date("*t");
+    local hour = g() ;
+    local minute = g() or dateTable["min"];
+    local second = g() or dateTable["sec"];
     -- Insert sunset inforation istead
-    sunsetDateTable["hour"] = hour;
-    sunsetDateTable["min"] = minute;
-    return(sunsetDateTable)
+    dateTable["hour"] = hour;
+    dateTable["min"] = minute;
+    dateTable["sec"] = second;
+    return(dateTable)
 end
 
 
