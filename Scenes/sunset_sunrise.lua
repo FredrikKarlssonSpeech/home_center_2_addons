@@ -28,6 +28,10 @@ function timestringToTable (time)
 end
 
 
+-- Utility function that computes the number of seconds since Epoch from a date and time table in the form given by os.date
+-- @param t A time specification table with the fields year, month, day, hour, min, sec, and isdst.
+-- @return An integer inficating the Epoch time stamp corresponding to the date and time given in the table.
+
 function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
@@ -72,4 +76,63 @@ function isInTimeRange (startTimeString, endTimeString)
     local now = os.time();
     return ( (startTime <= now ) and (endTime >= now))
 end
+
+--- A function that indicates whether today is one of the weekdays named in the given list.
+-- The function accepts short version of the weekday names.
+-- A call 'isDayofWeek({"Mon","Tues"})' will return true on Wednesdays and Tuesdays, but not other days.
+-- @param dayList A list of short names of weekdays.
+-- @return A boolean (true /false) indicating whether the short name of today is given in the list.
+
+function isDayofWeek (dayList)
+    local today = os.date("%a",os.time());
+--    fibaro:debug(tostring(today));
+    for i, v in ipairs(dayList) do
+        if today == v then
+            return(true);
+        end
+    end
+    return(false);
+end
+
+--- Simple function that returns true if today is a weekday.
+-- A weekday is defined as Monday-Friday.
+-- @return A boolean (true/false)
+
+function isWeekDay ()
+    local today = os.date("%w",os.time());
+    return (not (today == 0 or today == 6));
+end
+
+--- Simple function that returns true if today is part of the weekend.
+-- A weekday is defined as Saturday or Sunday
+-- @return A boolean (true/false)
+
+
+function isWeekEnd ()
+    local today = os.date("%w",os.time());
+    return (today == 0 or today == 6);
+end
+
+--- A function that lets you specify date and time through a table
+-- The table should use only fields that are returned by a call to os.time, i.e. a subset of year, month, day, hour, min, sec, wday, yday, isdst.
+-- @param dateTable A time specification. For instance, {day=6,hour=15} returns 'true' on Sundays at 3 pm, {year=2016,month=2, hour=9} will return 'true' every day in February 2016 at 9 am, and 'false' at any time where parts of specification is not met.
+-- @return A boolean (true/false) indicating the complete match of the table against current time and date.
+-- @see os.time
+-- @usage datetimeTableTrue({month=2,minute=2})
+-- -- # will return true every other minute in february.
+
+
+function datetimeTableTrue (dateTable,everyNTable)
+    local nowTodayTable = os.date("*t");
+    local currMod = 1;
+    for k, v in pairs(dateTable) do
+        currMod = everyNTable[k] or 1;
+        if not (nowTodayTable[k] == dateTable[k] ) then
+            return(false);
+        end
+    end
+    return(true);
+end
+
+print(tostring(datetimeTableTrue{year=2016,month=3, day=29}))
 
