@@ -114,31 +114,6 @@ function isWeekEnd ()
 end
 
 
--- ----------- BEGIN CHUNK datetimeTableTrue ------------------------------
-function tableValueExists(tab, value)
-  for k,v in pairs(tab) do
-    if value == v then
-      return true
-    end
-  end
-
-  return false
-end
-
-function keyUnion(t1, t2)
-    local outTab = {};
-    for k1, v1 in pairs(t1) do
-        for k2, v2 in pairs(t2) do
-            if not tableValueExists(outTab,k1) then
-                table.insert(outTab,k1);
-            end
-            if not tableValueExists(outTab,k1) then
-                table.insert(outTab,k2);
-            end
-        end
-    end
-    return(outTab);
-end
 
 --- A function that lets you specify date and time through a table
 -- The table should use only fields that are returned by a call to os.time, i.e. a subset of year, month, day, hour, min, sec, wday, yday, isdst.
@@ -149,27 +124,14 @@ end
 -- -- # will return true every other minute in february.
 
 
-function datetimeTableTrue (dateTable,everyNTable)
+function datetimeTableTrue (dateTable)
     local nowTodayTable = os.date("*t");
-    local currMod = 1;
-    local keys = keyUnion(dateTable,everyNTable);
-    -- Here, we have switched terms so that former keys of the input tables are now values in 'keys'
-    for i, k in keys do
-        currMod = everyNTable[k] or 1;
-        if not (nowTodayTable[k] == dateTable[k] ) then
+    for k,v in pairs(dateTable) do
+        if not (nowTodayTable[k] == dateTable[k]) then
             return(false);
         end
     end
     return(true);
 end
 
--- ----------- END CHUNK datetimeTableTrue ------------------------------
-
-print(tostring(datetimeTableTrue{year=2016,month=3, day=29}))
-
-
-
-
-
-
-
+--print(tostring(datetimeTableTrue({year=2016,hour=9})))
