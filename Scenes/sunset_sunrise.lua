@@ -113,6 +113,33 @@ function isWeekEnd ()
     return (today == 0 or today == 6);
 end
 
+
+-- ----------- BEGIN CHUNK datetimeTableTrue ------------------------------
+function tableValueExists(tab, value)
+  for k,v in pairs(tab) do
+    if value == v then
+      return true
+    end
+  end
+
+  return false
+end
+
+function keyUnion(t1, t2)
+    local outTab = {};
+    for k1, v1 in pairs(t1) do
+        for k2, v2 in pairs(t2) do
+            if not tableValueExists(outTab,k1) then
+                table.insert(outTab,k1);
+            end
+            if not tableValueExists(outTab,k1) then
+                table.insert(outTab,k2);
+            end
+        end
+    end
+    return(outTab);
+end
+
 --- A function that lets you specify date and time through a table
 -- The table should use only fields that are returned by a call to os.time, i.e. a subset of year, month, day, hour, min, sec, wday, yday, isdst.
 -- @param dateTable A time specification. For instance, {day=6,hour=15} returns 'true' on Sundays at 3 pm, {year=2016,month=2, hour=9} will return 'true' every day in February 2016 at 9 am, and 'false' at any time where parts of specification is not met.
@@ -125,7 +152,9 @@ end
 function datetimeTableTrue (dateTable,everyNTable)
     local nowTodayTable = os.date("*t");
     local currMod = 1;
-    for k, v in pairs(dateTable) do
+    local keys = keyUnion(dateTable,everyNTable);
+    -- Here, we have switched terms so that former keys of the input tables are now values in 'keys'
+    for i, k in keys do
         currMod = everyNTable[k] or 1;
         if not (nowTodayTable[k] == dateTable[k] ) then
             return(false);
@@ -134,5 +163,13 @@ function datetimeTableTrue (dateTable,everyNTable)
     return(true);
 end
 
+-- ----------- END CHUNK datetimeTableTrue ------------------------------
+
 print(tostring(datetimeTableTrue{year=2016,month=3, day=29}))
+
+
+
+
+
+
 
