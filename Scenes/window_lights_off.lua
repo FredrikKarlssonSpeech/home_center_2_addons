@@ -29,7 +29,7 @@ if (
  or
  (currentDate.wday >= 2 and currentDate.wday <= 6 and (math.abs(os.difftime(os.time(currentDate),os.time(weekendMorningTriggerTime) ) ) < acceptWindow))
 or
-startSource["type"] == "other"
+(startSource["type"] == "other")
 or
 (math.abs(os.difftime(os.time(currentDate),os.time(eveningTriggerTime) ) ) < acceptWindow)
 )

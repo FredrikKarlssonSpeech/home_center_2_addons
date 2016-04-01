@@ -1,0 +1,969 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"benchD",
+				"benchDataBase"
+			],
+			[
+				"sea",
+				"searchExtension"
+			],
+			[
+				"data",
+				"databaseFileName"
+			],
+			[
+				"functio",
+				"functionQuery"
+			],
+			[
+				"setupSe",
+				"setupSegmentsView"
+			],
+			[
+				"to",
+				"toSequenceString"
+			],
+			[
+				"In",
+				"Integer"
+			],
+			[
+				"MATCH",
+				"matchstring"
+			],
+			[
+				"select",
+				"selectPos"
+			],
+			[
+				"selectB",
+				"selectByCount"
+			],
+			[
+				"func",
+				"funcMT"
+			],
+			[
+				"Char",
+				"Char"
+			],
+			[
+				"Mat",
+				"MatchType"
+			],
+			[
+				"qui",
+				"quickQuery"
+			],
+			[
+				"mat",
+				"matchtype"
+			],
+			[
+				"query",
+				"queryToFile"
+			],
+			[
+				"Ma",
+				"MatchType"
+			],
+			[
+				"pos",
+				"posQuery"
+			],
+			[
+				"posi",
+				"PositionQuery"
+			],
+			[
+				"RE",
+				"REFERENCES"
+			],
+			[
+				"se",
+				"segmentlist"
+			],
+			[
+				"Sege",
+				"SegmentlistHeader"
+			],
+			[
+				"qu",
+				"quotedChar"
+			],
+			[
+				"Se",
+				"SegmentlistHeader"
+			],
+			[
+				"u",
+				"unionQuery"
+			],
+			[
+				"setupAs",
+				"setupAssignedMetadata"
+			],
+			[
+				"parse",
+				"parseResult"
+			],
+			[
+				"other",
+				"otherwise"
+			],
+			[
+				"ot",
+				"otherwise"
+			],
+			[
+				"selecLa",
+				"selectLabelInLabeltype"
+			],
+			[
+				"SegmentList",
+				"SegmentlistHeader"
+			],
+			[
+				"Sql",
+				"SqlValue"
+			],
+			[
+				"ume",
+				"umeQueryComponent"
+			],
+			[
+				"label",
+				"labelType"
+			],
+			[
+				"writeSeg",
+				"writeSegmentList"
+			],
+			[
+				"hash",
+				"hashFile"
+			],
+			[
+				"CON",
+				"CONFLICT"
+			],
+			[
+				"Le",
+				"LevelHierarchy"
+			],
+			[
+				"setupL",
+				"setupLabelTypes"
+			],
+			[
+				"setupLe",
+				"setupLegalLabels"
+			],
+			[
+				"setup",
+				"setupFeatures"
+			],
+			[
+				"setu",
+				"setupVariables"
+			],
+			[
+				"set",
+				"setupSegments"
+			],
+			[
+				"conn",
+				"connectSqlite3"
+			],
+			[
+				"setupT",
+				"setupTCLevelLevel"
+			],
+			[
+				"getOp",
+				"getSqlOp"
+			],
+			[
+				"get",
+				"getOpJoiner"
+			],
+			[
+				"so",
+				"sort"
+			],
+			[
+				"som",
+				"somethingelse"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Scenes/window_lights_on.lua",
+			"settings":
+			{
+				"buffer_size": 998,
+				"line_ending": "Unix",
+				"name": "--[["
+			}
+		},
+		{
+			"file": "Scenes/car_heater.lua",
+			"settings":
+			{
+				"buffer_size": 1085,
+				"line_ending": "Unix",
+				"name": "--[["
+			}
+		}
+	],
+	"build_system": "Packages/Haskell/Haskell.sublime-build",
+	"command_palette":
+	{
+		"height": 227.0,
+		"selected_items":
+		[
+			[
+				"comm",
+				"Git: Quick Commit"
+			],
+			[
+				"lua",
+				"Set Syntax: Lua"
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"add",
+				"Git: Add Current File"
+			],
+			[
+				"git",
+				"Git: Quick Commit"
+			],
+			[
+				"todo",
+				"Show TODOs: Project and open files"
+			],
+			[
+				"haskell",
+				"SublimeHaskell: Go to next error"
+			],
+			[
+				"haskell lin",
+				"SublimeHaskell: Check & Lint"
+			],
+			[
+				"hask",
+				"SublimeHaskell: Stylish"
+			],
+			[
+				"git add",
+				"Git: Add Current File"
+			],
+			[
+				"upd",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"git p",
+				"Git: Push"
+			],
+			[
+				"git ",
+				"Git: Commit"
+			],
+			[
+				"ctags",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"to",
+				"Show TODOs: Open files only"
+			],
+			[
+				"text",
+				"TextFormatting - Maxlength (wrap lines)"
+			],
+			[
+				"package ",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"brack ",
+				"BracketHighlighter: Toggle Global Enable"
+			],
+			[
+				"toggle",
+				"BracketHighlighter: Toggle High Visibility Mode"
+			],
+			[
+				"bra",
+				"BracketHighlighter: Toggle High Visibility Mode"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"hasl",
+				"SublimeHaskell: Check & Lint"
+			],
+			[
+				"haskell l",
+				"SublimeHaskell: Lint"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Discover Packages"
+			],
+			[
+				"hde",
+				"Show TODOs: Project and open files"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"pref hask",
+				"Preferences: SublimeHaskell Settings – User"
+			],
+			[
+				"pref has",
+				"Preferences: SublimeHaskell Settings – Default"
+			],
+			[
+				"refor",
+				"StylishHaskell: Reformat haskell"
+			],
+			[
+				"sty",
+				"StylishHaskell: Reformat haskell"
+			],
+			[
+				"hlin",
+				"SublimeHaskell: Check & Lint"
+			],
+			[
+				"pacak",
+				"Package Control: Discover Packages"
+			],
+			[
+				"prese",
+				"Preferences: Browse Packages"
+			],
+			[
+				"repl",
+				"SublimeREPL: Haskell"
+			],
+			[
+				"paca",
+				"Package Control: Discover Packages"
+			],
+			[
+				"package install ",
+				"Package Control: Install Package"
+			],
+			[
+				"package in",
+				"Package Control: Install Package"
+			],
+			[
+				"pacakge",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"package",
+				"Package Control: Discover Packages"
+			],
+			[
+				"packa insta",
+				"Package Control: Install Package"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"lint",
+				"SublimeHaskell: Lint"
+			],
+			[
+				"haske",
+				"Set Syntax: Haskell"
+			],
+			[
+				"has",
+				"Preferences: SublimeHaskell Settings – User"
+			],
+			[
+				"",
+				"Package Control: List Packages"
+			],
+			[
+				"Pac",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 521.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/UmeQuery.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/UmeDatabase.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/SegmentList.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/tests/TestQueryGenerator.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/FileParsers/TextgridParser.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/tests/TestQueryParser.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/sql/requery.sql",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/SublimeHaskell.sublime-settings",
+		"/Users/frkkan96/Documents/src/umecore-hs/String",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/UmeQueryParser.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/LICENSE",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/umequery.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/IPA/IPAParser.hs",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/frkkan96/Desktop/articulation_proficiency 2/articulation.luax",
+		"/Volumes/OpenHAB Config/quartz.properties",
+		"/Users/frkkan96/Documents/src/umecore-hs/umecore-hs.cabal",
+		"/Users/frkkan96/Documents/src/umecore-hs/GT_English.pdf",
+		"/Users/frkkan96/Desktop/test.org",
+		"/Users/frkkan96/Downloads/scholar.ris",
+		"/Users/frkkan96/Downloads/beat/loadmrf.m",
+		"/Users/frkkan96/Downloads/snack2.2.10/generic/jkGetF0.h",
+		"/Users/frkkan96/Downloads/snack2.2.10/generic/jkGetF0.c",
+		"/Users/frkkan96/Documents/src/umecore-hs/bench/mkBenchdata.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/tpgui.hs",
+		"/Users/frkkan96/Desktop/JONT-D-15-00113",
+		"/Volumes/C/Program Files (x86)/Alvin3/phonetics/consonants/consonantsymbols1.luax",
+		"/Users/frkkan96/Desktop/Reviewer",
+		"/Users/frkkan96/Downloads/export.csv",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/query2file.hs",
+		"/Users/frkkan96/Desktop/example.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/tests/tests.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/seq.sql",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/DataTypes.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/tests/TestUmeQuery.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/textgrid_import",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/testquery.sql",
+		"/Users/frkkan96/Documents/src/umecore-hs/dist/setup-config",
+		"/Users/frkkan96/Documents/forskning/Parkinson/ddkrythm/patload.csv",
+		"/Users/frkkan96/Desktop/OmniFocus.csv",
+		"/Users/frkkan96/Desktop/submitting",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/QueryGenerator.hs",
+		"/Users/frkkan96/Documents/src/legacy_info/ume/umecore/generic/emuquery.tcl",
+		"/Users/frkkan96/Desktop/OmniFocus.txt",
+		"/Users/frkkan96/Documents/src/umecore-hs/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/sql/requery.sql",
+		"/Users/frkkan96/Documents/src/umecore-hs/TextgridParser.hs",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/SublimeHaskell/Settings/SublimeHaskell.sublime-settings",
+		"/Users/frkkan96/Documents/src/legacy_info/sql/requery.sql",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/2pdf/2pdf.sublime-settings",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/2pdf.sublime-settings",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/Git.sublime-settings",
+		"/Users/frkkan96/Documents/src/umecore-hs/umecore-hs.sublime-project",
+		"/Users/frkkan96/Documents/src/umecore-hs/dist/package.conf.inplace",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/test.hs",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/frkkan96/Documents/src/umecore-hs/Setup.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/Setup.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/QueryGenerator.hs",
+		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/FileParsers/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/UmeQueryParser.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/FileParsers/TextgridParser.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/FileParsers/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/UmeQuery.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/UmeDatabase.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/SegmentList.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/src/Phonetic/Database/DataTypes.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/legacy_info/ume/umecore/generic/emuquery.tcl",
+		"/Users/frkkan96/Documents/src/umecore_hs/UmeQueryParser.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/QueryGenerator.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/UmeDatabase.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/TextgridParser.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/SegmentList.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/DataTypes.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/UmeQuery.hs",
+		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/frkkan96/Documents/src/umecore_hs/DataTypes",
+		"/Users/frkkan96/Desktop/F+A.lab",
+		"/Users/frkkan96/Downloads/CVPatterns.js",
+		"/Users/frkkan96/Documents/src/umecore_hs/EmuQueryProtobuf.hs",
+		"/Users/frkkan96/Documents/src/umecore_hs/umecore_hs.sublime-project",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/QueryGenerator.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/emu_R/R/emusegs.S",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeDatabase.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/TextgridParser.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQuery.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/sql/3_triggers.sql",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/umecore.cabal",
+		"/Users/frkkan96/Documents/src/umecore_hs/UmeServer.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/SegmentList.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQueryParser.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/EmuQuery.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/cmdline_tools/textgrid_import.hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQuery,hs",
+		"/Users/frkkan96/Documents/src/haskell/umecore_hs/umecore_hs.sublime-project",
+		"/Users/frkkan96/Desktop/intelligibility/intelligibility.luax",
+		"/Users/frkkan96/Desktop/skiss",
+		"/Applications/Modiware.app/Contents/PkgInfo",
+		"/Users/frkkan96/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/FE633BBD-0B6D-49B1-9DDB-D26FDA4975FD/FK.res",
+		"/Users/frkkan96/Downloads/VoiceSauce/func_parseF0.m",
+		"/Users/frkkan96/Desktop/input",
+		"/Users/frkkan96/Desktop/Mats löfgren",
+		"/Users/frkkan96/Downloads/VoiceSauce/func_PraatPitch.m",
+		"/private/var/folders/_8/_tsst82j257bv9hk57dgxgt00000gr/T/com.apple.mail/com.apple.mail.drag-T0x6000000734c0.tmp.C9kPh5/FK.res",
+		"/Users/frkkan96/Desktop/Workbook1.dif",
+		"/Users/frkkan96/Documents/forskning/Parkinson/intell/intelligibility/intelligibility.luax",
+		"/Users/frkkan96/Documents/forskning/Parkinson/ddkrythm/OutTab.Table",
+		"/Users/frkkan96/Documents/forskning/Parkinson/intell/intelligibility/intelligibility.stim",
+		"/Users/frkkan96/Documents/forskning/Parkinson/ddkrythm/DDKTable.Table",
+		"/Users/frkkan96/Desktop/voice_log.txt",
+		"/Users/frkkan96/Desktop/Sökning: \"dysfagi äldreboende\"",
+		"/Users/frkkan96/Desktop/intelligibility_mac/intelligibility.luax",
+		"/Users/frkkan96/Desktop/intelligibility_mac/intelligibility.stim",
+		"/Users/frkkan96/Documents/forskning/Parkinson/ddkrythm/renamed/89_3546666666667_4d4f038c4863598d8966a54f419261ae.TextGrid",
+		"/Users/frkkan96/Desktop/Untitled.ris",
+		"/Users/frkkan96/boohmi.txt",
+		"/Users/frkkan96/intelligibilityError1",
+		"/Users/frkkan96/Documents/alvin/intelligibility/FK.cfg",
+		"/Users/frkkan96/Documents/alvin/intelligibility/FK.res",
+		"/Users/frkkan96/Desktop/intelligibility/intelligibility.stim",
+		"/Users/frkkan96/Desktop/intelligibility/x.cfg",
+		"/Users/frkkan96/Desktop/intelligibility/x.res",
+		"/Applications/Alvin/phonetics/intelligibility/intelligibility.luax",
+		"/Applications/Alvin/phonetics/intelligibility/intelligibility.stim"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"setupUmeDatabase",
+			": ",
+			"UmeQuery",
+			"simpleQueryIntersect",
+			"	",
+			"tRunUmeQuery",
+			"otherwise",
+			"BS",
+			"BTE",
+			"labels ",
+			"labels",
+			"label",
+			"otherwise",
+			"AugmentedSegment",
+			"toArgs",
+			"\\t",
+			"    commit conn",
+			"disconnect",
+			"connectSqlite3",
+			"handleSqlError $ ",
+			"[]",
+			"quickQuery'",
+			"	commit conn",
+			"disconnect",
+			"quickQuery'",
+			"quickQuery",
+			"quickQuery'",
+			"SQLite",
+			"\\t",
+			"        ",
+			"^\\t",
+			"\n	",
+			" `mappend` ",
+			") ",
+			" `mappend` ",
+			"Text",
+			"text",
+			"Text",
+			" Text ",
+			"Text",
+			"text",
+			"Text",
+			"toArgs",
+			"T.",
+			"	",
+			"SQLT",
+			"try (umeSubquery) <|>  try(functionQuery) <|> try (labelInLabelType ) <|> labelType",
+			"disjunctQuery",
+			"	",
+			"sequenceQueryHash",
+			"query",
+			"write",
+			"print",
+			"appendFile file",
+			"write",
+			"Write",
+			"write",
+			"'",
+			"combine fp $ combine",
+			"disjunctQuery",
+			"try (disjunctQuery) <|>",
+			"TODO:",
+			"testdb",
+			"queryPrint",
+			"?",
+			"[|]+",
+			"[ \\t]+",
+			"[|]",
+			"[ \\t]*",
+			"dur",
+			"=",
+			"let",
+			"utterance",
+			"dominatedCount",
+			"s.",
+			"SECONDARY",
+			"Pos(",
+			"PARENT",
+			"CHILD",
+			"utterance_id",
+			"PARENT",
+			"CHILD",
+			"Acousti",
+			"SECONDARY",
+			"TARGET",
+			"F.",
+			"utterance_id",
+			"selectFirst",
+			"SECONDARY",
+			"TARGET",
+			"utterance",
+			"Utterance",
+			"utterance",
+			"Pos",
+			"Position",
+			"utterance",
+			" labelType",
+			"labelType",
+			"labeltype",
+			"labelType",
+			"String",
+			"	",
+			"\n	",
+			"functions",
+			"transcribers",
+			"transcribers(",
+			"importTextGridFile",
+			"insertTextGridFile",
+			"\"",
+			"importTextGridFile",
+			"whitespace",
+			"utt",
+			"Utterance",
+			"utterance",
+			" u ",
+			"session",
+			"utterance",
+			"Utterance",
+			"utterance",
+			"utterances",
+			"query' ",
+			"query",
+			"LabelInLabelType",
+			"EmuQuery",
+			"SqlByteString",
+			"umeHashFile",
+			"utt",
+			"ominance"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"    ",
+			"'",
+			"\\t",
+			"",
+			"ä",
+			"ö",
+			"å"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Scenes/window_lights_on.lua",
+					"settings":
+					{
+						"buffer_size": 998,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "--[[",
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Scenes/car_heater.lua",
+					"settings":
+					{
+						"buffer_size": 1085,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1085,
+								1085
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "--[[",
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 309.0
+	},
+	"output.git":
+	{
+		"height": 136.0
+	},
+	"output.haskell_sublime_load":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 207.0,
+	"status_bar_visible": true
+}

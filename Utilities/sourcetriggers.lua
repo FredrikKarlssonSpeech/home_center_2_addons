@@ -1,10 +1,11 @@
---- A group of functions that makes testing for and handling of source triggers more managable
+--- A module joining together a group of functions that makes testing for and handling of source triggers more managable.
 -- The design of the functions allow for them to be called in a context where one would like to know if
 -- what caused the scene to trigger (i.e. in the context of an conditions testing of an if-statement ).
 -- If called outside of a context where truth value is not evaluated, then you may get more detailed
 -- on the trigger.
 --
 -- Since all values that are not 'false' or 'nil' are evaluated at true, this works.
+
 
 
 --- A function that tests whether the scene was started manually
