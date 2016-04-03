@@ -35,7 +35,7 @@ function tableValueExists(tab, value)
 end
 
 --- A function that finds the union of keys in two tables
--- @tparam tablet1 The first table
+-- @tparam table t1 The first table
 -- @tparam table t2 The second table
 -- @treturn table A table with keys that are the union (no replication) of keys from the two tables, and will a value 'true' assigned to each key.
 

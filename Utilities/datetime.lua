@@ -41,6 +41,7 @@ function tableToEpochtime (t)
     return(outTime);
 end
 
+
 --- A function that tests whether the current time is within a specified time window from a given time.
 -- In order to work well with the output of fibaro:call(1,"sunsetHour") and similar use cases, time is specified in the
 -- form of a string ("08:10" for ten minutes past eight in the morning) in a 24 hour clock format, and an offset (in minutes).
@@ -118,7 +119,37 @@ function isWeekEnd ()
     return (today == 0 or today == 6);
 end
 
+--- Check whether current time is before a specified time.
+-- The function is designed to work well in a chain of checks, and therefore also makes sure that
+-- time is not before the start of the day.
+-- @tparam string time A time specification string, e.g. "08", "08:10" or "08:10:10"
+-- @treturn boolean A truth value (true/false)
+-- @see os.time
 
+function beforeTime(time)
+    local timeEpoch = tableToEpochtime(timestringToTable(time));
+    local startOfDay = tableToEpochtime(timestringToTable("00:00"));
+    local now = os.time();
+    return( (now < timeEpoch) and (now >= startOfDay ))
+end
+
+--- Check whether current time is after a specified time.
+-- The function is designed to work well in a chain of checks, and therefore also makes sure that
+-- time is not after the end of the day.
+-- @tparam string time A time specification string, e.g. "08", "08:10" or "08:10:10".
+-- If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
+-- as an argument. Thus, this function will then return 'true' from "08:10:01" and onwards.
+-- @treturn boolean A truth value (true/false)
+-- @see os.time
+
+function afterTime(time)
+
+    local timeEpoch = tableToEpochtime(timestringToTable(time));
+    print(timeEpoch)
+    local endOfDay = tableToEpochtime(timestringToTable("23:59:59"));
+    local now = os.time();
+    return( (now > timeEpoch) and (now <= endOfDay ))
+end
 
 --- A function that lets you specify date and time in a very flexible way through a table
 -- The table should use only fields that are returned by a call to @{os.time} (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).
@@ -194,4 +225,5 @@ function myTimer(shouldRun, functionToRun, delaySeconds )
         fibaro:sleep(delaySeconds*1000)
     end
 end
+
 
