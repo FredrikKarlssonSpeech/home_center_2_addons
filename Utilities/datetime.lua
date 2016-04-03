@@ -123,6 +123,8 @@ end
 -- The function is designed to work well in a chain of checks, and therefore also makes sure that
 -- time is not before the start of the day.
 -- @tparam string time A time specification string, e.g. "08", "08:10" or "08:10:10"
+-- If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
+-- as an argument. Thus, this function will then return 'true' up until "08:09:59" .
 -- @treturn boolean A truth value (true/false)
 -- @see os.time
 
@@ -226,4 +228,55 @@ function myTimer(shouldRun, functionToRun, delaySeconds )
     end
 end
 
+--- A function that determines whether the heater of a car should be turned on.
+-- The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
+-- @tparam string readyTime A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
+-- @tparam number tempOutside The temperature outside or inside the car (if available).
+-- @tparam boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
+-- @tparam boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not speficied, it defaults to false.
+-- @treturn boolean A truth value (true/false).
+
+function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
+    local timeEpoch = tableToEpochtime(timestringToTable(readyTime));
+    local now = os.time();
+    local heaterStarted = heaterON or false;
+    local startTime = timeEpoch;
+    if (eco) then
+        if (tempOutside <= -15) then
+            -- 2 Hours before time
+            startTime = timeEpoch - (3600*2)
+        elseif (tempOutside <= -10) then
+            -- 1 Hour before time
+            startTime = timeEpoch - (3600*1)
+        elseif (tempOutside <= 0) then
+            -- 1 Hours before time
+            startTime = timeEpoch - (3600*1)
+        elseif (tempOutside <= 10) then
+            -- 0.5 Hours before time
+            startTime = timeEpoch - (3600*0.5)
+        else
+            -- if not <=10 degrees C, do not start the heater.
+            return(false);
+        end
+    else
+        if (tempOutside <= -20) then
+            -- 3 Hours before time
+            startTime = timeEpoch - (3600*3)
+        elseif (tempOutside <= -10) then
+            -- 2 Hours before time
+            startTime = timeEpoch - (3600*2)
+        elseif (tempOutside <= 0) then
+            -- 1 Hours before time
+            startTime = timeEpoch - (3600*1)
+        elseif (tempOutside <= 10) then
+            -- 1Hours before time
+            startTime = timeEpoch - (3600*1)
+        else
+            -- if not <=10 degrees C, do not start the heater.
+            return(false);
+        end
+    end
+    -- Now calculate whether the heater should start NOW
+    return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch))
+end
 
