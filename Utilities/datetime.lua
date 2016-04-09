@@ -27,7 +27,7 @@ function timestringToTable (time)
     dateTable["hour"] = hour;
     dateTable["min"] = minute;
     dateTable["sec"] = second;
-    return(dateTable)
+    return(dateTable);
 end
 
 
@@ -58,14 +58,14 @@ end
 
 function isTime (timeString, offsetMinutes, secondsWindow)
     if (fibaro:countScenes() > 1) then
-        fibaro:abort()
+        fibaro:abort();
     else
         local timeTable = timestringToTable(timeString);
         local timeEpoch = tableToEpochtime (timeTable);
         local timeWithOffset = timeEpoch + (offsetMinutes * 60);
         local now = os.time();
-        return ( math.abs(timeWithOffset - now) <= secondsWindow )
-    end
+        return ( math.abs(timeWithOffset - now) <= secondsWindow );
+    end;
 end
 
 --- A function that checks whether the current time is within a range given as two text strings.
@@ -83,7 +83,7 @@ function isInTimeRange (startTimeString, endTimeString)
     local startTimeEpoch = tableToEpochtime (startTimeTable);
     local endTimeEpoch = tableToEpochtime (endTimeTable);
     local now = os.time();
-    return ( (startTime <= now ) and (endTime >= now))
+    return ( (startTime <= now ) and (endTime >= now));
 end
 
 --- A function that indicates whether today is one of the weekdays named in the given list.
@@ -94,12 +94,11 @@ end
 function isDayOfWeek (dayList)
     local today = os.date("%a",os.time());
     local longToday = os.date("%A",os.time());
---    fibaro:debug(tostring(today));
     for i, v in ipairs(dayList) do
         if today == v or longToday == v then
             return(true);
-        end
-    end
+        end;
+    end;
     return(false);
 end
 
@@ -108,7 +107,7 @@ end
 -- @treturn boolean A boolean (true/false)
 
 function isWeekDay ()
-    local today = os.date("%w",os.time());
+    local today = tonumber(os.date("%w",os.time()));
     -- Please note that this specification is 0-6 range, sunday=0
     return (not (today == 0 or today == 6));
 end
@@ -119,7 +118,7 @@ end
 
 
 function isWeekEnd ()
-    local today = os.date("%w",os.time());
+    local today = tonumber(os.date("%w",os.time()));
     return (today == 0 or today == 6);
 end
 
