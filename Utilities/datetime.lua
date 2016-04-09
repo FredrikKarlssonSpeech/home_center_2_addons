@@ -135,7 +135,7 @@ function beforeTime(time)
     local timeEpoch = tableToEpochtime(timestringToTable(time));
     local startOfDay = tableToEpochtime(timestringToTable("00:00"));
     local now = os.time();
-    return( (now < timeEpoch) and (now >= startOfDay ))
+    return( (now < timeEpoch) and (now >= startOfDay ));
 end
 
 --- Check whether current time is after a specified time.
@@ -148,12 +148,10 @@ end
 -- @see os.time
 
 function afterTime(time)
-
     local timeEpoch = tableToEpochtime(timestringToTable(time));
-    print(timeEpoch)
     local endOfDay = tableToEpochtime(timestringToTable("23:59:59"));
     local now = os.time();
-    return( (now > timeEpoch) and (now <= endOfDay ))
+    return( (now > timeEpoch) and (now <= endOfDay ));
 end
 
 --- A function that lets you specify date and time in a very flexible way through a table
@@ -169,7 +167,7 @@ end
 -- -- Will return 'true' when I wake up on my birthday
 -- datetimeTableTrue({month=1,day={14,15,16},hour=6, minute={0,30}})
 -- -- Will return 'true' on the 14th,15th or 16th of January at 6:00 or 6:30.
-
+-- @fixme print(tostring(datetimeTableTrue{month=4,hour=19, minute=24})) returns false even when it is true.
 
 function datetimeTableTrue (dateTable)
     local nowTodayTable = os.date("*t");
@@ -179,26 +177,26 @@ function datetimeTableTrue (dateTable)
         if type (v) == "number" then
             if not (nowTodayTable[k] == dateTable[k]) then
                 return(false);
-            end
+            end;
         elseif type (v) == "table" then
             -- Here the logic is different. We cannot return 'false' until we have checked all elements in the list.
             for ki, vi in pairs(v) do
                 if (nowTodayTable[k] == v[ki]) then
                     scorekeeper = true;
-                end
-            end
+                end;
+            end;
             if not scorekeeper then
                 return(false)
-            end
+            end;
             scorekeeper = false;
         else
             if not debug == nil then
                 fibaro:debug("List of options in a field in the table should only contain numbers")
             else
                 error("List of options in a field in the table should only contain numbers")
-            end
-        end
-    end
+            end;
+        end;
+    end;
     return(true);
 end
 
@@ -225,10 +223,12 @@ end
 -- -- sure that it is not evaluated again within the 20 seconds time window allowed by the call to @{isTime}.
 
 function myTimer(shouldRun, functionToRun, delaySeconds )
-    if shouldRun then
-        functionToRun()
-        fibaro:sleep(delaySeconds*1000)
-    end
+    if (fibaro:countScenes() > 1) then
+        fibaro:abort();
+    elseif shouldRun then
+        functionToRun();
+        fibaro:sleep(delaySeconds*1000);
+    end;
 end
 
 --- A function that determines whether the heater of a car should be turned on.
@@ -260,7 +260,7 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
         else
             -- if not <=10 degrees C, do not start the heater.
             return(false);
-        end
+        end;
     else
         if (tempOutside <= -20) then
             -- 3 Hours before time
@@ -277,10 +277,10 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
         else
             -- if not <=10 degrees C, do not start the heater.
             return(false);
-        end
-    end
+        end;
+    end;
     -- Now calculate whether the heater should start NOW
-    return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch))
+    return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch));
 end
 
 --- Function that determines whether its time to turn off the heater.
@@ -301,6 +301,5 @@ function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperatur
     -- Here, I negate the boolean so that a true in the block results in a false in
     -- response to the question whether the shutoff should be blocked
     local notblock = (not blockedByOutsideTemperature) or false;
-    return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) )
-
+    return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
 end
