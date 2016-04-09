@@ -8,11 +8,11 @@
 -- @treturn table A table with year, month,day, hour min, sec and isdst fields.
 -- @see os.date
 -- @usage
--- print(tostring(timestringToTable("08:10")))
+-- timestringToTable("08:10")
 -- -- Will return 'true' when between 08:10  and 08:59
--- print(tostring(timestringToTable("08")))
+-- timestringToTable("08")
 -- -- Will return 'true' the entire hour
--- print(tostring(timestringToTable("08:10:10")))
+-- timestringToTable("08:10:10")
 -- -- Will return 'true' exactly at the indicated second
 
 function timestringToTable (time)
@@ -57,11 +57,15 @@ end
 
 
 function isTime (timeString, offsetMinutes, secondsWindow)
-    local timeTable = timestringToTable(timeString);
-    local timeEpoch = tableToEpochtime (timeTable);
-    local timeWithOffset = timeEpoch + (offsetMinutes * 60);
-    local now = os.time();
-    return ( math.abs(timeWithOffset - now) <= secondsWindow )
+    if (fibaro:countScenes() > 1) then
+        fibaro:abort()
+    else
+        local timeTable = timestringToTable(timeString);
+        local timeEpoch = tableToEpochtime (timeTable);
+        local timeWithOffset = timeEpoch + (offsetMinutes * 60);
+        local now = os.time();
+        return ( math.abs(timeWithOffset - now) <= secondsWindow )
+    end
 end
 
 --- A function that checks whether the current time is within a range given as two text strings.
@@ -218,7 +222,7 @@ end
 -- myTimer ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
 -- -- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 -- -- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
--- -- or more than once, as the 2 minutes delay combined with the call to @{notCurrentlyRunning} makes
+-- -- or more than once, as the 2 minutes delay combined with the call to @{sourcetriggers.notCurrentlyRunning} makes
 -- -- sure that it is not evaluated again within the 20 seconds time window allowed by the call to @{isTime}.
 
 function myTimer(shouldRun, functionToRun, delaySeconds )
@@ -280,3 +284,24 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch))
 end
 
+--- Function that determines whether its time to turn off the heater.
+-- The determination is based on the time when the heater was turned on, an auto off time and a
+-- filter boolean that makes it possible to block turning the AC off.
+-- @tparam number heaterOnTime An Epoch time stamp indicating when the heater was turned on
+-- @tparam number autoOffTime The number of hours after which the heater should automatically be turned off.
+-- @tparam boolean blockedByOutsideTemperature A true/false value. If 'true' automatic shutoff will be blocked. The idea is that this value should be based on an expression involving the outside temperature
+-- @usage
+-- shouldStopHeater (fibaro:getModificationTime(193, "value"), 3, tonumber(fibaro:getValue(3, "Temperature")) <= -20 )
+-- -- This call will return when checked 3 hours or more after the time when the state of
+-- -- device 193 was last changed, provided that the current outside temperature is not <= -20 degrees.
+-- -- If the temperature is <= -20 degrees, the function will always return 'false'
+-- -- so that the heater is not stopped.
+
+function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)
+    local now = os.time();
+    -- Here, I negate the boolean so that a true in the block results in a false in
+    -- response to the question whether the shutoff should be blocked
+    local notblock = (not blockedByOutsideTemperature) or false;
+    return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) )
+
+end
