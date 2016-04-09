@@ -57,15 +57,11 @@ end
 
 
 function isTime (timeString, offsetMinutes, secondsWindow)
-    if (fibaro:countScenes() > 1) then
-        fibaro:abort();
-    else
-        local timeTable = timestringToTable(timeString);
-        local timeEpoch = tableToEpochtime (timeTable);
-        local timeWithOffset = timeEpoch + (offsetMinutes * 60);
-        local now = os.time();
-        return ( math.abs(timeWithOffset - now) <= secondsWindow );
-    end;
+    local timeTable = timestringToTable(timeString);
+    local timeEpoch = tableToEpochtime (timeTable);
+    local timeWithOffset = timeEpoch + (offsetMinutes * 60);
+    local now = os.time();
+    return ( math.abs(timeWithOffset - now) <= secondsWindow );
 end
 
 --- A function that checks whether the current time is within a range given as two text strings.
