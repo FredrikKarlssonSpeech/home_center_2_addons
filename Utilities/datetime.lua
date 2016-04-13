@@ -208,9 +208,9 @@ end
 -- After running the function constituting the scene, a delay may be imposed.
 -- @tparam boolean shouldRun A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
 -- @tparam function functionToRun The function summarising the actions of the scene.
--- @tparam number delaySeconds The number of seconds delay that should be imposed after having performed the scene.
+-- @tparam number sleepSeconds The number of seconds delay that should be imposed after having performed the scene. If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
 -- @usage
--- function f () fibaro:call(12,"powerON") end
+-- function f () fibaro:call(12,"powerON"); end
 -- -- A very simple scene
 -- myTimer ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
 -- -- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
@@ -218,12 +218,13 @@ end
 -- -- or more than once, as the 2 minutes delay combined with the call to @{sourcetriggers.notCurrentlyRunning} makes
 -- -- sure that it is not evaluated again within the 20 seconds time window allowed by the call to @{isTime}.
 
-function myTimer(shouldRun, functionToRun, delaySeconds )
-    if (fibaro:countScenes() > 1) then
-        fibaro:abort();
-    elseif shouldRun then
+
+
+function myTimer(shouldRun, functionToRun, sleepSeconds )
+    local delay = sleepSeconds or 60;
+    if (fibaro:countScenes() > 1 and shouldRun ) then
         functionToRun();
-        fibaro:sleep(delaySeconds*1000);
+        fibaro:sleep(delay*1000);
     end;
 end
 
