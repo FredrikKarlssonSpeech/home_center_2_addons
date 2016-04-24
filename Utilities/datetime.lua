@@ -28,7 +28,7 @@ function timestringToTable (time)
     dateTable["min"] = minute;
     dateTable["sec"] = second;
     return(dateTable);
-end
+end;
 
 
 -- Utility function that computes the number of seconds since Epoch from a date and time table in the form given by os.date
@@ -39,7 +39,7 @@ function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
     return(outTime);
-end
+end;
 
 
 --- A function that tests whether the current time is within a specified time window from a given time.
@@ -62,7 +62,7 @@ function isTime (timeString, offsetMinutes, secondsWindow)
     local timeWithOffset = timeEpoch + (offsetMinutes * 60);
     local now = os.time();
     return ( math.abs(timeWithOffset - now) <= secondsWindow );
-end
+end;
 
 --- A function that checks whether the current time is within a range given as two text strings.
 -- This function is often more convenient than 'isTime' as you don't have to calculate the time and offset yourself.
@@ -80,7 +80,7 @@ function isInTimeRange (startTimeString, endTimeString)
     local endTimeEpoch = tableToEpochtime (endTimeTable);
     local now = os.time();
     return ( (startTime <= now ) and (endTime >= now));
-end
+end;
 
 --- A function that indicates whether today is one of the weekdays named in the given list.
 -- A call 'isDayofWeek({"Mon","Tues"})' will return true on Wednesdays and Tuesdays, but not other days.
@@ -96,7 +96,7 @@ function isDayOfWeek (dayList)
         end;
     end;
     return(false);
-end
+end;
 
 --- Simple function that returns true if today is a weekday.
 -- A weekday is defined as Monday-Friday.
@@ -106,7 +106,7 @@ function isWeekDay ()
     local today = tonumber(os.date("%w",os.time()));
     -- Please note that this specification is 0-6 range, sunday=0
     return (not (today == 0 or today == 6));
-end
+end;
 
 --- Simple function that returns true if today is part of the weekend.
 -- A weekday is defined as Saturday or Sunday
@@ -116,7 +116,7 @@ end
 function isWeekEnd ()
     local today = tonumber(os.date("%w",os.time()));
     return (today == 0 or today == 6);
-end
+end;
 
 --- Check whether current time is before a specified time.
 -- The function is designed to work well in a chain of checks, and therefore also makes sure that
@@ -132,7 +132,7 @@ function beforeTime(time)
     local startOfDay = tableToEpochtime(timestringToTable("00:00"));
     local now = os.time();
     return( (now < timeEpoch) and (now >= startOfDay ));
-end
+end;
 
 --- Check whether current time is after a specified time.
 -- The function is designed to work well in a chain of checks, and therefore also makes sure that
@@ -148,7 +148,7 @@ function afterTime(time)
     local endOfDay = tableToEpochtime(timestringToTable("23:59:59"));
     local now = os.time();
     return( (now > timeEpoch) and (now <= endOfDay ));
-end
+end;
 
 --- A function that lets you specify date and time in a very flexible way through a table
 -- The table should use only fields that are returned by a call to @{os.time} (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).
@@ -194,7 +194,7 @@ function datetimeTableTrue (dateTable)
         end;
     end;
     return(true);
-end
+end;
 
 --print(tostring(datetimeTableTrue({year=2016,hour=9})))
 
@@ -208,7 +208,7 @@ end
 -- After running the function constituting the scene, a delay may be imposed.
 -- @tparam boolean shouldRun A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
 -- @tparam function functionToRun The function summarising the actions of the scene.
--- @tparam number sleepSeconds The number of seconds delay that should be imposed after having performed the scene. If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
+-- @tparam number sleepSeconds Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
 -- @usage
 -- function f () fibaro:call(12,"powerON"); end
 -- -- A very simple scene
@@ -226,14 +226,14 @@ function myTimer(shouldRun, functionToRun, sleepSeconds )
         functionToRun();
         fibaro:sleep(delay*1000);
     end;
-end
+end;
 
 --- A function that determines whether the heater of a car should be turned on.
 -- The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
 -- @tparam string readyTime A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
 -- @tparam number tempOutside The temperature outside or inside the car (if available).
 -- @tparam boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
--- @tparam boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not speficied, it defaults to false.
+-- @tparam boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not specified, it defaults to false.
 -- @treturn boolean A truth value (true/false).
 
 function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
@@ -278,7 +278,7 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     end;
     -- Now calculate whether the heater should start NOW
     return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch));
-end
+end;
 
 --- Function that determines whether its time to turn off the heater.
 -- The determination is based on the time when the heater was turned on, an auto off time and a
@@ -299,4 +299,4 @@ function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperatur
     -- response to the question whether the shutoff should be blocked
     local notblock = (not blockedByOutsideTemperature) or false;
     return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
-end
+end;
