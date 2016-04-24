@@ -1,13 +1,11 @@
 
 --- Function that prints out the content of a table within a Fibaro scene as debuging information
 -- @tparam table t A table. Only simple tables (not nested) are supported.
-
-
 function fibaroDebugTable (t)
     for k, v in pairs(t) do
-        fibaro:debug(k.." ".. tostring(v))
-    end
-end
+        fibaro:debug(k.." ".. tostring(v));
+    end;
+end;
 
 --- Function that prints out the content of a table within a ordinary lua environment.
 -- @tparam table t A table. Only simple tables (not nested) are supported.
@@ -15,9 +13,9 @@ end
 
 function debugTable (t)
     for k, v in pairs(t) do
-        print(k.." ".. tostring(v))
-    end
-end
+        print(k.." ".. tostring(v));
+    end;
+end;
 
 --- Function that checks whether a value exists in a table
 -- @tparam table tab The table
@@ -27,12 +25,11 @@ end
 function tableValueExists(tab, value)
   for k,v in pairs(tab) do
     if value == v then
-      return true
-    end
-  end
-
-  return false
-end
+      return true;
+    end;
+  end;
+  return false;
+end;
 
 --- A function that finds the union of keys in two tables
 -- @tparam table t1 The first table
@@ -46,10 +43,10 @@ function keyUnion(t1, t2)
         for k2, v2 in pairs(t2) do
             outTab[k1] = true;
             outTab[k2] = true;
-        end
-    end
+        end;
+    end;
     return(outTab);
-end
+end;
 
 
 -- debugTable(os.date("*t"));
