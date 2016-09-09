@@ -62,7 +62,7 @@ end;
 --- A function that allows you to create an array containing integers ranging from 'start' to 'stop', optionally spaced by 'step' numbers.
 -- @tparam integer start The integer which will be the first (head) of the sequence.
 -- @tparam integer stop The integer which will either be the largest in the sequence (the tail) or integer setting the upper boundary for the sequence. In the latter case, the last element in the integer array will be the largets integer x the fullfills (x + 'step') < 'stop'.
--- @tparam integer step The spacing between numbers in the returned sequence, so that x_i == x_(i-1) + 'step'.
+-- @tparam integer step The spacing between numbers in the returned sequence.
 function seq(start, stop, step)
     local myStep = myStep or 1;
     local out = {};
