@@ -159,11 +159,10 @@ end;
 -- -- # will return 'true' every other minute in february.
 -- datetimeTableTrue({wday=2,yday=2})
 -- -- # will return 'true' when tested on the January 2nd, if it is a Monday.
--- datetimeTableTrue({month=1,day=14,hour=6, minute=30})
+-- datetimeTableTrue({month=1,day=14,hour=6, min=30})
 -- -- Will return 'true' when I wake up on my birthday
--- datetimeTableTrue({month=1,day={14,15,16},hour=6, minute={0,30}})
+-- datetimeTableTrue({month=1,day={14,15,16},hour=6, min={0,30}})
 -- -- Will return 'true' on the 14th,15th or 16th of January at 6:00 or 6:30.
--- @fixme print(tostring(datetimeTableTrue{month=4,hour=19, minute=24})) returns false even when it is true.
 
 function datetimeTableTrue (dateTable)
     local nowTodayTable = os.date("*t");

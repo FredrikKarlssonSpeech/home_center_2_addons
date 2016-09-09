@@ -13,7 +13,14 @@ end;
 
 function debugTable (t)
     for k, v in pairs(t) do
-        print(k.." ".. tostring(v));
+        if(type(v) == "table") then
+            print(k.."::\t")
+            for kI, vI in pairs(v) do
+                print(kI.." ".. tostring(v1));
+            end;
+        else
+            print(k.." ".. tostring(v));
+        end;
     end;
 end;
 
@@ -49,7 +56,22 @@ function keyUnion(t1, t2)
 end;
 
 
--- debugTable(os.date("*t"));
 
--- debugTable(os.date("*t",1454093731));
 
+
+--- A function that allows you to create an array containing integers ranging from 'start' to 'stop', optionally spaced by 'step' numbers.
+-- @tparam integer start The integer which will be the first (head) of the sequence.
+-- @tparam integer stop The integer which will either be the largest in the sequence (the tail) or integer setting the upper boundary for the sequence. In the latter case, the last element in the integer array will be the largets integer x the fullfills (x + 'step') < 'stop'.
+-- @tparam integer step The spacing between numbers in the returned sequence, so that x_i == x_(i-1) + 'step'.
+function seq(start, stop, step)
+    local myStep = myStep or 1;
+    local out = {};
+    local i = start;
+    local store = start;
+    while (store <= stop) do
+        out[i] = store;
+        i = i + 1;
+        store = store + myStep;
+    end;
+    return out;
+end;
