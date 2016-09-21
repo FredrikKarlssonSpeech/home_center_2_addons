@@ -72,14 +72,17 @@ end;
 -- @tparam string startTimeString a time specification in the form of "HH:MM" (e.g. "08:10") indicating the start of the time range.
 -- @tparam string endTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the end of the time range.
 -- @treturn boolean A boolean (true or false) indicating whether the current time is within the specificed time range.
-
 function isInTimeRange (startTimeString, endTimeString)
     local startTimeTable = timestringToTable(startTimeString);
     local endTimeTable = timestringToTable(endTimeString);
     local startTimeEpoch = tableToEpochtime (startTimeTable);
     local endTimeEpoch = tableToEpochtime (endTimeTable);
+    -- allow for end time being in the upcoming day, but before startTime then
+    if (endTimeEpoch < startTimeEpoch) then
+        endTimeEpoch = endTimeEpoch + 24*3600  -- add 24 hours
+    end;
     local now = os.time();
-    return ( (startTime <= now ) and (endTime >= now));
+    return ( (startTimeEpoch <= now ) and (endTimeEpoch >= now));
 end;
 
 --- A function that indicates whether today is one of the weekdays named in the given list.
