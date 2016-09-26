@@ -36,13 +36,20 @@ function afterTime(time)
     return( (now > timeEpoch) and (now <= endOfDay ));
 end;
 
+function beforeTime(time)
+    local timeEpoch = tableToEpochtime(timestringToTable(time));
+    local startOfDay = tableToEpochtime(timestringToTable("00:00"));
+    local now = os.time();
+    return( (now < timeEpoch) and (now >= startOfDay ));
+end;
+
 
 
 
 if (takState == 0) then
     fibaro:debug(" 0 - Got state "..takState);
     -- turned off
-    if (afterTime(sunsetHour)) then
+    if (afterTime(sunsetHour) and beforeTime("22:00")) then
     
         fibaro:call(346, "setValue", "30");
     end;
