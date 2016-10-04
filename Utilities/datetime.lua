@@ -79,7 +79,18 @@ function isInTimeRange (startTimeString, endTimeString)
     local endTimeEpoch = tableToEpochtime (endTimeTable);
     -- allow for end time being in the upcoming day, but before startTime then
     if (endTimeEpoch < startTimeEpoch) then
-        endTimeEpoch = endTimeEpoch + 24*3600  -- add 24 hours
+        endTimeEpoch = endTimeEpoch + 24*3600;  -- add 24 hours
+    end;
+        -- Now, we adjust for Daylight saving time effects 
+    if (startTimeTable.isdst == false and endTimeTable.isdst == true) then
+        -- In this case, start time is Not summer, and end time is in summer time
+        -- which means that we are going from spring into summer
+        -- then advance the clock one more hour from the end time
+        endTimeEpoch = endTimeEpoch + 3600;
+    elseif (startTimeTable.isdst == true and endTimeTable.isdst == false) then
+        -- Here, we are coming into fall (from summer)
+        -- then remove one hour from the time end time
+         endTimeEpoch = endTimeEpoch - 3600;
     end;
     local now = os.time();
     return ( (startTimeEpoch <= now ) and (endTimeEpoch >= now));
