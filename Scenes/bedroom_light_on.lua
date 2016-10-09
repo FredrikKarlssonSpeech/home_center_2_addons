@@ -51,9 +51,9 @@ if (takState == 0) then
     -- turned off
     if (afterTime(sunsetHour) and beforeTime("22:00")) then
     
-        fibaro:call(346, "setValue", "30");
+        fibaro:call(375, "setValue", "30");
     end;
 else
     fibaro:debug(" 1 - Got state "..takState);
-    fibaro:call(346, "setValue", "0")  
+    fibaro:call(375, "setValue", "0")  
 end;
