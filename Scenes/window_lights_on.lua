@@ -78,10 +78,18 @@ end
 
 
 function myFunc ()
-    fibaro:call(43, "turnOn");
-    fibaro:call(21, "setValue", "78");
-    fibaro:call(58, "turnOn");
-    fibaro:call(24, "setValue", "60");
+    -- fibaro:call(43, "turnOn");
+    -- fibaro:call(21, "setValue", "78");
+    -- fibaro:call(58, "turnOn");
+    -- fibaro:call(24, "setValue", "60");
+    fibaro:call(375, "turnOn") -- Dimmer vårt rum
+    fibaro:call(375, "setValue", "20") -- Dimmer vårt rum
+
+    fibaro:call(323, "turnOn") 
+    fibaro:call(323, "setValue", "20") -- Fönster uppe
+    fibaro:call(21, "setValue", "30") -- fönster köket nere
+
+    fibaro:call(288, "turnOn") -- Gröna lampan
 end
 
 

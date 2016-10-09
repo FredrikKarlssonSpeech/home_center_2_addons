@@ -1,47 +1,110 @@
 --[[
+%% autostart
 %% properties
 54 sceneActivation
-%% events
 %% globals
 --]]
 
--- This structure does not work for timers set to 23:59 - 00:01 as the date will then be different possibly from the date gotten from the os.date representation of current time.
 
-local currentDate = os.date("*t");
-local acceptWindow = 2* 60 ; -- 2 minutes. os.difftime returns number of seconds
-local sleepAfter = acceptWindow ;
+function timestringToTable (time)
+    local dateTable = os.date("*t");
+    -- Get an iterator that extracts date fields
+    local g =  string.gmatch(time, "%d+");
 
-local eveningTriggerTime = currentDate;
-eveningTriggerTime["hour"] = 23;
-eveningTriggerTime["min"] = 30;
-local weekMorningTriggerTime = currentDate;
-weekMorningTriggerTime["hour"] = 8;
-weekMorningTriggerTime["min"] = 0;
-local weekendMorningTriggerTime = currentDate;
-weekendMorningTriggerTime["hour"] = 9;
-weekendMorningTriggerTime["min"] = 0;
-
-local startSource = fibaro:getSourceTrigger();
-if (
-  (tonumber(fibaro:getValue(54, "sceneActivation")) == 40)
- or
- (currentDate.wday >= 2 and currentDate.wday <= 6 and (math.abs(os.difftime(os.time(currentDate),os.time(weekMorningTriggerTime) ) ) < acceptWindow ) )
- or
- (currentDate.wday >= 2 and currentDate.wday <= 6 and (math.abs(os.difftime(os.time(currentDate),os.time(weekendMorningTriggerTime) ) ) < acceptWindow))
-or
-(startSource["type"] == "other")
-or
-(math.abs(os.difftime(os.time(currentDate),os.time(eveningTriggerTime) ) ) < acceptWindow)
-)
-then
-    fibaro:call(24, "turnOff");
-    fibaro:call(24, "setValue", "1");
-    fibaro:call(21, "setValue", "0");
-    fibaro:call(56, "turnOff");
-    fibaro:call(58, "turnOff");
-    fibaro:call(60, "setValue", "0");
-    fibaro:call(43, "turnOff");
+    local hour = g() ;
+    local minute = g() or 0;
+    local second = g() or 0;
+    -- Insert sunset inforation istead
+    dateTable["hour"] = hour;
+    dateTable["min"] = minute;
+    dateTable["sec"] = second;
+    return(dateTable)
 end
 
-fibaro:sleep(sleepAfter);
+function tableToEpochtime (t)
+    local now = os.date("*t");
+    local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
+    return(outTime);
+end
+
+function startedManually ()
+    local startSource = fibaro:getSourceTrigger();
+    return( startSource["type"] == "other")
+end
+
+function startedByDevice ()
+    local startSource = fibaro:getSourceTrigger();
+    -- startSource ={type="property",deviceID="11",propertyName="tet"}
+    if startSource["type"] == "property" then
+        return ({deviceID=startSource["deviceID"], propertyName=startSource["propertyName"]})
+    else
+        return false
+    end
+end
+
+function isTime (timeString, offsetMinutes, secondsWindow)
+    local timeTable = timestringToTable(timeString);
+    local timeEpoch = tableToEpochtime (timeTable);
+    local timeWithOffset = timeEpoch + (offsetMinutes * 60);
+    local now = os.time();
+    return ( math.abs(timeWithOffset - now) <= secondsWindow )
+end
+
+
+function myTimer(shouldRun, functionToRun)
+    if ( shouldRun ) then
+        functionToRun();
+    end;
+end;
+
+function isWeekEnd ()
+    local today = tonumber(os.date("%w",os.time()));
+    return (today == 0 or today == 6);
+end
+
+function isWeekDay ()
+    local today = tonumber(os.date("%w",os.time()));
+    -- Please note that this specification is 0-6 range, sunday=0
+    return (not (today == 0 or today == 6));
+end
+-- Main
+
+
+function myFunc ()
+
+    fibaro:call(375, "turnOff") -- Dimmer vårt rum
+    fibaro:call(375, "setValue", "0") -- Dimmer vårt rum
+
+    fibaro:call(323, "turnOff") 
+    fibaro:call(323, "setValue", "0") -- Fönster uppe
+    fibaro:call(21, "setValue", "0") -- fönster köket nere
+
+    fibaro:call(288, "turnOff") -- Gröna lampan
+
+end;
+
+
+if (startedManually() ) then
+    myFunc();
+    fibaro:debug(tostring(fibaro:getValue(1, "sunsetHour")));
+elseif ( startedByDevice () ) then
+    local info = startedByDevice();
+    local scene = tonumber(fibaro:getValue(info["deviceID"], "sceneActivation"));
+    if (scene == 40) then
+        myFunc();
+    end;
+elseif (fibaro:countScenes() < 2) then
+    local sunsetHour = "19:00";
+    while (true) do
+
+        sunriseHour = tostring(fibaro:getValue(1, "sunriseHour"));
+        --fibaro:debug("Sunset hour = ".. sunsetHour);
+        myTimer( isTime(sunriseHour,30,180) ,myFunc);
+        myTimer( isTime("07:30",0,180) and  isWeekDay() ,myFunc);
+        myTimer( isTime("10:30",0,180) and  isWeekEnd() ,myFunc);
+        fibaro:sleep(60*1000);
+    end;
+end;
+
+
 
