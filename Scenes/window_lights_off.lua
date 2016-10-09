@@ -2,6 +2,7 @@
 %% autostart
 %% properties
 54 sceneActivation
+396 sceneActivation
 %% globals
 --]]
 
