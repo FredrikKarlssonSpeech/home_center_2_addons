@@ -82,7 +82,7 @@ function isInTimeRange (startTimeString, endTimeString)
     if (endTimeEpoch < startTimeEpoch) then
         endTimeEpoch = endTimeEpoch + 24*3600;  -- add 24 hours
         -- Now, we make a new table object, to find out whether the DST status of the new end time is 
-        newEndTimeTable = os.time("*t",endTimeEpoch);
+        newEndTimeTable = os.date("*t",endTimeEpoch);
     end;
         -- Now, we adjust for Daylight saving time effects 
     if (startTimeTable.isdst == false and newEndTimeTable.isdst == true) then
@@ -260,16 +260,16 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     if (eco) then
         if (tempOutside <= -15) then
             -- 2 Hours before time
-            startTime = timeEpoch - (3600*2)
+            startTime = timeEpoch - (3600*2);
         elseif (tempOutside <= -10) then
             -- 1 Hour before time
-            startTime = timeEpoch - (3600*1)
+            startTime = timeEpoch - (3600*1);
         elseif (tempOutside <= 0) then
             -- 1 Hours before time
-            startTime = timeEpoch - (3600*1)
+            startTime = timeEpoch - (3600*1);
         elseif (tempOutside <= 10) then
             -- 0.5 Hours before time
-            startTime = timeEpoch - (3600*0.5)
+            startTime = timeEpoch - (3600*0.5);
         else
             -- if not <=10 degrees C, do not start the heater.
             return(false);
@@ -277,16 +277,16 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     else
         if (tempOutside <= -20) then
             -- 3 Hours before time
-            startTime = timeEpoch - (3600*3)
+            startTime = timeEpoch - (3600*3);
         elseif (tempOutside <= -10) then
             -- 2 Hours before time
-            startTime = timeEpoch - (3600*2)
+            startTime = timeEpoch - (3600*2);
         elseif (tempOutside <= 0) then
             -- 1 Hours before time
-            startTime = timeEpoch - (3600*1)
+            startTime = timeEpoch - (3600*1);
         elseif (tempOutside <= 10) then
             -- 1Hours before time
-            startTime = timeEpoch - (3600*1)
+            startTime = timeEpoch - (3600*1);
         else
             -- if not <=10 degrees C, do not start the heater.
             return(false);
