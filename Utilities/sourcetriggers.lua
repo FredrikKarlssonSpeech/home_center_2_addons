@@ -240,4 +240,11 @@ zwavemeSceneTable = {
     [46]="1C_PLH"
 };
 
+function onButInactive(id,threshold)
+    local t = threshold or 15;
+    local state = tonumber(fibaro:getValue(id, "value"));
+    local pow = tonumber(fibaro:getValue(id, "power"));
+
+    return(state == 1 and pow > t);
+end;
 
