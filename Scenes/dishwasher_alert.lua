@@ -7,7 +7,7 @@
 
 if (fibaro:countScenes() > 1) then
   fibaro:abort();
-end
+end;
 
 local consumption = tonumber(fibaro:getValue(279, "power"));
 local prev = tostring(fibaro:getGlobal("Dishwasher"));

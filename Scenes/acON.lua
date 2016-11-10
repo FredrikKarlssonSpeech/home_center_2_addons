@@ -71,44 +71,46 @@ end;
 -- Main
 
 
-function acONHeat22()
+function acONHeat22 ()
     fibaro:call(341, "turnOn")
-    fibaro:sleep(5*1000);
+    fibaro:sleep(10*1000);
     fibaro:call(49, "setMode", "Heat")
+    fibaro:sleep(1*1000);
     fibaro:call(47, "setThermostatSetpoint", "22", "Heating")
+    fibaro:sleep(1*1000);
     fibaro:call(50, "setFanMode", "Auto low speed")
+    fibaro:sleep(1*1000);
     fibaro:call(47, "setSetpointMode", "Heating")
 end
 
-function acONDry()
+function acONDry ()
     fibaro:call(341, "turnOn")
-    fibaro:sleep(5*1000);
+    fibaro:sleep(10*1000);
     fibaro:call(49, "setMode", "Dry Air")
+    fibaro:sleep(1*1000);
     fibaro:call(47, "setThermostatSetpoint", "22", "Dry air")
+    fibaro:sleep(1*1000);
     fibaro:call(50, "setFanMode", "Auto low speed")
+    fibaro:sleep(1*1000);
     fibaro:call(47, "setSetpointMode", "Dry Air")
-end
-
-function acOFF()
-    fibaro:call(49, "setMode", "Off")
-
-    fibaro:sleep(5*1000);
-    fibaro:call(341, "turnOff")
 end
 
 
 if (startedManually() ) then
-    myFunc();
+    acONHeat22();
 elseif (fibaro:countScenes() < 2) then
     local tempOutside = -1;
     local eco = false;
     local heaterON = false;
     while (true) do
         tempOutside = tonumber(fibaro:getValue(3, "Temperature"));
+        humidityInside = tonumber(fibaro:getValue(126, "value"));
         --if (fibaro:getValue(193, "value") == 1) then heaterON = true else heaterON = false end;
         myTimer( isTime("15:00", 0, 10*60 ) and  isWeekDay() and (tempOutside <= -5), acONHeat22);
-        -- Turn off an hour later
-        myTimer( isTime("16:00", 0, 10*60 ) and  isWeekDay(),acOFF);
+
+        if(humidityInside > 45) then 
+            acONDry();
+        end;
 
 
         fibaro:sleep(10*60*1000);

@@ -16,12 +16,12 @@ function startLevelChangeWithDur(dimmerID,startLevel,stopLevel,durationSeconds,d
         -- wait for timeStepSeconds seconds
         fibaro:sleep(timeStepSeconds* 1000);
         -- check actual setting of the device now
-        currentLevelFromDevice = tonumber(fibaro:getValue(dimmerID, "value"));
+    --    currentLevelFromDevice = tonumber(fibaro:getValue(dimmerID, "value"));
         newLevel = currentLevel + deltaPerSecond;
         -- continue only if the level to be set is smaller or equal to the stop level
         -- AND the level has not been manually decreased in the waiting period
     until ( newLevel > stopLevel )
-  --or ( currentLevelFromDevice < currentLevel );
+  -- or ( currentLevelFromDevice < currentLevel );
 
     fibaro:debug("DONE light increase");
 end;
