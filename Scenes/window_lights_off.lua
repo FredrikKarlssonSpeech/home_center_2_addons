@@ -81,7 +81,9 @@ function myFunc ()
     fibaro:call(21, "setValue", "0") -- fönster köket nere
 
     fibaro:call(288, "turnOff") -- Gröna lampan
-
+    fibaro:sleep(15*60*1000);
+    fibaro:call(447, "turnOff") -- innergårdens belysning
+    fibaro:call(285, "turnOff") -- uttagen i uterummet
 end;
 
 
