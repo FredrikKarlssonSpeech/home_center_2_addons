@@ -240,7 +240,13 @@ zwavemeSceneTable = {
     [46]="1C_PLH"
 };
 
-function onButInactive(id,threshold)
+--- A function that checks that a device is drawing power, if on
+-- The use case for this function is for instance a car heater. If it is turned on, it should draw power.
+-- If not, it is unplugged. Of course, this function requires a device that has power reporting.
+-- @tparam number id The ID of the device.
+-- @tparam number threshold The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
+-- @treturn number A boolean indicating wheter the device is ON but not active (not plugged in)
+function onButUnplugged(id,threshold)
     local t = threshold or 15;
     local state = tonumber(fibaro:getValue(id, "value"));
     local pow = tonumber(fibaro:getValue(id, "power"));
