@@ -3,8 +3,10 @@
 
 all: docs fk_lib.lua
 
-docs: datetime.lua sourcetriggers.lua utils.lua
-	ldoc *.lua -d ../Docs/
+docs: *.lua
+	@cat *.lua > ../lib/B-HAll.lua
+	@ldoc ../lib/B-HAll.lua -d ../Docs/
+	@rm ../lib/B-HAll.lua
 
 fk_lib.lua: datetime.lua sourcetriggers.lua utils.lua clearlib
 	@echo "Compressing (datetime|sourcetriggers|utils).lua files into the fk_lib.lua single file"
