@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>datetime</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>datetime</code></h1>
+<p>A module that fascilitates specification of times when Fibaro lua scenes should run.</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#timestringToTable">timestringToTable (time)</a></td>
+	<td class="summary">A function that creates a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> table from the time of sunset the same day.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isTime">isTime (timeString, offsetMinutes, secondsWindow)</a></td>
+	<td class="summary">A function that tests whether the current time is within a specified time window from a given time.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isInTimeRange">isInTimeRange (startTimeString, endTimeString)</a></td>
+	<td class="summary">A function that checks whether the current time is within a range given as two text strings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isDayOfWeek">isDayOfWeek (dayList)</a></td>
+	<td class="summary">A function that indicates whether today is one of the weekdays named in the given list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isWeekDay">isWeekDay ()</a></td>
+	<td class="summary">Simple function that returns true if today is a weekday.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isWeekEnd">isWeekEnd ()</a></td>
+	<td class="summary">Simple function that returns true if today is part of the weekend.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#beforeTime">beforeTime (time)</a></td>
+	<td class="summary">Check whether current time is before a specified time.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#afterTime">afterTime (time)</a></td>
+	<td class="summary">Check whether current time is after a specified time.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#datetimeTableTrue">datetimeTableTrue (dateTable)</a></td>
+	<td class="summary">A function that lets you specify date and time in a very flexible way through a table
+ The table should use only fields that are returned by a call to <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a> (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#myTimer">myTimer (shouldRun, functionToRun, sleepSeconds)</a></td>
+	<td class="summary">Function that simplifies running a scene on a timer and specify the delay needed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#timeToStartCarHeater">timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)</a></td>
+	<td class="summary">A function that determines whether the heater of a car should be turned on.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#shouldStopHeater">shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)</a></td>
+	<td class="summary">Function that determines whether its time to turn off the heater.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "timestringToTable"></a>
+    <strong>timestringToTable (time)</strong>
+    </dt>
+    <dd>
+    A function that creates a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> table from the time of sunset the same day.
+ Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
+ call made exactly the minute corresponding to the sunset hour.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">time</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A text representation (e.g. "08:10") of the time of today to concert to a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        A table with year, month,day, hour min, sec and isdst fields.
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ timestringToTable(<span class="string">"08:10"</span>)
+ <span class="comment">-- Will return 'true' when between 08:10  and 08:59
+</span> timestringToTable(<span class="string">"08"</span>)
+ <span class="comment">-- Will return 'true' the entire hour
+</span> timestringToTable(<span class="string">"08:10:10"</span>)
+ -- Will <span class="keyword">return</span> <span class="string">'true'</span> exactly at the indicated second</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "isTime"></a>
+    <strong>isTime (timeString, offsetMinutes, secondsWindow)</strong>
+    </dt>
+    <dd>
+    A function that tests whether the current time is within a specified time window from a given time.
+ In order to work well with the output of fibaro:call(1,"sunsetHour") and similar use cases, time is specified in the
+ form of a string ("08:10" for ten minutes past eight in the morning) in a 24 hour clock format, and an offset (in minutes).
+ When called as isTime("08:10",0,10) the function will return 'true' from 08:09:50 to 08:10:10, and 'false' outside of this time range.
+ Please note that the function will return true every time it is checked within the time range, so the calling function
+ needs to make sure that there is an appropriate delay between checks.
+<p> A call isTime("08:10",45,10) will return 'true' from 08:54:50 to 08:55:10, and 'false' earlier or later than this.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">timeString</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         The textual specification of the time to test against (e.g. "08:10").
+        </li>
+        <li><span class="parameter">offsetMinutes</span>
+            <span class="types"><span class="type">number</span></span>
+         The number of minutes to add to the 'timeString' time.
+        </li>
+        <li><span class="parameter">secondsWindow</span>
+            <span class="types"><span class="type">number</span></span>
+         The size of the time window (in secons) in which the function will return 'true'. A zero (0) will cause the function to return 'true' only at 08:10:00 (and not 08:10:01) when called as isTime("08:10",0,0) so calls like that should be avoided.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true or false) indicating whether the current time is within the specificed time range.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isInTimeRange"></a>
+    <strong>isInTimeRange (startTimeString, endTimeString)</strong>
+    </dt>
+    <dd>
+    A function that checks whether the current time is within a range given as two text strings.
+ This function is often more convenient than 'isTime' as you don't have to calculate the time and offset yourself.
+ Please note that the function will return true every time it is checked within the time range, so the calling function
+ needs to make sure that there is an appropriate delay between checks.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">startTimeString</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         a time specification in the form of "HH:MM" (e.g. "08:10") indicating the start of the time range.
+        </li>
+        <li><span class="parameter">endTimeString</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         a time specification in the form of HH:MM (e.g. "08:10") indicating the end of the time range.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true or false) indicating whether the current time is within the specificed time range.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isDayOfWeek"></a>
+    <strong>isDayOfWeek (dayList)</strong>
+    </dt>
+    <dd>
+    A function that indicates whether today is one of the weekdays named in the given list.
+ A call 'isDayofWeek({"Mon","Tues"})' will return true on Wednesdays and Tuesdays, but not other days.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dayList</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">{string}</a></span>
+         A list of names of weekdays in a long (e.g. "Friday") or short (e.g. "Fri") format.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true /false) indicating whether the short name of today is given in the list.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isWeekDay"></a>
+    <strong>isWeekDay ()</strong>
+    </dt>
+    <dd>
+    Simple function that returns true if today is a weekday.
+ A weekday is defined as Monday-Friday.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true/false)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isWeekEnd"></a>
+    <strong>isWeekEnd ()</strong>
+    </dt>
+    <dd>
+    Simple function that returns true if today is part of the weekend.
+ A weekday is defined as Saturday or Sunday
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true/false)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "beforeTime"></a>
+    <strong>beforeTime (time)</strong>
+    </dt>
+    <dd>
+    Check whether current time is before a specified time.
+ The function is designed to work well in a chain of checks, and therefore also makes sure that
+ time is not before the start of the day.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">time</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A time specification string, e.g. "08", "08:10" or "08:10:10"
+ If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
+ as an argument. Thus, this function will then return 'true' up until "08:09:59" .
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true/false)
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "afterTime"></a>
+    <strong>afterTime (time)</strong>
+    </dt>
+    <dd>
+    Check whether current time is after a specified time.
+ The function is designed to work well in a chain of checks, and therefore also makes sure that
+ time is not after the end of the day.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">time</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A time specification string, e.g. "08", "08:10" or "08:10:10".
+ If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
+ as an argument. Thus, this function will then return 'true' from "08:10:01" and onwards.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true/false)
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "datetimeTableTrue"></a>
+    <strong>datetimeTableTrue (dateTable)</strong>
+    </dt>
+    <dd>
+    A function that lets you specify date and time in a very flexible way through a table
+ The table should use only fields that are returned by a call to <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a> (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dateTable</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table giving a time specification.  For instance, {day=6,hour=15} returns 'true' on Sundays at 3 pm, {year=2016,month=2, hour=9} will return 'true' every day in February 2016 at 9 am, and 'false' at any time where parts of specification is not met. In each field, a table may be given, in which case any one of the options given will be accepted.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true/false) indicating the complete match of the table against current time and date.
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"> datetimeTableTrue({month=<span class="number">2</span>,minute=<span class="number">2</span>})
+ <span class="comment">-- # will return 'true' every other minute in february.
+</span> datetimeTableTrue({wday=<span class="number">2</span>,yday=<span class="number">2</span>})
+ <span class="comment">-- # will return 'true' when tested on the January 2nd, if it is a Monday.
+</span> datetimeTableTrue({month=<span class="number">1</span>,day=<span class="number">14</span>,hour=<span class="number">6</span>, min=<span class="number">30</span>})
+ <span class="comment">-- Will return 'true' when I wake up on my birthday
+</span> datetimeTableTrue({month=<span class="number">1</span>,day={<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>},hour=<span class="number">6</span>, min={<span class="number">0</span>,<span class="number">30</span>}})
+ -- Will <span class="keyword">return</span> <span class="string">'true'</span> on the <span class="number">14</span>th,<span class="number">15</span>th <span class="keyword">or</span> <span class="number">16</span>th of January at <span class="number">6</span>:<span class="number">00</span> <span class="keyword">or</span> <span class="number">6</span>:<span class="number">30.</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "myTimer"></a>
+    <strong>myTimer (shouldRun, functionToRun, sleepSeconds)</strong>
+    </dt>
+    <dd>
+    Function that simplifies running a scene on a timer and specify the delay needed.
+ The basic structure of the function is that it takes a truth value indicating whether the scene should run.
+ The idea is that this truth value should be the result of a series of time or source evaluations combined
+ into one evaluation by 'and' and 'or' joiners, possibly with nesting.
+ The function <a href="index.html#myTimer">myTimer</a> will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'.
+ After running the function constituting the scene, a delay may be imposed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">shouldRun</span>
+            <span class="types"><span class="type">boolean</span></span>
+         A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
+        </li>
+        <li><span class="parameter">functionToRun</span>
+            <span class="types"><span class="type">function</span></span>
+         The function summarising the actions of the scene.
+        </li>
+        <li><span class="parameter">sleepSeconds</span>
+            <span class="types"><span class="type">number</span></span>
+         Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="keyword">function</span> f () fibaro:call(<span class="number">12</span>,<span class="string">"powerON"</span>); <span class="keyword">end</span>
+ <span class="comment">-- A very simple scene
+</span> myTimer ( notCurrentlyRunning() <span class="keyword">and</span> isTime(<span class="string">"08:10"</span>,<span class="number">0</span>,<span class="number">20</span>) <span class="keyword">and</span> isDayOfWeek(<span class="string">"Mon"</span>,<span class="string">"Tues"</span>), f, <span class="number">2</span>*<span class="number">60</span>)
+ <span class="comment">-- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
+</span> <span class="comment">-- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
+</span> <span class="comment">-- or more than once, as the 2 minutes delay combined with the call to ??? makes
+</span> -- sure that it is <span class="keyword">not</span> evaluated again within the <span class="number">20</span> seconds time window allowed by the call to @{isTime}.</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "timeToStartCarHeater"></a>
+    <strong>timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)</strong>
+    </dt>
+    <dd>
+    A function that determines whether the heater of a car should be turned on.
+ The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">readyTime</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
+        </li>
+        <li><span class="parameter">tempOutside</span>
+            <span class="types"><span class="type">number</span></span>
+         The temperature outside or inside the car (if available).
+        </li>
+        <li><span class="parameter">eco</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Should eco settings be used? If not, the car motor health will be considered more important.
+        </li>
+        <li><span class="parameter">heaterON</span>
+            <span class="types"><span class="type">boolean</span></span>
+         An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not specified, it defaults to false.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true/false).
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "shouldStopHeater"></a>
+    <strong>shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)</strong>
+    </dt>
+    <dd>
+    Function that determines whether its time to turn off the heater.
+ The determination is based on the time when the heater was turned on, an auto off time and a
+ filter boolean that makes it possible to block turning the AC off.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">heaterOnTime</span>
+            <span class="types"><span class="type">number</span></span>
+         An Epoch time stamp indicating when the heater was turned on
+        </li>
+        <li><span class="parameter">autoOffTime</span>
+            <span class="types"><span class="type">number</span></span>
+         The number of hours after which the heater should automatically be turned off.
+        </li>
+        <li><span class="parameter">blockedByOutsideTemperature</span>
+            <span class="types"><span class="type">boolean</span></span>
+         A true/false value. If 'true' automatic shutoff will be blocked. The idea is that this value should be based on an expression involving the outside temperature
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ shouldStopHeater (fibaro:getModificationTime(<span class="number">193</span>, <span class="string">"value"</span>), <span class="number">3</span>, <span class="global">tonumber</span>(fibaro:getValue(<span class="number">3</span>, <span class="string">"Temperature"</span>)) &lt;= -<span class="number">20</span> )
+ <span class="comment">-- This call will return when checked 3 hours or more after the time when the state of
+</span> <span class="comment">-- device 193 was last changed, provided that the current outside temperature is not &lt;= -20 degrees.
+</span> <span class="comment">-- If the temperature is &lt;= -20 degrees, the function will always return 'false'
+</span> -- so that the heater is <span class="keyword">not</span> stopped.</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-11-20 19:54:06 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

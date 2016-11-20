@@ -30,19 +30,20 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><strong>datetime</strong></li>
+  <li><strong>B-HAll</strong></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-<h1>Module <code>datetime</code></h1>
+<h1>Module <code>B-HAll</code></h1>
 <p>A module that fascilitates specification of times when Fibaro lua scenes should run.</p>
 <p></p>
 
@@ -97,6 +98,74 @@
 	<tr>
 	<td class="name" nowrap><a href="#shouldStopHeater">shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)</a></td>
 	<td class="summary">Function that determines whether its time to turn off the heater.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#riskOfMold">riskOfMold (hum, temp, levelDescriptions)</a></td>
+	<td class="summary">Function that checks whether there is a risk of mold growth, and assessess the level of threat.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startLevelChangeWithDur">startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</a></td>
+	<td class="summary">A function that manages gradual dimming up of a device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startedManually">startedManually ()</a></td>
+	<td class="summary">A function that tests whether the scene was started manually</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startedByVariable">startedByVariable ()</a></td>
+	<td class="summary">A function that tests whether the scene was started by a change in a global variable</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startedByDevice">startedByDevice ()</a></td>
+	<td class="summary">A function that tests whether the scene was started by a change in the state or property of a device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#notCurrentlyRunning">notCurrentlyRunning ()</a></td>
+	<td class="summary">A function that tests whether the scene is currently running.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#onButUnplugged">onButUnplugged (id, threshold)</a></td>
+	<td class="summary">A function that checks that a device is drawing power, if on
+ The use case for this function is for instance a car heater.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fibaroDebugTable">fibaroDebugTable (t)</a></td>
+	<td class="summary">Function that prints out the content of a table within a Fibaro scene as debuging information</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#debugTable">debugTable (t)</a></td>
+	<td class="summary">Function that prints out the content of a table within a ordinary lua environment.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tableValueExists">tableValueExists (tab, value)</a></td>
+	<td class="summary">Function that checks whether a value exists in a table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#keyUnion">keyUnion (t1, t2)</a></td>
+	<td class="summary">A function that finds the union of keys in two tables</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#seq">seq (start, stop, step)</a></td>
+	<td class="summary">A function that allows you to create an array containing integers ranging from 'start' to 'stop', optionally spaced by 'step' numbers.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#nodonSceneTableVerbose">nodonSceneTableVerbose</a></td>
+	<td class="summary">A table of mappings between NodOn remote scene codes and a text description.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#nodonSceneTable">nodonSceneTable</a></td>
+	<td class="summary">Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#zwavemeSceneTableVerbose">zwavemeSceneTableVerbose</a></td>
+	<td class="summary">A table for Zwave.me wall controller (actually keyfob) scene codes.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#zwavemeSceneTable">zwavemeSceneTable</a></td>
+	<td class="summary">Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.</td>
 	</tr>
 </table>
 
@@ -449,7 +518,7 @@
 </span> myTimer ( notCurrentlyRunning() <span class="keyword">and</span> isTime(<span class="string">"08:10"</span>,<span class="number">0</span>,<span class="number">20</span>) <span class="keyword">and</span> isDayOfWeek(<span class="string">"Mon"</span>,<span class="string">"Tues"</span>), f, <span class="number">2</span>*<span class="number">60</span>)
  <span class="comment">-- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 </span> <span class="comment">-- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
-</span> <span class="comment">-- or more than once, as the 2 minutes delay combined with the call to ??? makes
+</span> <span class="comment">-- or more than once, as the 2 minutes delay combined with the call to <a href="index.html#notCurrentlyRunning">notCurrentlyRunning</a> makes
 </span> -- sure that it is <span class="keyword">not</span> evaluated again within the <span class="number">20</span> seconds time window allowed by the call to @{isTime}.</pre>
     </ul>
 
@@ -534,6 +603,661 @@
     </ul>
 
 </dd>
+    <dt>
+    <a name = "riskOfMold"></a>
+    <strong>riskOfMold (hum, temp, levelDescriptions)</strong>
+    </dt>
+    <dd>
+    Function that checks whether there is a risk of mold growth, and assessess the level of threat.
+ The calculations are based on temperature and humidity estimates, as well as a rough mathmatical approximation of risk regions.
+ developed from this http://www.penthon.com/wp-content/uploads/2014/08/Mogelriskdiagram.png image.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">hum</span>
+            <span class="types"><span class="type">number</span></span>
+         the humidity percentage, measured at the site where a mold growth risk estimate should be computed.
+        </li>
+        <li><span class="parameter">temp</span>
+            <span class="types"><span class="type">number</span></span>
+         the temperature at the location where the humidity measure was made.
+        </li>
+        <li><span class="parameter">levelDescriptions</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table of risk names. Defaults to {"Risk of mold growth","Mold growth happening (8v)","Mold growth happening (4v)"}.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        'false' if there is no risk of mould, and a string value describing the level of risk if there is one.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ &gt; <span class="global">print</span>(riskOfMold(<span class="number">77</span>,<span class="number">10</span>)) <span class="comment">-- results in a "false" printout.
+</span> &gt; <span class="global">print</span>(riskOfMold(<span class="number">82</span>,<span class="number">10</span>)) -- results <span class="keyword">in</span> a <span class="string">""</span>Risk of mold growth" printout.</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "startLevelChangeWithDur"></a>
+    <strong>startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</strong>
+    </dt>
+    <dd>
+    A function that manages gradual dimming up of a device.
+ The function will see to it that  the device will gradually be dimmed up from a start level to an endpoint level within a
+ specified time frame.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dimmerID</span>
+            <span class="types"><span class="type">number</span></span>
+         The ID of the dimmer device.
+        </li>
+        <li><span class="parameter">startLevel</span>
+            <span class="types"><span class="type">number</span></span>
+         The dimmer level set at the onset of the sequence.
+        </li>
+        <li><span class="parameter">stopLevel</span>
+            <span class="types"><span class="type">number</span></span>
+         The dimmer level to reach.
+        </li>
+        <li><span class="parameter">durationSeconds</span>
+            <span class="types"><span class="type">number</span></span>
+         The time window for reaching the stopLevel.
+        </li>
+        <li><span class="parameter">delayBetweenSteps</span>
+            <span class="types"><span class="type">number</span></span>
+         Optional parameter inficating the time inbetwen steps. Defaults to 2. If you specify this, the time frame calculations will not be correct.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "startedManually"></a>
+    <strong>startedManually ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started manually
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "startedByVariable"></a>
+    <strong>startedByVariable ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started by a change in a global variable
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        If started by a global variable, the name of the variable is returned.</li>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        If started by something else, 'false' is returned.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "startedByDevice"></a>
+    <strong>startedByDevice ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started by a change in the state or property of a device.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table containting two fields:
+  'deviceID', indicating the ID of the triggering device
+  'propertyName' the property of the device that changed, causing the scene to trigger.</li>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false).</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "notCurrentlyRunning"></a>
+    <strong>notCurrentlyRunning ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene is currently running.
+ Please note that the testing is stated in the negative. What is tested is whether the scene is NOT
+ running, as this is the most probable use case.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false).
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "onButUnplugged"></a>
+    <strong>onButUnplugged (id, threshold)</strong>
+    </dt>
+    <dd>
+    A function that checks that a device is drawing power, if on
+ The use case for this function is for instance a car heater.  If it is turned on, it should draw power.
+ If not, it is unplugged. Of course, this function requires a device that has power reporting.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">number</span></span>
+         The ID of the device.
+        </li>
+        <li><span class="parameter">threshold</span>
+            <span class="types"><span class="type">number</span></span>
+         The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        A boolean indicating wheter the device is ON but not active (not plugged in)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fibaroDebugTable"></a>
+    <strong>fibaroDebugTable (t)</strong>
+    </dt>
+    <dd>
+    Function that prints out the content of a table within a Fibaro scene as debuging information
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table. Only simple tables (not nested) are supported.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "debugTable"></a>
+    <strong>debugTable (t)</strong>
+    </dt>
+    <dd>
+    Function that prints out the content of a table within a ordinary lua environment.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table. Only simple tables (not nested) are supported.
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#fibaroDebugTable">fibaroDebugTable</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "tableValueExists"></a>
+    <strong>tableValueExists (tab, value)</strong>
+    </dt>
+    <dd>
+    Function that checks whether a value exists in a table
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tab</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         The table
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A value to check for.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A value indicating whether the value existed in the table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "keyUnion"></a>
+    <strong>keyUnion (t1, t2)</strong>
+    </dt>
+    <dd>
+    A function that finds the union of keys in two tables
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t1</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         The first table
+        </li>
+        <li><span class="parameter">t2</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         The second table
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        A table with keys that are the union (no replication) of keys from the two tables, and will a value 'true' assigned to each key.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "seq"></a>
+    <strong>seq (start, stop, step)</strong>
+    </dt>
+    <dd>
+    A function that allows you to create an array containing integers ranging from 'start' to 'stop', optionally spaced by 'step' numbers.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">start</span>
+            <span class="types"><span class="type">integer</span></span>
+         The integer which will be the first (head) of the sequence.
+        </li>
+        <li><span class="parameter">stop</span>
+            <span class="types"><span class="type">integer</span></span>
+         The integer which will either be the largest in the sequence (the tail) or integer setting the upper boundary for the sequence. In the latter case, the last element in the integer array will be the largets integer x the fullfills (x + 'step') < 'stop'.
+        </li>
+        <li><span class="parameter">step</span>
+            <span class="types"><span class="type">integer</span></span>
+         The spacing between numbers in the returned sequence.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "nodonSceneTableVerbose"></a>
+    <strong>nodonSceneTableVerbose</strong>
+    </dt>
+    <dd>
+    A table of mappings between NodOn remote scene codes and a text description.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">10</span>
+         Button 1 Single Press
+        </li>
+        <li><span class="parameter">20</span>
+         Button 2 Single Press
+        </li>
+        <li><span class="parameter">30</span>
+         Button 3 Single Press
+        </li>
+        <li><span class="parameter">40</span>
+         Button 4 Single Press
+        </li>
+        <li><span class="parameter">13</span>
+         Button 1 Double Press
+        </li>
+        <li><span class="parameter">23</span>
+         Button 2 Double Press
+        </li>
+        <li><span class="parameter">33</span>
+         Button 3 Double Press
+        </li>
+        <li><span class="parameter">43</span>
+         Button 4 Double Press
+        </li>
+        <li><span class="parameter">12</span>
+         Button 1 Hold Press
+        </li>
+        <li><span class="parameter">22</span>
+         Button 2 Hold Press
+        </li>
+        <li><span class="parameter">32</span>
+         Button 3 Hold Press
+        </li>
+        <li><span class="parameter">42</span>
+         Button 4 Hold Press
+        </li>
+        <li><span class="parameter">11</span>
+         Button 1 Hold Released
+        </li>
+        <li><span class="parameter">21</span>
+         Button 2 Hold Released
+        </li>
+        <li><span class="parameter">31</span>
+         Button 3 Hold Released
+        </li>
+        <li><span class="parameter">41</span>
+         Button 4 Hold Released
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "nodonSceneTable"></a>
+    <strong>nodonSceneTable</strong>
+    </dt>
+    <dd>
+    Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.
+ In the short forms stored, the 'SP' indicates a single press, 'DP' a double press. 'HP' indicates that the button is pressed and held, and 'HR' that it is released.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">10</span>
+         (1SP) Button 1 Single Press
+        </li>
+        <li><span class="parameter">20</span>
+         (2SP) Button 2 Single Press
+        </li>
+        <li><span class="parameter">30</span>
+         (3SP) Button 3 Single Press
+        </li>
+        <li><span class="parameter">40</span>
+         (4SP) Button 4 Single Press
+        </li>
+        <li><span class="parameter">13</span>
+         (1DP) Button 1 Double Press
+        </li>
+        <li><span class="parameter">23</span>
+         (2DP) Button 2 Double Press
+        </li>
+        <li><span class="parameter">33</span>
+         (3DP) Button 3 Double Press
+        </li>
+        <li><span class="parameter">43</span>
+         (4DP) Button 4 Double Press
+        </li>
+        <li><span class="parameter">12</span>
+         (1HP) Button 1 Hold Press
+        </li>
+        <li><span class="parameter">22</span>
+         (2HP) Button 2 Hold Press
+        </li>
+        <li><span class="parameter">32</span>
+         (3HP) Button 3 Hold Press
+        </li>
+        <li><span class="parameter">42</span>
+         (4HP) Button 4 Hold Press
+        </li>
+        <li><span class="parameter">11</span>
+         (1HR) Button 1 Hold Released
+        </li>
+        <li><span class="parameter">21</span>
+         (2HR) Button 2 Hold Released
+        </li>
+        <li><span class="parameter">31</span>
+         (3HR) Button 3 Hold Released
+        </li>
+        <li><span class="parameter">41</span>
+         (4HR) Button 4 Hold Released
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "zwavemeSceneTableVerbose"></a>
+    <strong>zwavemeSceneTableVerbose</strong>
+    </dt>
+    <dd>
+    A table for Zwave.me wall controller (actually keyfob) scene codes.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">11</span>
+         Button 1 Single Click
+        </li>
+        <li><span class="parameter">21</span>
+         Button 2 Single Click
+        </li>
+        <li><span class="parameter">31</span>
+         Button 3 Single Click
+        </li>
+        <li><span class="parameter">41</span>
+         Button 4 Single Click
+        </li>
+        <li><span class="parameter">12</span>
+         Button 1 Double Click
+        </li>
+        <li><span class="parameter">22</span>
+         Button 2 Double Click
+        </li>
+        <li><span class="parameter">32</span>
+         Button 3 Double Click
+        </li>
+        <li><span class="parameter">42</span>
+         Button 4 Double Click
+        </li>
+        <li><span class="parameter">13</span>
+         Button 1 Press and hold
+        </li>
+        <li><span class="parameter">23</span>
+         Button 2 Press and hold
+        </li>
+        <li><span class="parameter">33</span>
+         Button 3 Press and hold
+        </li>
+        <li><span class="parameter">43</span>
+         Button 4 Press and hold
+        </li>
+        <li><span class="parameter">14</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">24</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">34</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">44</span>
+         Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">15</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">25</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">35</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">45</span>
+         Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">16</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">26</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">36</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">46</span>
+         Button 4 Click and then Press and hold
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "zwavemeSceneTable"></a>
+    <strong>zwavemeSceneTable</strong>
+    </dt>
+    <dd>
+    Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.
+ In the short forms stored, the 'SC' indicates a single click, 'DC' a double click. 'PH' indicates that the button is pressed and held. In cases when two actions are performed, like in the case of a click followed by a press that is held, then the two actions are separated by a '_' in the code.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">11</span>
+         (1SC) Button 1 Single Click
+        </li>
+        <li><span class="parameter">21</span>
+         (2SC) Button 2 Single Click
+        </li>
+        <li><span class="parameter">31</span>
+         (3SC) Button 3 Single Click
+        </li>
+        <li><span class="parameter">41</span>
+         (4SC) Button 4 Single Click
+        </li>
+        <li><span class="parameter">12</span>
+         (1DC) Button 1 Double Click
+        </li>
+        <li><span class="parameter">22</span>
+         (2DC) Button 2 Double Click
+        </li>
+        <li><span class="parameter">32</span>
+         (3DC) Button 3 Double Click
+        </li>
+        <li><span class="parameter">42</span>
+         (4DC) Button 4 Double Click
+        </li>
+        <li><span class="parameter">13</span>
+         (1PH) Button 1 Press and hold
+        </li>
+        <li><span class="parameter">23</span>
+         (2PH) Button 2 Press and hold
+        </li>
+        <li><span class="parameter">33</span>
+         (3PH) Button 3 Press and hold
+        </li>
+        <li><span class="parameter">43</span>
+         (4PH) Button 4 Press and hold
+        </li>
+        <li><span class="parameter">14</span>
+         (1C_PH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">24</span>
+         (2C_PH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">34</span>
+         (3C_PH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">44</span>
+         (4C_PH) Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">15</span>
+         (1PLH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">25</span>
+         (2PLH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">35</span>
+         (3PLH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">45</span>
+         (4PLH) Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">16</span>
+         (1C_PLH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">26</span>
+         (1C_PLH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">36</span>
+         (1C_PLH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">46</span>
+         (1C_PLH) Button 4 Click and then Press and hold
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
 </dl>
 
 
@@ -541,7 +1265,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-09-09 21:29:22 </i>
+<i style="float:right;">Last updated 2016-11-20 20:27:48 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
