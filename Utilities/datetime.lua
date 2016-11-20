@@ -14,7 +14,6 @@
 -- -- Will return 'true' the entire hour
 -- timestringToTable("08:10:10")
 -- -- Will return 'true' exactly at the indicated second
-
 function timestringToTable (time)
     local dateTable = os.date("*t");
     -- Get an iterator that extracts date fields
@@ -231,7 +230,7 @@ end;
 -- myTimer ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
 -- -- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 -- -- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
--- -- or more than once, as the 2 minutes delay combined with the call to @{sourcetriggers.notCurrentlyRunning} makes
+-- -- or more than once, as the 2 minutes delay combined with the call to @{notCurrentlyRunning} makes
 -- -- sure that it is not evaluated again within the 20 seconds time window allowed by the call to @{isTime}.
 
 
@@ -316,3 +315,5 @@ function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperatur
     local notblock = (not blockedByOutsideTemperature) or false;
     return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
 end;
+
+return datetime;

@@ -1,3 +1,5 @@
+-- A module that collects general programming utility functions
+
 
 --- Function that prints out the content of a table within a Fibaro scene as debuging information
 -- @tparam table t A table. Only simple tables (not nested) are supported.

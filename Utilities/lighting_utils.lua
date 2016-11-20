@@ -1,4 +1,5 @@
 -- A module for handling functions related to management of lighting.
+-- @module lighting
 
 --- A function that manages gradual dimming up of a device.
 -- The function will see to it that  the device will gradually be dimmed up from a start level to an endpoint level within a 
@@ -7,7 +8,7 @@
 -- @tparam number startLevel The dimmer level set at the onset of the sequence.
 -- @tparam number stopLevel The dimmer level to reach.
 -- @tparam number durationSeconds The time window for reaching the stopLevel.
--- @tparma number delayBetweenSteps Optional parameter inficating the time inbetwen steps. Defaults to 2. If you specify this, the time frame calculations will not be correct.
+-- @tparam number delayBetweenSteps Optional parameter inficating the time inbetwen steps. Defaults to 2. If you specify this, the time frame calculations will not be correct.
 
 function startLevelChangeWithDur(dimmerID,startLevel,stopLevel,durationSeconds,delayBetweenSteps)
     local currentLevel = startLevel;

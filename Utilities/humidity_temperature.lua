@@ -1,3 +1,4 @@
+-- A module for handling computations that are primarilly based on temperature date.
 
 
 function D_Phi(humidity)
@@ -47,6 +48,7 @@ end;
 -- developed from this http://www.penthon.com/wp-content/uploads/2014/08/Mogelriskdiagram.png image.
 -- @tparam number hum the humidity percentage, measured at the site where a mold growth risk estimate should be computed.
 -- @tparam number temp the temperature at the location where the humidity measure was made.
+-- @tparam table levelDescriptions A table of risk names. Defaults to {"Risk of mold growth","Mold growth happening (8v)","Mold growth happening (4v)"}.
 -- @return 'false' if there is no risk of mould, and a string value describing the level of risk if there is one.
 -- @usage
 -- > print(riskOfMold(77,10)) -- results in a "false" printout.
