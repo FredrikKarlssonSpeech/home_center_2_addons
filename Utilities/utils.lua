@@ -14,14 +14,23 @@ end;
 -- @see fibaroDebugTable
 
 function debugTable (t)
+
     for k, v in pairs(t) do
         if(type(v) == "table") then
-            print(k.."::\t")
+            printFun(k.."::\t")
             for kI, vI in pairs(v) do
-                print(kI.." ".. tostring(v1));
+                if(not debug == nil) then
+                    fibaro:debug(kI.." ".. tostring(v1));
+                else
+                    print(kI.." ".. tostring(v1));
+                end;
             end;
         else
-            print(k.." ".. tostring(v));
+            if(not debug == nil) then
+                fibaro:debug(k.." ".. tostring(v));
+            else
+                print(k.." ".. tostring(v));
+            end;
         end;
     end;
 end;
