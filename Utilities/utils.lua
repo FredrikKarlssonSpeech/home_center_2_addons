@@ -1,36 +1,27 @@
 -- A module that collects general programming utility functions
 
 
---- Function that prints out the content of a table within a Fibaro scene as debuging information
--- @tparam table t A table. Only simple tables (not nested) are supported.
-function fibaroDebugTable (t)
-    for k, v in pairs(t) do
-        fibaro:debug(k.." ".. tostring(v));
-    end;
-end;
 
---- Function that prints out the content of a table within a ordinary lua environment.
+--- Function that prints out the content of a table.
+-- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment. 
 -- @tparam table t A table. Only simple tables (not nested) are supported.
 -- @see fibaroDebugTable
 
 function debugTable (t)
-
+    local printFunc = print
+    if (fibaro or {}).debug then 
+       function printFunc(...) 
+          return fibaro:debug(...)
+       end
+    end
     for k, v in pairs(t) do
         if(type(v) == "table") then
-            printFun(k.."::\t")
+            printFunc(k.."::\t")
             for kI, vI in pairs(v) do
-                if(not debug == nil) then
-                    fibaro:debug(kI.." ".. tostring(v1));
-                else
-                    print(kI.." ".. tostring(v1));
-                end;
+                printFunc(kI.." ".. tostring(v1));
             end;
         else
-            if(not debug == nil) then
-                fibaro:debug(k.." ".. tostring(v));
-            else
-                print(k.." ".. tostring(v));
-            end;
+            printFunc(k.." ".. tostring(v));
         end;
     end;
 end;
