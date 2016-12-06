@@ -89,7 +89,9 @@ function myFunc ()
 
     fibaro:call(288, "turnOn") -- Gröna lampan
     fibaro:call(447, "turnOn") -- innergårdens belysning
-    fibaro:call(285, "turnOn") -- uttagen i uterummet
+    fibaro:call(472, "turnOn") -- julbelysningen uppe plugg
+    fibaro:call(474, "turnOn") -- julbelysningen nere plugg
+ --   fibaro:call(285, "turnOn") -- uttagen i uterummet
 end;
 
 
