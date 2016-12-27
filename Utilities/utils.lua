@@ -5,7 +5,6 @@
 --- Function that prints out the content of a table.
 -- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment. 
 -- @tparam table t A table. Only simple tables (not nested) are supported.
--- @see fibaroDebugTable
 
 function debugTable (t)
     local printFunc = print
