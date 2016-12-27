@@ -88,6 +88,11 @@
  The table should use only fields that are returned by a call to <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.time">os.time</a> (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#stringTimeAdjust">stringTimeAdjust (stringTime, adjustmentMinutes, extraSecondsAdjustment)</a></td>
+	<td class="summary">A funtion that applies a time adjustment to a time specified in a string format
+ What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05").</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#myTimer">myTimer (shouldRun, functionToRun, sleepSeconds)</a></td>
 	<td class="summary">Function that simplifies running a scene on a timer and specify the delay needed.</td>
 	</tr>
@@ -98,6 +103,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#shouldStopHeater">shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)</a></td>
 	<td class="summary">Function that determines whether its time to turn off the heater.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#entryCounter">entryCounter (activatedID, moveInsideID, moveOutsideID, doorID, variableName)</a></td>
+	<td class="summary">This module collects functions that make it easier to reason about events.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#activationSequence">activationSequence (ids, property)</a></td>
+	<td class="summary">A function that produces a sequence of activations of devices.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#riskOfMold">riskOfMold (hum, temp, levelDescriptions)</a></td>
@@ -129,12 +142,8 @@
  The use case for this function is for instance a car heater.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fibaroDebugTable">fibaroDebugTable (t)</a></td>
-	<td class="summary">Function that prints out the content of a table within a Fibaro scene as debuging information</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#debugTable">debugTable (t)</a></td>
-	<td class="summary">Function that prints out the content of a table within a ordinary lua environment.</td>
+	<td class="summary">Function that prints out the content of a table.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tableValueExists">tableValueExists (tab, value)</a></td>
@@ -147,6 +156,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#seq">seq (start, stop, step)</a></td>
 	<td class="summary">A function that allows you to create an array containing integers ranging from 'start' to 'stop', optionally spaced by 'step' numbers.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tableToTable">tableToTable (t)</a></td>
+	<td class="summary">Utility function that changes keys to values and vise versa for a table.</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
@@ -479,6 +492,39 @@
 
 </dd>
     <dt>
+    <a name = "stringTimeAdjust"></a>
+    <strong>stringTimeAdjust (stringTime, adjustmentMinutes, extraSecondsAdjustment)</strong>
+    </dt>
+    <dd>
+    A funtion that applies a time adjustment to a time specified in a string format
+ What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05").
+ A numer of minutes (or optional seconds) are then added to the time, and the time is returned as a new time string.
+ The adjustment is applied at the Epoch time level, which means that adjustments that also leads to change of date will be correctly handled.
+ For the conversion, the time specification is assumed to be refering to *today*.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">stringTime</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the time specification.
+        </li>
+        <li><span class="parameter">adjustmentMinutes</span>
+            <span class="types"><span class="type">number</span></span>
+         the number of minutes to be added to the time. Negative values means subtraction of time.
+        </li>
+        <li><span class="parameter">extraSecondsAdjustment</span>
+            <span class="types"><span class="type">number</span></span>
+         an optional number of seconds to be added too (that is, in additional to the minutes). Negative numbers means subtraction.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "myTimer"></a>
     <strong>myTimer (shouldRun, functionToRun, sleepSeconds)</strong>
     </dt>
@@ -601,6 +647,69 @@
 </span> <span class="comment">-- If the temperature is &lt;= -20 degrees, the function will always return 'false'
 </span> -- so that the heater is <span class="keyword">not</span> stopped.</pre>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "entryCounter"></a>
+    <strong>entryCounter (activatedID, moveInsideID, moveOutsideID, doorID, variableName)</strong>
+    </dt>
+    <dd>
+    This module collects functions that make it easier to reason about events.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">activatedID</span>
+
+        </li>
+        <li><span class="parameter">moveInsideID</span>
+
+        </li>
+        <li><span class="parameter">moveOutsideID</span>
+
+        </li>
+        <li><span class="parameter">doorID</span>
+
+        </li>
+        <li><span class="parameter">variableName</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "activationSequence"></a>
+    <strong>activationSequence (ids, property)</strong>
+    </dt>
+    <dd>
+    A function that produces a sequence of activations of devices.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ids</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         An array of device IDs.
+        </li>
+        <li><span class="parameter">property</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         The property to check modication times of.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        A table of
+    </ol>
+
+
+
 
 </dd>
     <dt>
@@ -808,32 +917,12 @@
 
 </dd>
     <dt>
-    <a name = "fibaroDebugTable"></a>
-    <strong>fibaroDebugTable (t)</strong>
-    </dt>
-    <dd>
-    Function that prints out the content of a table within a Fibaro scene as debuging information
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">t</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         A table. Only simple tables (not nested) are supported.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
     <a name = "debugTable"></a>
     <strong>debugTable (t)</strong>
     </dt>
     <dd>
-    Function that prints out the content of a table within a ordinary lua environment.
+    Function that prints out the content of a table.
+ The function works well both within  Fibaro Home center 2 and in an ordinary lua environment.
 
 
     <h3>Parameters:</h3>
@@ -846,10 +935,6 @@
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="index.html#fibaroDebugTable">fibaroDebugTable</a>
-    </ul>
 
 
 </dd>
@@ -939,6 +1024,33 @@
         </li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tableToTable"></a>
+    <strong>tableToTable (t)</strong>
+    </dt>
+    <dd>
+    Utility function that changes keys to values and vise versa for a table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         The table to be inverted.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        A table where all the keys in t has become values (and the oposite).
+    </ol>
 
 
 
@@ -1265,7 +1377,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-11-20 20:34:45 </i>
+<i style="float:right;">Last updated 2016-12-27 11:27:50 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
