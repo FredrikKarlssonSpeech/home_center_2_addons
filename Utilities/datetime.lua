@@ -211,9 +211,24 @@ function datetimeTableTrue (dateTable)
     return(true);
 end;
 
---print(tostring(datetimeTableTrue({year=2016,hour=9})))
+--- A funtion that applies a time adjustment to a time specified in a string format
+-- What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05"). 
+-- A numer of minutes (or optional seconds) are then added to the time, and the time is returned as a new time string.
+-- The adjustment is applied at the Epoch time level, which means that adjustments that also leads to change of date will be correctly handled.
+-- For the conversion, the time specification is assumed to be refering to *today*.
+-- @tparam string stringTime the time specification.
+-- @tparam number adjustmentMinutes the number of minutes to be added to the time. Negative values means subtraction of time.
+-- @tparam number extraSecondsAdjustment an optional number of seconds to be added too (that is, in additional to the minutes). Negative numbers means subtraction. 
 
--- local tab = {a=1,b={1,2}};
+function stringTimeAdjust(stringTime,adjustmentMinutes,extraSecondsAdjustment)
+    local extraSecs = extraSecondsAdjustment or 0;
+    local timeEpoch = tableToEpochtime(timestringToTable(stringTime));
+    local adjustSeconds = tonumber(adjustmentMinutes) * 60 + tonumber(extraSecs);
+    local newEpochTime = timeEpoch + adjustSeconds;
+    local newTime = tostring(os.date("%X",newEpochTime));
+    return(newTime);
+end;
+
 
 --- Function that simplifies running a scene on a timer and specify the delay needed.
 -- The basic structure of the function is that it takes a truth value indicating whether the scene should run.
@@ -315,5 +330,7 @@ function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperatur
     local notblock = (not blockedByOutsideTemperature) or false;
     return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
 end;
+
+
 
 return datetime;
