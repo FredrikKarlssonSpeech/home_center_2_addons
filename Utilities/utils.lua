@@ -77,3 +77,14 @@ function seq(start, stop, step)
     end;
     return out;
 end;
+
+--- Utility function that changes keys to values and vise versa for a table.
+-- @tparam table t The table to be inverted.
+-- @treturn table A table where all the keys in t has become values (and the oposite).
+function tableToTable (t)
+    local out = {}
+    for k, v in pairs(t) do
+        out[tostring(v)] = k;
+    end;
+    return out;
+end;
