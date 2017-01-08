@@ -50,7 +50,7 @@ function dayrecorder( storageVariable)
     local toStore = {id,property, value};
     -- Now insert the event into the global variable
     fibaro:debug("Storing value ".. value .. " of property ".. property .. " for device " .. id);
-    local storageTable = json.decode(fibaro:getGlobal(tostring(storageVariable)));
+    local storageTable = json.decode(fibaro:getGlobal(tostring(storageVariable))) or {};
     table.insert(storageTable,toStore);
     local out = json.encode(storageTable);
     fibaro:setGlobal(tostring(storageVariable),out);
