@@ -87,3 +87,36 @@ function tableToTable (t)
     end;
     return out;
 end;
+
+--- A simple utility function which checks whether a value exists within an array
+-- @tparam table tab the array.
+-- @param value the value to check the presence of.
+-- @treturn boolean is the value present in 'tab'?
+-- @usage a={};table.insert(a,10);
+-- @usage print(arrayContainsValue(a,10));
+-- @usage print(arrayContainsValue(a,120));
+function arrayContainsValue(tab, value)
+    for k,v in pairs(tab) do
+        if tostring(v) == tostring(value) then
+            return(true);
+        end;
+    end;
+    return(false);
+end;
+
+
+--- A simple utility function which checks whether a key exists in an array
+-- @tparam table tab the array.
+-- @param key the value to check the presence of.
+-- @treturn boolean is the value present in 'tab'?
+-- @usage a={};a["10"]=90;a["20"]=80;
+-- @usage print(arrayContainsKey(a,10));
+-- @usage print(arrayContainsKey(a,120));
+function arrayContainsKey(tab, key)
+    for k,v in pairs(tab) do
+        if tostring(k) == tostring(key) then
+            return(true);
+        end;
+    end;
+    return(false);
+end;
