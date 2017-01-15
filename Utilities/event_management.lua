@@ -80,5 +80,23 @@ function hasBeenActivity(timeWindow, variableName)
     return (timeDiffMinutes < tonumber(timeWindow));
 end;
 
+--- A simple function that answers the question of whether a device property has been changed within a specified time window
+-- @tparam number id the id of the device to be checked.
+-- @tparam string property the property to be checked.
+-- @tparam number seconds  the number of seconds to go back when checking for a change in the property value.
+-- @tparam number minutes  an optional number of minutes to go back when checking for a change in the property value. Defaults to zero.
+-- @tparam number hours  an optional number of hours to go back when checking for a change in the property value. Defaults to zero.
+-- @tparam number debugChangeTimeEpoch a time point used when debugging the function. If this time point, specified as an Epoch time stamp, is given, the function will not check the device property modification time, but instead check whether the time point given here is within the time window counted from current time. 
+-- @treturn boolean has a change occured in the property later than 'seconds', 'minutes' and 'hours' ago?
+-- @usage print(hasChangedSince(1,"dded",3,0,0,tonumber(os.time())- 4));
+-- @usage print(hasChangedSince(1,"dded",0,1,0,tonumber(os.time())- 4));
+-- @usage print(hasChangedSince(1,"dded",4,0,0,tonumber(os.time())- 4));
+-- @usage print(hasChangedSince(1,"dded",2,0,0,tonumber(os.time())- 4));
 
-
+function hasChangedSince(id,property,seconds,minutes,hours,debugChangeTimeEpoch)
+    local min = minutes or 0;
+    local h = hours or 0;
+    local lastchange = tonumber(debugChangeTimeEpoch) or tonumber(fibaro:getModificationTime(id,property));
+    local now = os.time();
+    return(lastchange >= (now - seconds - min * 60 - h * 60 * 60));
+end;
