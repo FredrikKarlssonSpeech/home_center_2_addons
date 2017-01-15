@@ -98,5 +98,13 @@ function hasChangedSince(id,property,seconds,minutes,hours,debugChangeTimeEpoch)
     local h = hours or 0;
     local lastchange = tonumber(debugChangeTimeEpoch) or tonumber(fibaro:getModificationTime(id,property));
     local now = os.time();
+    local printFunc = print;
+    if (fibaro or {}).debug then 
+       function printFunc(...) ;
+          return fibaro:debug(...);
+       end;
+    end;
+    printFunc("Testing device time " .. lastchange.. " Epoch time, which is ".. os.date("%Y-%m-%d %X",lastchange));
+    printFunc("against current time ".. now .. " Epoch time, which is ".. os.date("%Y-%m-%d %X",now));
     return(lastchange >= (now - seconds - min * 60 - h * 60 * 60));
 end;
