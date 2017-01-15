@@ -37,32 +37,28 @@ end;
 
 
 --- This function takes a lox level reading and a set of conditions, and selects which lights to turn on
--- @tparam number luxLevel a LUX reading that should determine which lights should be turned on
--- @tparam {{number,number}} conditionsTable a table of {lux,id} tuples that performs the selection of devices to turn on. 
 -- If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.
--- FIXME: THIS DOES NOT WORK YET. THE PROBLEM SEEMS TO BE related to tables
+-- @tparam number currentLuxLevel a LUX reading that should determine which lights should be turned on
+-- @tparam {{number,number}} conditionsTable a table of {lux,id} tuples that performs the selection of devices to turn on. 
+-- @treturn table an array of device IDs that should be activated.
+-- @usage a = {}; a[10] = 90; a[30] = 80;
+-- @usage debugTable(lightSelect(20,a));
 
-function lightSelect(luxLevel, conditionsTable)
+function lightSelect(currentLuxLevel, conditionsTable)
     local currentLux = tonumber(luxLevel);
     out = {};
-    local size = nil;
 --    if (not type(conditionsTable) == "table")  then
 --        error("Array of arrays expected as 'conditionsTable' argument.")
 --    end;
-    for i, v in ipairs(conditionsTable) do
-        for lux, id in pairs(v) do
-            if currentLux <= lux then
-                size = table.getn(out);
-                out[n+1] = tonumber(id);
-            end;
+    for lux, id in pairs(conditionsTable) do
+        if tonumber(currentLuxLevel) <= tonumber(lux) then
+            table.insert(out,id);
         end;
     end;
     return(out);
 end;
 
-a = {}
-a[1] = {10,90}
-a[2] = {30,80}
+
 
 b = lightSelect(10,a); 
 print(b[1]);
