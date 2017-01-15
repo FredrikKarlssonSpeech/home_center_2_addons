@@ -39,7 +39,7 @@ end;
 --- This function takes a lox level reading and a set of conditions, and selects which lights to turn on
 -- If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.
 -- @tparam number currentLuxLevel a LUX reading that should determine which lights should be turned on
--- @tparam {{number,number}} conditionsTable a table of {lux,id} tuples that performs the selection of devices to turn on. 
+-- @tparam {{number,number}} conditionsTable a table of {id,lux} tuples that performs the selection of devices to turn on. 
 -- @treturn table an array of device IDs that should be activated.
 -- @usage a = {}; a[10] = 90; a[30] = 80;
 -- @usage debugTable(lightSelect(20,a));
@@ -50,7 +50,7 @@ function lightSelect(currentLuxLevel, conditionsTable)
 --    if (not type(conditionsTable) == "table")  then
 --        error("Array of arrays expected as 'conditionsTable' argument.")
 --    end;
-    for lux, id in pairs(conditionsTable) do
+    for id, lux in pairs(conditionsTable) do
         if tonumber(currentLuxLevel) <= tonumber(lux) then
             table.insert(out,id);
         end;
@@ -58,9 +58,5 @@ function lightSelect(currentLuxLevel, conditionsTable)
     return(out);
 end;
 
-
-
-b = lightSelect(10,a); 
-print(b[1]);
 
 
