@@ -120,3 +120,23 @@ function arrayContainsKey(tab, key)
     end;
     return(false);
 end;
+
+--- This utility function manages the loading of content from a HomeTable variable
+-- @tparam string variableName an optional name of a variable from which the structure should be collected.
+-- @treturn table a nested structure containing the HomeTable information.
+-- @treturn boolean return value is false if the function fails to load any information, or the HomeTable is empty.
+function loadHomeTable (variableName)
+    local var = variableName or "HomeTable";
+    local jT = json.decode(fibaro:getGlobalValue(variable));
+    -- Check what we got
+    if not next(jT) == nil then
+        fibaro:debug("Got HomeTable");
+        return(jT);
+    else
+        fibaro:debug("Could not load content from the HomeTable variable \'".. variableName "\'. Please make sure the variable exists.");
+        return(false);
+    end;
+end;
+
+
+
