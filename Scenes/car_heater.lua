@@ -72,6 +72,17 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch))
 end
 
+function isDayOfWeek (dayList)
+    local today = os.date("%a",os.time());
+    local longToday = os.date("%A",os.time());
+    for i, v in ipairs(dayList) do
+        if today == v or longToday == v then
+            return(true);
+        end;
+    end;
+    return(false);
+end;
+
 function startedManually ()
     local startSource = fibaro:getSourceTrigger();
     return( startSource["type"] == "other")
@@ -130,8 +141,7 @@ elseif (fibaro:countScenes() < 2) then
         --if (fibaro:getValue(193, "value") == 1) then heaterON = true else heaterON = false end;
         myTimer( timeToStartCarHeater("07:10", tempOutside, heaterON ) and  isWeekDay() ,myFunc);
         myTimer( timeToStartCarHeater("10:00", tempOutside, heaterON ) and  isWeekEnd() ,myFunc);
-
+        myTimer( timeToStartCarHeater("17:30", tempOutside, heaterON ) and  isDayOfWeek{"Sun"} ,myFunc);
         fibaro:sleep(60*1000);
     end;
 end;
-

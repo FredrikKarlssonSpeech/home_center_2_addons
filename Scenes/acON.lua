@@ -19,29 +19,30 @@ function timestringToTable (time)
     dateTable["min"] = minute;
     dateTable["sec"] = second;
     return(dateTable)
-end
+end;
 
 function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
     return(outTime);
-end
+end;
+
 
 
 function startedManually ()
     local startSource = fibaro:getSourceTrigger();
-    return( startSource["type"] == "other")
-end
+    return( startSource["type"] == "other");
+end;
 
 function startedByDevice ()
     local startSource = fibaro:getSourceTrigger();
     -- startSource ={type="property",deviceID="11",propertyName="tet"}
     if startSource["type"] == "property" then
-        return ({deviceID=startSource["deviceID"], propertyName=startSource["propertyName"]})
+        return ({deviceID=startSource["deviceID"], propertyName=startSource["propertyName"]});
     else
-        return false
-    end
-end
+        return false;
+    end;
+end;
 
 function isTime (timeString, offsetMinutes, secondsWindow)
     local timeTable = timestringToTable(timeString);
@@ -49,7 +50,7 @@ function isTime (timeString, offsetMinutes, secondsWindow)
     local timeWithOffset = timeEpoch + (offsetMinutes * 60);
     local now = os.time();
     return ( math.abs(timeWithOffset - now) <= secondsWindow )
-end
+end;
 
 function isWeekDay ()
     local today = tonumber(os.date("%w",os.time()));
@@ -108,7 +109,7 @@ elseif (fibaro:countScenes() < 2) then
         --if (fibaro:getValue(193, "value") == 1) then heaterON = true else heaterON = false end;
         myTimer( isTime("15:00", 0, 10*60 ) and  isWeekDay() and (tempOutside <= -5), acONHeat22);
 
-        if(humidityInside > 45) then 
+        if(humidityInside > 45) then
             acONDry();
         end;
 
@@ -116,5 +117,3 @@ elseif (fibaro:countScenes() < 2) then
         fibaro:sleep(10*60*1000);
     end;
 end;
-
-

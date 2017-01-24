@@ -25,7 +25,7 @@ fibaro:debug("Stänger av HomePlug för Isas TV");
 fibaro:call(292, "turnOff")
 
 -- Wait for 15 seconds
-fibaro:sleep(15*1000);
+fibaro:sleep(30*1000);
 
 -- restart homeplugs in order
 

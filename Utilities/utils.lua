@@ -3,13 +3,13 @@
 
 
 --- Function that prints out the content of a table.
--- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment. 
+-- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment.
 -- @tparam table t A table. Only simple tables (not nested) are supported.
 
 function debugTable (t)
     local printFunc = print
-    if (fibaro or {}).debug then 
-       function printFunc(...) 
+    if (fibaro or {}).debug then
+       function printFunc(...)
           return fibaro:debug(...)
        end
     end
@@ -24,6 +24,7 @@ function debugTable (t)
         end;
     end;
 end;
+
 
 --- Function that checks whether a value exists in a table
 -- @tparam table tab The table
@@ -126,17 +127,14 @@ end;
 -- @treturn table a nested structure containing the HomeTable information.
 -- @treturn boolean return value is false if the function fails to load any information, or the HomeTable is empty.
 function loadHomeTable (variableName)
-    local var = variableName or "HomeTable";
-    local jT = json.decode(fibaro:getGlobalValue(variable));
+    local var = tostring(variableName) or "HomeTable";
+    local jT = json.decode(fibaro:getGlobalValue(var));
     -- Check what we got
-    if not next(jT) == nil then
+    if jT == {} then
+        fibaro:debug("Could not load content from the HomeTable variable \'".. var .. "\'. Please make sure the variable exists.");
+        return(false);
+    else
         fibaro:debug("Got HomeTable");
         return(jT);
-    else
-        fibaro:debug("Could not load content from the HomeTable variable \'".. variableName "\'. Please make sure the variable exists.");
-        return(false);
     end;
 end;
-
-
-

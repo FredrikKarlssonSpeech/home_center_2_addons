@@ -1,0 +1,179 @@
+{
+  "Toaletten": {
+    "Setpointgolvv\u00e4rmen": 464,
+    "Temperaturgolvv\u00e4rme": 465,
+    "Badrummetbelysning": 214,
+    "Toalettd\u00f6rrnere": 181,
+    "Modegolvv\u00e4rme": 466
+  },
+  "Alexsovrum": {
+    "Alexelement": 203,
+    "Rangeextender": 334,
+    "TaklampanAlex": 264
+  },
+  "\u00d6verstavinden": {
+    "Temperatur": 336,
+    "Luftfuktighet": 337
+  },
+  "Tv\u00e4ttstugan": {
+    "Taklampan": 314,
+    "Elementtv\u00e4ttstugan": 166,
+    "Tv\u00e4ttmaskin": 279,
+    "R\u00f6relsetv\u00e4ttstugan": 379,
+    "Temperatur": 380,
+    "Uttagf\u00f6rstrykj\u00e4rn": 373,
+    "Lillalampan": 316,
+    "Ljus": 381
+  },
+  "Hallen": {
+    "ACMode": 49,
+    "L\u00e4gegolvv\u00e4rme": 462,
+    "Luxhallen": 357,
+    "R\u00f6relsehallen": 355,
+    "Ytterd\u00f6rrenhallen": 178,
+    "ACSetpoint": 47,
+    "Setpointgolvv\u00e4rme": 460,
+    "ACFanmode": 50,
+    "Tempgolvv\u00e4rme": 461,
+    "Temperatur": 48,
+    "ACplug": 369,
+    "Tempfibaro": 356,
+    "Knappvidd\u00f6rren": 54
+  },
+  "V\u00e5rtsovrum": {
+    "Knappvids\u00e4ngen": 396,
+    "Dimmerf\u00e4nsterlampa": 375,
+    "Elementv\u00e5rtrum": 149,
+    "Taklampa": 251,
+    "TVochAppleTV": 436
+  },
+  "Unallocated": {
+    "Fredrik": 74,
+    "Alva": 96,
+    "Veronica": 75
+  },
+  "Toalettuppe": {
+    "Setpointgolvv\u00e4rme": 468,
+    "Modegolvv\u00e4rme": 470,
+    "Golvtemp": 469,
+    "Belysningtoauppe": 62
+  },
+  "Garaget": {
+    "Sidod\u00f6rrengaraget": 388,
+    "Brandvarnaregaraget": 353,
+    "Garagetr\u00f6relse": 32,
+    "Luftfuktighet": 35,
+    "Sidod\u00f6rrtemp": 387,
+    "Bild\u00f6rrengaraget": 377,
+    "Taklampan": 28,
+    "Belysningarbetsb\u00e4nk": 449,
+    "GaragetTemp": 33,
+    "Garagetljus": 34
+  },
+  "Skrivar-f\u00f6rr\u00e5det": {
+    "D\u00f6rrskrivarf\u00f6rr\u00e5det": 243,
+    "V\u00e4ckNAS": 486,
+    "Routerochskrivare": 441,
+    "Tempskrivarf\u00f6rr\u00e5det": 242,
+    "Lyseskrivaren": 227
+  },
+  "Vardagsrummetnere": {
+    "Sensorvidkaminen": 476,
+    "Ljusvidsoffan": 478,
+    "Tempkaminen": 477,
+    "Verandad\u00f6rren": 84,
+    "Lampknappar": 412,
+    "Elementvardagnere": 147,
+    "Temperaturd\u00f6rren": 82,
+    "Dimmerbrasan": 268,
+    "Gr\u00f6naf\u00f6nsterlampan": 288,
+    "V\u00e4nsterv\u00e4gglampa": 408,
+    "Ljusvardagsrummetn": 83,
+    "Brandvarnarenere": 300,
+    "R\u00f6relsevardagsrum": 183,
+    "H\u00f6gerv\u00e4gglampa": 407,
+    "Alarmvardagsrumn": 276
+  },
+  "Vardagsrummetuppe": {
+    "Luftfuktighetupper": 126,
+    "V\u00e4nsterelementuppe": 153,
+    "H\u00f6gerelementuppe": 155,
+    "Lampornavidsoffan": 482,
+    "F\u00f6nsterlampornauppe": 323,
+    "Ljusupper": 125,
+    "Taklampan": 57,
+    "TVochTV-spel": 249,
+    "Julbelysninguppe": 472,
+    "Temperaturuppe": 124,
+    "UVUppe": 127,
+    "R\u00f6relseUppe": 5,
+    "Brandvarnareuppe": 304,
+    "Trapplampan": 58
+  },
+  "Lillaf\u00f6rr\u00e5det": {
+    "Templillaf\u00f6rr\u00e5det": 175,
+    "D\u00f6rrlillaf\u00f6rr\u00e5det": 173,
+    "Belysninglilla": 245
+  },
+  "Theosrum": {
+    "Taklampan": 310,
+    "TVochdator": 328,
+    "Theoselement": 161
+  },
+  "K\u00f6ksf\u00f6rr\u00e5det": {
+    "HC2+v\u00e4rmeslinga": 455
+  },
+  "F\u00f6rr\u00e5det": {
+    "Ljusf\u00f6rr\u00e5det": 392,
+    "Belysningf\u00f6rr\u00e5det": 451,
+    "Tempf\u00f6rr\u00e5det": 391,
+    "Sensorf\u00f6rr\u00e5det": 390
+  },
+  "K\u00f6ket": {
+    "Ljusstakarnere": 474,
+    "Frysen": 98,
+    "L\u00e4ckagediskmaskinen": 86,
+    "Elementk\u00f6ket": 145,
+    "DiskmaskinenOFF\/ON": 88,
+    "Kaffemaskinen": 281,
+    "Mikrov\u00e5gsugn": 419,
+    "Kyl": 45,
+    "F\u00f6nsterlamporna": 21,
+    "Ugn": 414
+  },
+  "iOS": {
+    "FredriksiPhone": 76,
+    "VeronicasiPhone": 365,
+    "\"VeronicasiPhone\"": 133,
+    "AlvasiPhone": 360,
+    "FredriksiPad": 95
+  },
+  "VD": {
+    "StyrningAC": 484,
+    "Startp\u00e5morgonen": 488,
+    "Variablestates": 347,
+    "Belysning": 485
+  },
+  "Alvassovrum": {
+    "Alvasfj\u00e4rr": 92,
+    "Alvasuttag": 400,
+    "Alvaslampa": 90,
+    "Alvaselement": 151
+  },
+  "Utomhus": {
+    "Ljusbrytareninnerg\u00e5": 446,
+    "Innerg\u00e5rdenbelysnin": 447,
+    "Motorv\u00e4rmaren": 193
+  },
+  "Isasrum": {
+    "IsasTV": 292,
+    "Isaselement": 163,
+    "Isastaklampa": 306
+  },
+  "users": {
+    "Veronica": 75,
+    "Fredrik": 74,
+    "Alva": 96,
+    "SuberUser": 2
+  }
+}

@@ -6,20 +6,20 @@ function entryCounter(activatedID, moveInsideID,moveOutsideID, doorID,variableNa
     local setVariable = (fibaro or {}).setGlobalValue or localSet;
     local getVariable = (fibaro or {}).getGlobalValue or localGet;
     local incrCounter = setVariable(variableName,getVariable(variableName) + 1 );
-    local decrCounter = setVariable(variableName,math.max(getVariable(variableName) - 1 ,0);
+    local decrCounter = setVariable(variableName,math.max(getVariable(variableName) - 1 ,0));
     -- First, the case where the door is opened and someone enters
-    
+
 end;
 
 --- A function that produces a sequence of activations of devices.
 -- @tparam table ids An array of device IDs.
 -- @tparam string property The property to check modication times of.
--- @treturn table A table of 
+-- @treturn table A table of
 function activationSequence (ids,property)
     local prop = property or "state"
     local timeTable = {};
     -- Insert the modification times for each device into a table
-    for i,id = pairs(ids) do
+    for i,id in pairs(ids) do
         time = fibaro:getModificationTime(id,prop);
         -- times are indices so that reverse sording by time is possible
         table.insert(timeTable,tonumber(time),tonumber(id));
@@ -30,7 +30,7 @@ function activationSequence (ids,property)
 end;
 
 --- This function records events to a variable in a format that can be replayed at a later time
--- The function assumes that what should be recorded is what caused the scene to run, and its state. 
+-- The function assumes that what should be recorded is what caused the scene to run, and its state.
 -- @param string storageVariable the name of the global variable into which the sequence of events should be recorded
 
 function dayrecorder( storageVariable)
@@ -52,9 +52,9 @@ end;
 
 --- A function that simply logs the time when ran last into a global variable
 -- This simple function may be used in a simple "last movement seen" scene that keeps track of when
--- movement was last seen in the house. This information may then be used to check wheter movement has been observerved 
+-- movement was last seen in the house. This information may then be used to check wheter movement has been observerved
 -- in X minutes or so by a different function "hasBeenActivity".
--- 
+--
 -- This function requires an "ACTIVITY_LAST_SEEN" global variable.
 -- @tparam string variableName an optional name of a global variable to be used. Defailts to "ACTIVITY_LAST_SEEN"
 
@@ -65,8 +65,8 @@ function logLastActivity(variableName)
     fibaro:setGlobal(var,tostring(now));
 end;
 
---- A simple function that fascilitates checking of when the activity was last observed. 
--- What the function will do is to 
+--- A simple function that fascilitates checking of when the activity was last observed.
+-- What the function will do is to
 -- This function requires an "ACTIVITY_LAST_SEEN" global variable.
 -- @tparam number timeWindow the number of minutes to go back to check activity.
 -- @tparam string variableName an optional name of a global variable to be used. Defailts to "ACTIVITY_LAST_SEEN"
@@ -86,7 +86,7 @@ end;
 -- @tparam number seconds  the number of seconds to go back when checking for a change in the property value.
 -- @tparam number minutes  an optional number of minutes to go back when checking for a change in the property value. Defaults to zero.
 -- @tparam number hours  an optional number of hours to go back when checking for a change in the property value. Defaults to zero.
--- @tparam number debugChangeTimeEpoch a time point used when debugging the function. If this time point, specified as an Epoch time stamp, is given, the function will not check the device property modification time, but instead check whether the time point given here is within the time window counted from current time. 
+-- @tparam number debugChangeTimeEpoch a time point used when debugging the function. If this time point, specified as an Epoch time stamp, is given, the function will not check the device property modification time, but instead check whether the time point given here is within the time window counted from current time.
 -- @treturn boolean has a change occured in the property later than 'seconds', 'minutes' and 'hours' ago?
 -- @usage print(hasChangedSince(1,"dded",3,0,0,tonumber(os.time())- 4));
 -- @usage print(hasChangedSince(1,"dded",0,1,0,tonumber(os.time())- 4));
@@ -99,7 +99,7 @@ function hasChangedSince(id,property,seconds,minutes,hours,debugChangeTimeEpoch)
     local lastchange = tonumber(debugChangeTimeEpoch) or tonumber(fibaro:getModificationTime(id,property));
     local now = os.time();
     local printFunc = print;
-    if (fibaro or {}).debug then 
+    if (fibaro or {}).debug then
        function printFunc(...) ;
           return fibaro:debug(...);
        end;
@@ -108,3 +108,42 @@ function hasChangedSince(id,property,seconds,minutes,hours,debugChangeTimeEpoch)
     printFunc("against current time ".. now .. " Epoch time, which is ".. os.date("%Y-%m-%d %X",now));
     return(lastchange >= (now - seconds - min * 60 - h * 60 * 60));
 end;
+
+
+-- --- This function is designed do handle turning spcific lights on or off depending on movement
+--
+-- -- TODO: Fortsätt på denna funktion.
+-- function movementHandler(movementSendorId,onTable, offTable)
+--     local offTable = offTable or {};
+--     local onTable = onTable or {};
+--     if (fibaro or {}).call then
+--        function callFunc(...) ;
+--           return fibaro:call(...);
+--        end;
+--     else
+--         function callFunc(...)
+--             print(...);
+--        end;
+--     end;
+--     if (fibaro or {}).getValue then
+--        function movementDetected(id)
+--           return (tonumber(fibaro:getValue(id,"value")) == 1);
+--        end;
+--     else
+--         function movementDetected(id)
+--             print("Cheking movement status of ID ".. id);
+--             -- If in development environment, movement is ALVWAYS detercted
+--             return(true);
+--        end;
+--     end;
+--
+--     if movementDetected(movementSendorId) and onTable ~= {} then
+--         for i,command in pairs(onTable) do
+--             callFunc(unpack(command));
+--         end;
+--     elseif not movementDetected(movementSendorId) and offTable ~= {} then
+--         for i,command in pairs(offTable) do
+--             callFunc(unpack(command));
+--         end;
+--     end;
+-- end;
