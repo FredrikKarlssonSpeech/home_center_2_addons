@@ -25,7 +25,6 @@ function debugTable (t)
     end;
 end;
 
-
 --- Function that checks whether a value exists in a table
 -- @tparam table tab The table
 -- @tparam string value A value to check for.
@@ -38,6 +37,14 @@ function tableValueExists(tab, value)
     end;
   end;
   return false;
+end;
+
+local function test_tableValueExists()
+  local a = {};
+  a[12] = "Tolvan";
+  a["13"] = "Tretton";
+  assert(tableValueExists(a,"Tolvan") == true,"Tolvan finns" );
+  assert(tableValueExists(a,"Tretton") == true,"Tretton finns" );
 end;
 
 --- A function that finds the union of keys in two tables

@@ -36,7 +36,7 @@ function startLevelChangeWithDur(dimmerID,startLevel,stopLevel,durationSeconds,d
 end;
 
 
---- This function takes a lox level reading and a set of conditions, and selects which lights to turn on
+--- This function takes a lux level reading and a set of conditions, and selects which lights to turn on
 -- If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.
 -- @tparam number currentLuxLevel a LUX reading that should determine which lights should be turned on
 -- @tparam {number,number} conditionsTable This selects ON/OFF devices based on the current lux level and a threshold for each device. The argument should be a table of {id,lux} tuples that performs the selection of devices to turn on.
@@ -72,4 +72,32 @@ function lightSelect(currentLuxLevel, conditionsTable)
 
     end;
     return(out);
+end;
+
+--- This function executes lighting commands from a table.
+-- This function will take a set of numeric IDs or a {id, level} tuple, or a mix of numerics and tuples, and execute the lighting commands. If the table entry is a numeric ID, then the corrensponding device will be turned ON. If the table entry is a tuple, then the device will be dimmed to the corresponding level.
+-- This function is designed to work from the output of the @lightSelect function.
+-- @tparam table onTable a table containing either IDs numeric values or or {id,level} tuples (tables).
+function runLigthingSetup(onTable)
+  -- first some functions that fascilitates debugging outside of HC2.
+  if (fibaro or {}).call then
+    function callFunc(...) ;
+      return fibaro:call(...);
+    end;
+  else
+    function callFunc(...)
+      print(...);
+    end;
+  end;
+  -- now, run the ON commands in the onTable
+  local IDOrONCommand = nil;
+  for _,IDOrONCommand in pairs(onTable) do
+    -- check for dimmer
+    if type(IDOrONCommand) == "table" then
+      IDOrONCommand = {IDOrONCommand[1],"setLevel",IDOrONCommand[2]};
+    else
+      IDOrONCommand = {IDOrONCommand,"turnOn"};
+    end;
+    callFunc(unpack(IDOrONCommand));
+  end;
 end;

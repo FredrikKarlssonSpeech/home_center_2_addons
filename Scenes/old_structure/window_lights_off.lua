@@ -76,16 +76,16 @@ function myFunc ()
     fibaro:call(375, "turnOff") -- Dimmer vårt rum
     fibaro:call(375, "setValue", "0") -- Dimmer vårt rum
 
-    fibaro:call(323, "turnOff") 
+    fibaro:call(323, "turnOff")
     fibaro:call(323, "setValue", "0") -- Fönster uppe
     fibaro:call(21, "setValue", "0") -- fönster köket nere
 
     fibaro:call(288, "turnOff") -- Gröna lampan
     fibaro:sleep(15*60*1000);
     fibaro:call(447, "turnOff") -- innergårdens belysning
-    fibaro:call(472, "turnOff") -- julbelysningen uppe plugg
-    fibaro:call(474, "turnOff") -- julbelysningen nere plugg
-  --  fibaro:call(285, "turnOff") -- uttagen i uterummet
+--    fibaro:call(472, "turnOff") -- julbelysningen uppe plugg
+--    fibaro:call(474, "turnOff") -- julbelysningen nere plugg
+  fibaro:call(497, "turnOff") -- uttagen i uterummet
 end;
 
 
@@ -110,6 +110,3 @@ elseif (fibaro:countScenes() < 2) then
         fibaro:sleep(60*1000);
     end;
 end;
-
-
-

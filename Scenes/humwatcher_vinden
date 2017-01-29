@@ -1,7 +1,0 @@
---[[
-%% properties
-%% events
-%% globals
---]]
-
-fibaro:getValue(337, "value")

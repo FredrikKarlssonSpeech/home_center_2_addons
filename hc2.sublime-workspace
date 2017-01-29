@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"print",
+				"printResult"
+			],
+			[
+				"last",
+				"lastActivity"
+			],
+			[
+				"risk",
+				"riskOfMold"
+			],
+			[
+				"level",
+				"levelDescriptions"
+			],
+			[
 				"else",
 				"elseif"
 			],
@@ -208,60 +224,40 @@
 	"buffers":
 	[
 		{
-			"file": "Scenes/car_heater.lua",
+			"file": "Scenes/track_movements_down.lua",
 			"settings":
 			{
-				"buffer_size": 4182,
+				"buffer_size": 693,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scenes/car_heater_off.lua",
+			"file": "Scenes/track_movements_up.lua",
 			"settings":
 			{
-				"buffer_size": 507,
+				"buffer_size": 619,
+				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "--[["
 			}
 		},
 		{
-			"file": "Scenes/window_lights_on.lua",
+			"file": "Scenes/set_state.lua",
 			"settings":
 			{
-				"buffer_size": 3155,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scenes/window_lights_off.lua",
-			"settings":
-			{
-				"buffer_size": 2994,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scenes/all_off.lua",
-			"settings":
-			{
-				"buffer_size": 624,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scenes/wakeup_light.lua",
-			"settings":
-			{
-				"buffer_size": 2193,
+				"buffer_size": 1122,
+				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "--[["
 			}
 		},
 		{
-			"file": "Misc/weatherinfo.lua",
+			"file": "Scenes/restart_homeplugs.lua",
 			"settings":
 			{
-				"buffer_size": 796,
+				"buffer_size": 1201,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -269,47 +265,65 @@
 			"file": "Utilities/datetime.lua",
 			"settings":
 			{
-				"buffer_size": 16443,
+				"buffer_size": 18595,
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"file": "Scenes/car_heater.lua",
+			"settings":
+			{
+				"buffer_size": 4559,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "--- \n-- A module joining together a group of functions that makes testing for and handling of source triggers more managable.\n-- The design of the functions allow for them to be called in a context where one would like to know if\n-- what caused the scene to trigger (i.e. in the context of an conditions testing of an if-statement ).\n-- If called outside of a context where truth value is not evaluated, then you may get more detailed\n-- on the trigger.\n-- Since all values that are not 'false' or 'nil' are evaluated at true, this works.\n\n\n\n\n--- A function that tests whether the scene was started manually\n-- @treturn boolean A truth value (true /false)\n\nfunction startedManually ()\n    local startSource = fibaro:getSourceTrigger();\n    return( startSource[\"type\"] == \"other\");\nend;\n\n--- A function that tests whether the scene was started by a change in a global variable\n-- @treturn string If started by a global variable, the name of the variable is returned.\n-- @treturn boolean If started by something else, 'false' is returned.\n\nfunction startedByVariable ()\n    local startSource = fibaro:getSourceTrigger();\n    if startSource[\"type\"] == \"global\" then\n        return (startSource[\"name\"]);\n    else\n        return false;\n    end;\nend;\n\n--- A function that tests whether the scene was started by a change in the state or property of a device.\n-- @treturn table A table containting two fields:\n--  'deviceID', indicating the ID of the triggering device\n--  'propertyName' the property of the device that changed, causing the scene to trigger.\n-- @treturn boolean A truth value (true /false).\nfunction startedByDevice ()\n    local startSource = fibaro:getSourceTrigger();\n    -- startSource ={type=\"property\",deviceID=\"11\",propertyName=\"tet\"}\n    if startSource[\"type\"] == \"property\" then\n        return ({deviceID=startSource[\"deviceID\"], propertyName=startSource[\"propertyName\"]});\n    else\n        return false;\n    end;\nend;\n\n--- A function that tests whether the scene is currently running.\n-- Please note that the testing is stated in the negative. What is tested is whether the scene is NOT\n-- running, as this is the most probable use case.\n-- @treturn boolean A truth value (true /false).\nfunction notCurrentlyRunning()\n    local sceneCount = tonumber(fibaro:countScenes());\n    return (sceneCount == 1);\nend;\n\n\n--- A table of mappings between NodOn remote scene codes and a text description.\n-- @table nodonSceneTableVerbose\n-- @field 10 Button 1 Single Press\n-- @field 20 Button 2 Single Press\n-- @field 30 Button 3 Single Press\n-- @field 40 Button 4 Single Press\n-- @field 13 Button 1 Double Press\n-- @field 23 Button 2 Double Press\n-- @field 33 Button 3 Double Press\n-- @field 43 Button 4 Double Press\n-- @field 12 Button 1 Hold Press\n-- @field 22 Button 2 Hold Press\n-- @field 32 Button 3 Hold Press\n-- @field 42 Button 4 Hold Press\n-- @field 11 Button 1 Hold Released\n-- @field 21 Button 2 Hold Released\n-- @field 31 Button 3 Hold Released\n-- @field 41 Button 4 Hold Released\nnodonSceneTableVerbose = {\n    [10]=\"Button 1 Single Press\",\n    [20]=\"Button 2 Single Press\",\n    [30]=\"Button 3 Single Press\",\n    [40]=\"Button 4 Single Press\",\n    [13]=\"Button 1 Double Press\",\n    [23]=\"Button 2 Double Press\",\n    [33]=\"Button 3 Double Press\",\n    [43]=\"Button 4 Double Press\",\n    [12]=\"Button 1 Hold Press\",\n    [22]=\"Button 2 Hold Press\",\n    [32]=\"Button 3 Hold Press\",\n    [42]=\"Button 4 Hold Press\",\n    [11]=\"Button 1 Hold Released\",\n    [21]=\"Button 2 Hold Released\",\n    [31]=\"Button 3 Hold Released\",\n    [41]=\"Button 4 Hold Released\"\n};\n\n--- Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.\n-- In the short forms stored, the 'SP' indicates a single press, 'DP' a double press. 'HP' indicates that the button is pressed and held, and 'HR' that it is released.\n-- @table nodonSceneTable\n-- @field 10 (1SP) Button 1 Single Press\n-- @field 20 (2SP) Button 2 Single Press\n-- @field 30 (3SP) Button 3 Single Press\n-- @field 40 (4SP) Button 4 Single Press\n-- @field 13 (1DP) Button 1 Double Press\n-- @field 23 (2DP) Button 2 Double Press\n-- @field 33 (3DP) Button 3 Double Press\n-- @field 43 (4DP) Button 4 Double Press\n-- @field 12 (1HP) Button 1 Hold Press\n-- @field 22 (2HP) Button 2 Hold Press\n-- @field 32 (3HP) Button 3 Hold Press\n-- @field 42 (4HP) Button 4 Hold Press\n-- @field 11 (1HR) Button 1 Hold Released\n-- @field 21 (2HR) Button 2 Hold Released\n-- @field 31 (3HR) Button 3 Hold Released\n-- @field 41 (4HR) Button 4 Hold Released\nnodonSceneTable = {\n    [10]=\"1SP\",\n    [20]=\"2SP\",\n    [30]=\"3SP\",\n    [40]=\"4SP\",\n    [13]=\"1DP\",\n    [23]=\"2DP\",\n    [33]=\"3DP\",\n    [43]=\"4DP\",\n    [12]=\"1HP\",\n    [22]=\"2HP\",\n    [32]=\"3HP\",\n    [42]=\"4HP\",\n    [11]=\"1HR\",\n    [21]=\"2HR\",\n    [31]=\"3HR\",\n    [41]=\"4HR\"\n};\n\n--- A table for Zwave.me wall controller (actually keyfob) scene codes.\n-- @table zwavemeSceneTableVerbose\n-- @field 11 Button 1 Single Click\n-- @field 21 Button 2 Single Click\n-- @field 31 Button 3 Single Click\n-- @field 41 Button 4 Single Click\n-- @field 12 Button 1 Double Click\n-- @field 22 Button 2 Double Click\n-- @field 32 Button 3 Double Click\n-- @field 42 Button 4 Double Click\n-- @field 13 Button 1 Press and hold\n-- @field 23 Button 2 Press and hold\n-- @field 33 Button 3 Press and hold\n-- @field 43 Button 4 Press and hold\n-- @field 14 Button 1 Click and then Press and hold\n-- @field 24 Button 2 Click and then Press and hold\n-- @field 34 Button 3 Click and then Press and hold\n-- @field 44 Button 4 Click and then Press and hold\n-- @field 15 Button 1 Click and then Press and hold\n-- @field 25 Button 2 Click and then Press and hold\n-- @field 35 Button 3 Click and then Press and hold\n-- @field 45 Button 4 Click and then Press and hold\n-- @field 16 Button 1 Click and then Press and hold\n-- @field 26 Button 2 Click and then Press and hold\n-- @field 36 Button 3 Click and then Press and hold\n-- @field 46 Button 4 Click and then Press and hold\nzwavemeSceneTableVerbose = {\n    [11]=\"Button 1 Single Click\",\n    [21]=\"Button 2 Single Click\",\n    [31]=\"Button 3 Single Click\",\n    [41]=\"Button 4 Single Click\",\n    [12]=\"Button 1 Double Click\",\n    [22]=\"Button 2 Double Click\",\n    [32]=\"Button 3 Double Click\",\n    [42]=\"Button 4 Double Click\",\n    [13]=\"Button 1 Press and hold\",\n    [23]=\"Button 2 Press and hold\",\n    [33]=\"Button 3 Press and hold\",\n    [43]=\"Button 4 Press and hold\",\n    [14]=\"Button 1 Click and then Press and hold\",\n    [24]=\"Button 2 Click and then Press and hold\",\n    [34]=\"Button 3 Click and then Press and hold\",\n    [44]=\"Button 4 Click and then Press and hold\",\n    [15]=\"Button 1 Click and then Press and hold\",\n    [25]=\"Button 2 Click and then Press and hold\",\n    [35]=\"Button 3 Click and then Press and hold\",\n    [45]=\"Button 4 Click and then Press and hold\",\n    [16]=\"Button 1 Click and then Press and hold long time\",\n    [26]=\"Button 2 Click and then Press and hold long time\",\n    [36]=\"Button 3 Click and then Press and hold long time\",\n    [46]=\"Button 4 Click and then Press and hold long time\"\n};\n\n\n\n--- Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.\n-- In the short forms stored, the 'SC' indicates a single click, 'DC' a double click. 'PH' indicates that the button is pressed and held. In cases when two actions are performed, like in the case of a click followed by a press that is held, then the two actions are separated by a '_' in the code.\n-- @table zwavemeSceneTable\n-- @field 11 (1SC) Button 1 Single Click\n-- @field 21 (2SC) Button 2 Single Click\n-- @field 31 (3SC) Button 3 Single Click\n-- @field 41 (4SC) Button 4 Single Click\n-- @field 12 (1DC) Button 1 Double Click\n-- @field 22 (2DC) Button 2 Double Click\n-- @field 32 (3DC) Button 3 Double Click\n-- @field 42 (4DC) Button 4 Double Click\n-- @field 13 (1PH) Button 1 Press and hold\n-- @field 23 (2PH) Button 2 Press and hold\n-- @field 33 (3PH) Button 3 Press and hold\n-- @field 43 (4PH) Button 4 Press and hold\n-- @field 14 (1C_PH) Button 1 Click and then Press and hold\n-- @field 24 (2C_PH) Button 2 Click and then Press and hold\n-- @field 34 (3C_PH) Button 3 Click and then Press and hold\n-- @field 44 (4C_PH) Button 4 Click and then Press and hold\n-- @field 15 (1PLH) Button 1 Click and then Press and hold\n-- @field 25 (2PLH) Button 2 Click and then Press and hold\n-- @field 35 (3PLH) Button 3 Click and then Press and hold\n-- @field 45 (4PLH) Button 4 Click and then Press and hold\n-- @field 16 (1C_PLH) Button 1 Click and then Press and hold\n-- @field 26 (1C_PLH) Button 2 Click and then Press and hold\n-- @field 36 (1C_PLH) Button 3 Click and then Press and hold\n-- @field 46 (1C_PLH) Button 4 Click and then Press and hold\nzwavemeSceneTable = {\n    [11]=\"1SC\",\n    [21]=\"2SC\",\n    [31]=\"3SC\",\n    [41]=\"4SC\",\n    [12]=\"1DC\",\n    [22]=\"2DC\",\n    [32]=\"3DC\",\n    [42]=\"4DC\",\n    [13]=\"1PH\",\n    [23]=\"2PH\",\n    [33]=\"3PH\",\n    [43]=\"4PH\",\n    [14]=\"1C_PH\",\n    [24]=\"2C_PH\",\n    [34]=\"3C_PH\",\n    [44]=\"4C_PH\",\n    [15]=\"1PLH\",\n    [25]=\"2PLH\",\n    [35]=\"3PLH\",\n    [45]=\"4PLH\",\n    [16]=\"1C_PLH\",\n    [26]=\"1C_PLH\",\n    [36]=\"1C_PLH\",\n    [46]=\"1C_PLH\"\n};\n\n--- A function that checks that a device is drawing power, if on\n-- The use case for this function is for instance a car heater. If it is turned on, it should draw power.\n-- If not, it is unplugged. Of course, this function requires a device that has power reporting.\n-- @tparam number id The ID of the device.\n-- @tparam number threshold The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.\n-- @treturn number A boolean indicating wheter the device is ON but not active (not plugged in)\nfunction onButUnplugged(id,threshold)\n    local t = threshold or 15;\n    local state = tonumber(fibaro:getValue(id, \"value\"));\n    local pow = tonumber(fibaro:getValue(id, \"power\"));\n\n    return(state == 1 and pow > t);\nend;\n\n\n\n",
 			"file": "Utilities/sourcetriggers.lua",
+			"file_size": 9956,
+			"file_write_time": 131289389320000000,
 			"settings":
 			{
-				"buffer_size": 9160,
+				"buffer_size": 9958,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Utilities/Makefile",
+			"file": "Misc/HomeTable.json",
 			"settings":
 			{
-				"buffer_size": 602,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Utilities/utils.lua",
-			"settings":
-			{
-				"buffer_size": 1719,
+				"buffer_size": 4268,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
 	],
 	"build_system": "Packages/Haskell/Haskell.sublime-build",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
-		"height": 67.0,
+		"height": 107.0,
+		"last_filter": "install",
 		"selected_items":
 		[
 			[
-				"quic",
-				"Git: Quick Commit"
+				"install",
+				"Package Control: Install Package"
 			],
 			[
 				"comm",
+				"Git: Quick Commit (current file)"
+			],
+			[
+				"commit",
+				"Git: Quick Commit (current file)"
+			],
+			[
+				"commi",
 				"Git: Commit"
 			],
 			[
@@ -317,12 +331,24 @@
 				"Git: Add Current File"
 			],
 			[
-				"qui",
+				"com",
+				"Git: Commit"
+			],
+			[
+				"amme",
+				"Git: Amend Commit"
+			],
+			[
+				"git",
+				"Git: Amend Commit"
+			],
+			[
+				"quic",
 				"Git: Quick Commit"
 			],
 			[
-				"commi",
-				"Git: Commit"
+				"qui",
+				"Git: Quick Commit"
 			],
 			[
 				"qu",
@@ -331,10 +357,6 @@
 			[
 				"amen",
 				"Git: Amend Commit"
-			],
-			[
-				"commit",
-				"Git: Quick Commit"
 			],
 			[
 				"folde",
@@ -351,10 +373,6 @@
 			[
 				"lua",
 				"Set Syntax: Lua"
-			],
-			[
-				"git",
-				"Git: Quick Commit"
 			],
 			[
 				"todo",
@@ -391,10 +409,6 @@
 			[
 				"ctags",
 				"CTags: Rebuild Tags"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
 			],
 			[
 				"to",
@@ -533,11 +547,15 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 521.0
+		"width": 449.0
 	},
 	"console":
 	{
-		"height": 125.0
+		"height": 125.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
 	},
 	"distraction_free":
 	{
@@ -548,26 +566,67 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/Users/frkkan96/Documents/src/home_center_2_addons",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/lib",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Misc",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities"
+	],
 	"file_history":
 	[
+		"/Volumes/docker/homebridge/config.json",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/event_management.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/dimmer_wall_lights_sync.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/utils.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/datetime.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/lighting_utils.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/AM_diskmaskin.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/HomeTable.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_on.lua",
+		"/Users/frkkan96/Downloads/Heizung_manuell_v0/Heizung_manuell.lua",
+		"/Users/frkkan96/Desktop/Anette/SS.xml",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/day_recorder.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/sourcetriggers.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/humidity_temperature.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/humwatcher_vinden.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/child_night_light.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_off.lua",
+		"/Users/frkkan96/Downloads/Alarm_Clock_2.2.vfib.json",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/alert_no_carheating.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/wall_lights.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/users.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/dishwasher_alert.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/wakeup_light.lua",
+		"/Users/frkkan96/Desktop/ämnen_studenter_handledare.csv",
+		"/Users/frkkan96/Desktop/Vowel space dispersion.opml",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/acON.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/bedroom_light_on.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/acOFF.lua",
+		"/Users/frkkan96/Downloads/Wallplug_Color.vfib",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/Makefile",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Misc/weatherinfo.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/ac.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/coffee_alert.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/washing_alert.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/timeofday.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/fireplace_watcher.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/car_heater_off.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/all_off.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/car_heater.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/temperatur_nu.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/vardagsrummet_nere_motion_lights.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/closet_timer.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/fk_lib.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/test.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/ac.lua",
 		"/Users/frkkan96/Documents/admin/Institutionen för klinisk vetenskap/Forskningsansvar/Bibliometri12-14/Citation report/scopus2012-2014.csv",
 		"/Users/frkkan96/Documents/admin/Institutionen för klinisk vetenskap/Forskningsansvar/Bibliometri12-14/Citation report/scopus2012-2016.csv",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_on.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_off.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Misc/weatherinfo.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/triggers.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/datetime.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/config.ld",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/utils.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/sunset_sunrise.lua",
 		"/Users/frkkan96/Desktop/Application 2016-03-17.pdf",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/car_heater.lua",
 		"/Users/frkkan96/Downloads/scopus-2.csv",
 		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/UmeQuery.hs",
 		"/Users/frkkan96/Documents/src/umecore-hs/src/Phonetic/Database/UmeDatabase.hs",
@@ -644,40 +703,7 @@
 		"/Users/frkkan96/Documents/src/umecore_hs/UmeDatabase.hs",
 		"/Users/frkkan96/Documents/src/umecore_hs/textgrid_import.hs",
 		"/Users/frkkan96/Documents/src/umecore_hs/TextgridParser.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/SegmentList.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/DataTypes.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/UmeQuery.hs",
-		"/Users/frkkan96/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
-		"/Users/frkkan96/Documents/src/umecore_hs/DataTypes",
-		"/Users/frkkan96/Desktop/F+A.lab",
-		"/Users/frkkan96/Downloads/CVPatterns.js",
-		"/Users/frkkan96/Documents/src/umecore_hs/EmuQueryProtobuf.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/umecore_hs.sublime-project",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/textgrid_import.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/QueryGenerator.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/emu_R/R/emusegs.S",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeDatabase.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/TextgridParser.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQuery.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/sql/3_triggers.sql",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/umecore.cabal",
-		"/Users/frkkan96/Documents/src/umecore_hs/UmeServer.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/SegmentList.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQueryParser.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/EmuQuery.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/cmdline_tools/textgrid_import.hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/UmeQuery,hs",
-		"/Users/frkkan96/Documents/src/haskell/umecore_hs/umecore_hs.sublime-project",
-		"/Users/frkkan96/Desktop/intelligibility/intelligibility.luax",
-		"/Users/frkkan96/Desktop/skiss",
-		"/Applications/Modiware.app/Contents/PkgInfo",
-		"/Users/frkkan96/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/FE633BBD-0B6D-49B1-9DDB-D26FDA4975FD/FK.res",
-		"/Users/frkkan96/Downloads/VoiceSauce/func_parseF0.m",
-		"/Users/frkkan96/Desktop/input",
-		"/Users/frkkan96/Desktop/Mats löfgren",
-		"/Users/frkkan96/Downloads/VoiceSauce/func_PraatPitch.m",
-		"/private/var/folders/_8/_tsst82j257bv9hk57dgxgt00000gr/T/com.apple.mail/com.apple.mail.drag-T0x6000000734c0.tmp.C9kPh5/FK.res",
-		"/Users/frkkan96/Desktop/Workbook1.dif"
+		"/Users/frkkan96/Documents/src/umecore_hs/SegmentList.hs"
 	],
 	"find":
 	{
@@ -696,6 +722,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"/\n",
+			"userID",
+			"HomeTable",
+			"notC",
+			"acONHeat22",
+			"Coffe_mashine",
+			"--[[\n%% properties\n279 power\n%% events\n%% globals\n--]]\n\nif (fibaro:countScenes() > 1) then\n  fibaro:abort();\nend\n\nlocal consumption = tonumber(fibaro:getValue(279, \"power\"));\nlocal prev = tostring(fibaro:getGlobal(\"Washing\"));\n  \nfibaro:debug(\"Current consumption is\"..consumption.. \"W\");\n\n-- Check state by current power consumption\nif (consumption < 50 ) then\n  fibaro:setGlobal(\"Washing\", \"Not running\");\nelse\n  fibaro:setGlobal(\"Washing\", \"Running\");\nend;\n-- Check every 10 minutes\nfibaro:sleep(5*60*1000);\nlocal curr = tostring(fibaro:getGlobal(\"Washing\"));\n-- Check whether the state has changed!\n-- If it has, then do something about is, depending on the nature of the change!\n-- This provides a nice separation of logic. Could have easilly gone into the prev if clause.\nif ( curr ~= prev) then\n    if prev == \"Running\" then\n        -- In this case, the washing was running, but is not any more\n        fibaro:debug(\"Washing done!\");\n    else\n        fibaro:debug(\"Washing started...\");\n    end;\nend;\n",
+			"24",
 			"--.*",
 			"\",",
 			"--.*",
@@ -732,7 +766,7 @@
 			": ",
 			"UmeQuery",
 			"simpleQueryIntersect",
-			"	",
+			"\t",
 			"tRunUmeQuery",
 			"otherwise",
 			"BS",
@@ -750,7 +784,7 @@
 			"handleSqlError $ ",
 			"[]",
 			"quickQuery'",
-			"	commit conn",
+			"\tcommit conn",
 			"disconnect",
 			"quickQuery'",
 			"quickQuery",
@@ -759,7 +793,7 @@
 			"\\t",
 			"        ",
 			"^\\t",
-			"\n	",
+			"\n\t",
 			" `mappend` ",
 			") ",
 			" `mappend` ",
@@ -772,11 +806,11 @@
 			"Text",
 			"toArgs",
 			"T.",
-			"	",
+			"\t",
 			"SQLT",
 			"try (umeSubquery) <|>  try(functionQuery) <|> try (labelInLabelType ) <|> labelType",
 			"disjunctQuery",
-			"	",
+			"\t",
 			"sequenceQueryHash",
 			"query",
 			"write",
@@ -815,18 +849,10 @@
 			"TARGET",
 			"F.",
 			"utterance_id",
-			"selectFirst",
-			"SECONDARY",
-			"TARGET",
-			"utterance",
-			"Utterance",
-			"utterance",
-			"Pos",
-			"Position",
-			"utterance"
+			"selectFirst"
 		],
 		"highlight": true,
-		"in_selection": true,
+		"in_selection": false,
 		"preserve_case": false,
 		"regex": true,
 		"replace_history":
@@ -848,242 +874,73 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scenes/car_heater.lua",
+					"file": "Scenes/track_movements_down.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4182,
+						"buffer_size": 693,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3691,
-								3667
+								400,
+								400
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scenes/car_heater_off.lua",
+					"file": "Scenes/track_movements_up.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 507,
+						"buffer_size": 619,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								507,
-								507
+								161,
+								161
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
 							"auto_name": "--[[",
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage"
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Scenes/window_lights_on.lua",
+					"file": "Scenes/set_state.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3155,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								128,
-								128
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1149.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Scenes/window_lights_off.lua",
-					"settings":
-					{
-						"buffer_size": 2994,
+						"buffer_size": 1122,
 						"regions":
 						{
 						},
@@ -1091,213 +948,99 @@
 						[
 							[
 								0,
-								2994
+								1122
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"auto_name": "--[[",
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 874.0,
+						"translation.y": 39.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Scenes/restart_homeplugs.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1201,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								859,
+								859
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 194.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "Scenes/all_off.lua",
+					"file": "Utilities/datetime.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 624,
+						"buffer_size": 18595,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								622,
-								0
+								6638,
+								6366
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1365.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "Scenes/wakeup_light.lua",
+					"file": "Scenes/car_heater.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2193,
+						"buffer_size": 4559,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1673,
-								1673
+								2622,
+								2350
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"auto_name": "--[[",
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
@@ -1305,382 +1048,73 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "Misc/weatherinfo.lua",
+					"file": "Utilities/sourcetriggers.lua",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 796,
+						"buffer_size": 9958,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								204,
-								161
+								9957,
+								9957
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage"
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 5.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 7,
 					"type": "text"
-				},
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
 				{
 					"buffer": 7,
-					"file": "Utilities/datetime.lua",
+					"file": "Misc/HomeTable.json",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16443,
+						"buffer_size": 4268,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16442,
-								16442
+								2314,
+								2317
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5878.0,
+						"translation.y": 957.0,
 						"zoom_level": 1.0
 					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "Utilities/sourcetriggers.lua",
-					"settings":
-					{
-						"buffer_size": 9160,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2316,
-								2316
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3978.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "Utilities/Makefile",
-					"settings":
-					{
-						"buffer_size": 602,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								517,
-								517
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Makefile/Makefile.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "Utilities/utils.lua",
-					"settings":
-					{
-						"buffer_size": 1719,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								778,
-								479
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/Lua/Lua.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -1703,6 +1137,12 @@
 				0,
 				1,
 				1
+			],
+			[
+				0,
+				1,
+				1,
+				2
 			]
 		],
 		"cols":
@@ -1713,6 +1153,7 @@
 		"rows":
 		[
 			0.0,
+			0.599427857807,
 			1.0
 		]
 	},
@@ -1720,6 +1161,10 @@
 	"output.exec":
 	{
 		"height": 309.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
 	},
 	"output.git":
 	{
@@ -1729,6 +1174,8 @@
 	{
 		"height": 100.0
 	},
+	"pinned_build_system": "Packages/Haskell/Haskell.sublime-build",
+	"project": "hc2.sublime-project",
 	"replace":
 	{
 		"height": 64.0
@@ -1737,6 +1184,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1745,15 +1193,40 @@
 	"select_project":
 	{
 		"height": 500.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
 		"width": 380.0
 	},
+	"select_symbol":
+	{
+		"height": 107.0,
+		"last_filter": "fina",
+		"selected_items":
+		[
+			[
+				"fina",
+				"finalizeUmeQuery"
+			],
+			[
+				"run",
+				"runUmeQuery"
+			]
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
 	"show_minimap": true,
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 207.0,
-	"status_bar_visible": true
+	"side_bar_width": 282.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
 }

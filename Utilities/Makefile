@@ -15,3 +15,7 @@ fk_lib.lua: datetime.lua sourcetriggers.lua utils.lua clearlib
 clearlib:
 	@echo "Removing old version of compressed library file"
 	@rm -f ../lib/fk_lib.lua
+
+test:
+	@echo "Running all test cases using Lua Testy"
+	@testy.lua *.lua
