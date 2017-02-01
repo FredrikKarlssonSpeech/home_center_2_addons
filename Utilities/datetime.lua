@@ -80,10 +80,10 @@ function isInTimeRange (startTimeString, endTimeString)
     -- allow for end time being in the upcoming day, but before startTime then
     if (endTimeEpoch < startTimeEpoch) then
         endTimeEpoch = endTimeEpoch + 24*3600;  -- add 24 hours
-        -- Now, we make a new table object, to find out whether the DST status of the new end time is 
+        -- Now, we make a new table object, to find out whether the DST status of the new end time is
         newEndTimeTable = os.date("*t",endTimeEpoch);
     end;
-        -- Now, we adjust for Daylight saving time effects 
+        -- Now, we adjust for Daylight saving time effects
     if (startTimeTable.isdst == false and newEndTimeTable.isdst == true) then
         -- In this case, start time is Not summer, and end time is in summer time
         -- which means that we are going from spring into summer
@@ -212,13 +212,13 @@ function datetimeTableTrue (dateTable)
 end;
 
 --- A funtion that applies a time adjustment to a time specified in a string format
--- What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05"). 
+-- What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05").
 -- A numer of minutes (or optional seconds) are then added to the time, and the time is returned as a new time string.
 -- The adjustment is applied at the Epoch time level, which means that adjustments that also leads to change of date will be correctly handled.
 -- For the conversion, the time specification is assumed to be refering to *today*.
 -- @tparam string stringTime the time specification.
 -- @tparam number adjustmentMinutes the number of minutes to be added to the time. Negative values means subtraction of time.
--- @tparam number extraSecondsAdjustment an optional number of seconds to be added too (that is, in additional to the minutes). Negative numbers means subtraction. 
+-- @tparam number extraSecondsAdjustment an optional number of seconds to be added too (that is, in additional to the minutes). Negative numbers means subtraction.
 
 function stringTimeAdjust(stringTime,adjustmentMinutes,extraSecondsAdjustment)
     local extraSecs = extraSecondsAdjustment or 0;
@@ -237,7 +237,8 @@ end;
 -- The function @{myTimer} will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'.
 -- After running the function constituting the scene, a delay may be imposed.
 -- @tparam boolean shouldRun A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
--- @tparam function functionToRun The function summarising the actions of the scene.
+-- @tparam function toRun The function summarising the actions of the scene.
+-- @tparam table toRun if instead an array is passed to the function, this is assumed to be an array of scene IDs to run.
 -- @tparam number sleepSeconds Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
 -- @usage
 -- function f () fibaro:call(12,"powerON"); end
@@ -250,12 +251,20 @@ end;
 
 
 
-function myTimer(shouldRun, functionToRun, sleepSeconds )
-    local delay = sleepSeconds or 60;
-    if (fibaro:countScenes() > 1 and shouldRun ) then
-        functionToRun();
-        fibaro:sleep(delay*1000);
+function myTimer(shouldRun, toRun, sleepSeconds )
+  local delay = sleepSeconds or 60;
+  if (type(toRun) == "function" and shouldRun ) then
+    toRun();
+  elseif ( type(toRun) == "table"  and shouldRun ) then
+    for k,v in pairs(toRun) do
+        if ( fibaro:isSceneEnabled(k)) then
+          fibaro:startScene(k);
+        else
+          fibaro:debug("Not running disabled scene ID:".. tostring(k));
+        end;
     end;
+  end;
+  fibaro:sleep(delay*1000);
 end;
 
 --- A function that determines whether the heater of a car should be turned on.
