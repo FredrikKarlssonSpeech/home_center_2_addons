@@ -243,7 +243,7 @@ end;
 -- @usage
 -- function f () fibaro:call(12,"powerON"); end
 -- -- A very simple scene
--- myTimer ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
+-- runIf ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
 -- -- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 -- -- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
 -- -- or more than once, as the 2 minutes delay combined with the call to @{notCurrentlyRunning} makes
@@ -251,7 +251,7 @@ end;
 
 
 
-function myTimer(shouldRun, toRun, sleepSeconds )
+function runIf(shouldRun, toRun, sleepSeconds )
   local delay = sleepSeconds or 60;
   if (type(toRun) == "function" and shouldRun ) then
     toRun();
