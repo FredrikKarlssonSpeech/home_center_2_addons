@@ -71,7 +71,7 @@ end;
 -- @tparam string startTimeString a time specification in the form of "HH:MM" (e.g. "08:10") indicating the start of the time range.
 -- @tparam string endTimeString a time specification in the form of HH:MM (e.g. "08:10") indicating the end of the time range.
 -- @treturn boolean A boolean (true or false) indicating whether the current time is within the specificed time range.
-function isInTimeRange (startTimeString, endTimeString)
+function timeIsInRange (startTimeString, endTimeString)
     local startTimeTable = timestringToTable(startTimeString);
     local endTimeTable = timestringToTable(endTimeString);
     local startTimeEpoch = tableToEpochtime (startTimeTable);
@@ -257,8 +257,9 @@ function runIf(shouldRun, toRun, sleepSeconds )
     toRun();
   elseif ( type(toRun) == "table"  and shouldRun ) then
     for k,v in pairs(toRun) do
-        if ( fibaro:isSceneEnabled(k)) then
-          fibaro:startScene(k);
+        v = tonumber(v);
+        if ( fibaro:isSceneEnabled(v)) then
+          fibaro:startScene(v);
         else
           fibaro:debug("Not running disabled scene ID:".. tostring(k));
         end;
