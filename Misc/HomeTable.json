@@ -1,179 +1,345 @@
+[DEBUG] 08:48:01: Fill hometable with 139 devices
+[DEBUG] 08:48:01: i=5, type=com.fibaro.motionSensor, device=RarelseUppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:01: i=21, type=com.fibaro.FGD212, device=Fansterlamporna, room=Köket
+[DEBUG] 08:48:01: i=28, type=com.fibaro.binarySwitch, device=Taklampan, room=Garaget
+[DEBUG] 08:48:01: i=32, type=com.fibaro.motionSensor, device=Garagetrarelse, room=Garaget
+[DEBUG] 08:48:01: i=33, type=com.fibaro.temperatureSensor, device=GaragetTemp, room=Garaget
+[DEBUG] 08:48:01: i=34, type=com.fibaro.lightSensor, device=Garagetljus, room=Garaget
+[DEBUG] 08:48:01: i=35, type=com.fibaro.humiditySensor, device=Luftfuktighet, room=Garaget
+[DEBUG] 08:48:01: i=45, type=com.fibaro.FGWP101, device=Kyl, room=Köket
+[DEBUG] 08:48:01: i=47, type=com.fibaro.setPoint, device=ACSetpoint, room=Hallen
+[DEBUG] 08:48:01: i=48, type=com.fibaro.temperatureSensor, device=Temperatur, room=Hallen
+[DEBUG] 08:48:01: i=49, type=com.fibaro.operatingMode, device=ACMode, room=Hallen
+[DEBUG] 08:48:01: i=50, type=com.fibaro.fanMode, device=ACFanmode, room=Hallen
+[DEBUG] 08:48:01: i=54, type=com.fibaro.remoteController, device=Knappviddarren, room=Hallen
+[DEBUG] 08:48:01: i=57, type=com.fibaro.binarySwitch, device=Taklampan, room=Vardagsrummetuppe
+[DEBUG] 08:48:01: i=62, type=com.fibaro.binarySwitch, device=Belysningtoauppe, room=Toalettuppe
+[DEBUG] 08:48:01: i=74, type=HC_user, device=Fredrik, room=Unallocated
+[DEBUG] 08:48:01: i=75, type=HC_user, device=Veronica, room=Unallocated
+[DEBUG] 08:48:01: i=76, type=iOS_device, device=FredriksiPhone
+[DEBUG] 08:48:01: i=82, type=com.fibaro.temperatureSensor, device=Temperaturdarren, room=Vardagsrummetnere
+[DEBUG] 08:48:01: i=83, type=com.fibaro.lightSensor, device=Ljusvardagsrummetn, room=Vardagsrummetnere
+[DEBUG] 08:48:01: i=84, type=com.fibaro.doorSensor, device=Verandadarren, room=Vardagsrummetnere
+[DEBUG] 08:48:01: i=86, type=com.fibaro.floodSensor, device=Lackagediskmaskinen, room=Köket
+[DEBUG] 08:48:01: i=88, type=com.fibaro.FGWP101, device=DiskmaskinenOFF/ON, room=Köket
+[DEBUG] 08:48:01: i=90, type=com.fibaro.colorController, device=Alvaslampa, room=Alvassovrum
+[DEBUG] 08:48:01: i=92, type=com.fibaro.remoteController, device=Alvasfjarr, room=Alvassovrum
+[DEBUG] 08:48:01: i=95, type=iOS_device, device=FredriksiPad
+[DEBUG] 08:48:01: i=96, type=HC_user, device=Alva, room=Unallocated
+[DEBUG] 08:48:01: i=98, type=com.fibaro.FGWP101, device=Frysen, room=Köket
+[DEBUG] 08:48:01: i=124, type=com.fibaro.temperatureSensor, device=Temperaturuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:01: i=125, type=com.fibaro.lightSensor, device=Ljusupper, room=Vardagsrummetuppe
+[DEBUG] 08:48:01: i=126, type=com.fibaro.humiditySensor, device=Luftfuktighetupper, room=Vardagsrummetuppe
+[DEBUG] 08:48:02: i=127, type=com.fibaro.multilevelSensor, device=UVUppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:02: i=133, type=iOS_device, device="VeronicasiPhone"
+[DEBUG] 08:48:02: i=145, type=com.fibaro.thermostatDanfoss, device=Elementkaket, room=Köket
+[DEBUG] 08:48:02: i=147, type=com.fibaro.thermostatDanfoss, device=Elementvardagnere, room=Vardagsrummetnere
+[DEBUG] 08:48:02: i=149, type=com.fibaro.thermostatDanfoss, device=Elementvartrum, room=Vårtsovrum
+[DEBUG] 08:48:02: i=151, type=com.fibaro.thermostatDanfoss, device=Alvaselement, room=Alvassovrum
+[DEBUG] 08:48:02: i=153, type=com.fibaro.thermostatDanfoss, device=Vansterelementuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:02: i=155, type=com.fibaro.thermostatDanfoss, device=Hagerelementuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:02: i=161, type=com.fibaro.thermostatDanfoss, device=Theoselement, room=Theosrum
+[DEBUG] 08:48:02: i=163, type=com.fibaro.thermostatDanfoss, device=Isaselement, room=Isasrum
+[DEBUG] 08:48:02: i=166, type=com.fibaro.thermostatDanfoss, device=Elementtvattstugan, room=Tvättstugan
+[DEBUG] 08:48:02: i=173, type=com.fibaro.doorSensor, device=Darrlillafarradet, room=Lillaförrådet
+[DEBUG] 08:48:02: i=175, type=com.fibaro.temperatureSensor, device=Templillafarradet, room=Lillaförrådet
+[DEBUG] 08:48:02: i=177, type=com.fibaro.motionSensor, device=Ytterdarrenhallen, room=Hallen
+[DEBUG] 08:48:02: i=178, type=com.fibaro.doorSensor, device=Ytterdarrenhallen, room=Hallen
+[DEBUG] 08:48:02: i=180, type=com.fibaro.motionSensor, device=Toalettdarrnere, room=Toaletten
+[DEBUG] 08:48:02: i=181, type=com.fibaro.doorSensor, device=Toalettdarrnere, room=Toaletten
+[DEBUG] 08:48:02: i=183, type=com.fibaro.motionSensor, device=Rarelsevardagsrum, room=Vardagsrummetnere
+[DEBUG] 08:48:02: i=193, type=com.fibaro.binarySwitch, device=Motorvarmaren, room=Utomhus
+[DEBUG] 08:48:02: i=203, type=com.fibaro.thermostatDanfoss, device=Alexelement, room=Alexsovrum
+[DEBUG] 08:48:02: i=214, type=com.fibaro.binarySwitch, device=Badrummetbelysning, room=Toaletten
+[DEBUG] 08:48:02: i=241, type=com.fibaro.doorSensor, device=Darrskrivarfarradet, room=Skrivar-förrådet
+[DEBUG] 08:48:02: i=242, type=com.fibaro.temperatureSensor, device=Tempskrivarfarradet, room=Skrivar-förrådet
+[DEBUG] 08:48:02: i=243, type=com.fibaro.heatDetector, device=Darrskrivarfarradet, room=Skrivar-förrådet
+[DEBUG] 08:48:02: i=245, type=com.fibaro.binarySwitch, device=Belysninglilla, room=Lillaförrådet
+[DEBUG] 08:48:02: i=249, type=com.fibaro.binarySwitch, device=TVochTV-spel, room=Vardagsrummetuppe
+[DEBUG] 08:48:02: i=251, type=com.fibaro.binarySwitch, device=Taklampa, room=Vårtsovrum
+[DEBUG] 08:48:02: i=264, type=com.fibaro.binarySwitch, device=TaklampanAlex, room=Alexsovrum
+[DEBUG] 08:48:02: i=268, type=com.fibaro.multilevelSwitch, device=Dimmerbrasan, room=Vardagsrummetnere
+[DEBUG] 08:48:02: i=276, type=com.fibaro.motionSensor, device=Alarmvardagsrumn, room=Vardagsrummetnere
+[DEBUG] 08:48:02: i=279, type=com.fibaro.binarySwitch, device=Tvattmaskin, room=Tvättstugan
+[DEBUG] 08:48:02: i=281, type=com.fibaro.binarySwitch, device=Kaffemaskinen, room=Köket
+[DEBUG] 08:48:02: i=288, type=com.fibaro.FGWP101, device=Granafansterlampan, room=Vardagsrummetnere
+[DEBUG] 08:48:03: i=292, type=com.fibaro.binarySwitch, device=IsasTV, room=Isasrum
+[DEBUG] 08:48:03: i=298, type=com.fibaro.motionSensor, device=Brandvarnarenere, room=Vardagsrummetnere
+[DEBUG] 08:48:03: i=299, type=com.fibaro.smokeSensor, device=Brandvarnarenere, room=Vardagsrummetnere
+[DEBUG] 08:48:03: i=300, type=com.fibaro.smokeSensor, device=Brandvarnarenere, room=Vardagsrummetnere
+[DEBUG] 08:48:03: i=302, type=com.fibaro.smokeSensor, device=Brandvarnareuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:03: i=303, type=com.fibaro.smokeSensor, device=Brandvarnareuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:03: i=304, type=com.fibaro.smokeSensor, device=Brandvarnareuppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:03: i=306, type=com.fibaro.binarySwitch, device=Isastaklampa, room=Isasrum
+[DEBUG] 08:48:03: i=310, type=com.fibaro.binarySwitch, device=Taklampan, room=Theosrum
+[DEBUG] 08:48:03: i=314, type=com.fibaro.binarySwitch, device=Taklampan, room=Tvättstugan
+[DEBUG] 08:48:03: i=316, type=com.fibaro.binarySwitch, device=Lillalampan, room=Tvättstugan
+[DEBUG] 08:48:03: i=323, type=com.fibaro.FGD212, device=Fansterlampornauppe, room=Vardagsrummetuppe
+[DEBUG] 08:48:03: i=328, type=com.fibaro.binarySwitch, device=TVochdator, room=Theosrum
+[DEBUG] 08:48:03: i=334, type=com.fibaro.zwaveDevice, device=Rangeextender, room=Alexsovrum
+[DEBUG] 08:48:03: i=336, type=com.fibaro.temperatureSensor, device=Temperatur, room=Överstavinden
+[DEBUG] 08:48:03: i=337, type=com.fibaro.humiditySensor, device=Luftfuktighet, room=Överstavinden
+[DEBUG] 08:48:03: i=347, type=virtual_device, device=Variablestates
+[DEBUG] 08:48:03: i=351, type=com.fibaro.motionSensor, device=Brandvarnaregaraget, room=Garaget
+[DEBUG] 08:48:03: i=352, type=com.fibaro.smokeSensor, device=Brandvarnaregaraget, room=Garaget
+[DEBUG] 08:48:03: i=353, type=com.fibaro.smokeSensor, device=Brandvarnaregaraget, room=Garaget
+[DEBUG] 08:48:03: i=355, type=com.fibaro.FGMS001v2, device=Rarelsehallen, room=Hallen
+[DEBUG] 08:48:03: i=356, type=com.fibaro.temperatureSensor, device=Tempfibaro, room=Hallen
+[DEBUG] 08:48:03: i=357, type=com.fibaro.lightSensor, device=Luxhallen, room=Hallen
+[DEBUG] 08:48:03: i=360, type=iOS_device, device=AlvasiPhone
+[DEBUG] 08:48:03: i=365, type=iOS_device, device=VeronicasiPhone
+[DEBUG] 08:48:03: i=369, type=com.fibaro.binarySwitch, device=ACplug, room=Hallen
+[DEBUG] 08:48:03: i=373, type=com.fibaro.binarySwitch, device=Uttagfarstrykjarn, room=Tvättstugan
+[DEBUG] 08:48:03: i=375, type=com.fibaro.multilevelSwitch, device=Dimmerfansterlampa, room=Vårtsovrum
+[DEBUG] 08:48:03: i=377, type=com.fibaro.doorSensor, device=Bildarrengaraget, room=Garaget
+[DEBUG] 08:48:03: i=379, type=com.fibaro.FGMS001v2, device=Rarelsetvattstugan, room=Tvättstugan
+[DEBUG] 08:48:03: i=380, type=com.fibaro.temperatureSensor, device=Temperatur, room=Tvättstugan
+[DEBUG] 08:48:04: i=381, type=com.fibaro.lightSensor, device=Ljus, room=Tvättstugan
+[DEBUG] 08:48:04: i=386, type=com.fibaro.doorSensor, device=Sidodarrengaraget, room=Garaget
+[DEBUG] 08:48:04: i=387, type=com.fibaro.temperatureSensor, device=Sidodarrtemp, room=Garaget
+[DEBUG] 08:48:04: i=388, type=com.fibaro.heatDetector, device=Sidodarrengaraget, room=Garaget
+[DEBUG] 08:48:04: i=390, type=com.fibaro.FGMS001v2, device=Sensorfarradet, room=Förrådet
+[DEBUG] 08:48:04: i=391, type=com.fibaro.temperatureSensor, device=Tempfarradet, room=Förrådet
+[DEBUG] 08:48:04: i=392, type=com.fibaro.lightSensor, device=Ljusfarradet, room=Förrådet
+[DEBUG] 08:48:04: i=396, type=com.fibaro.remoteController, device=Knappvidsangen, room=Vårtsovrum
+[DEBUG] 08:48:04: i=400, type=com.fibaro.binarySwitch, device=Alvasuttag, room=Alvassovrum
+[DEBUG] 08:48:04: i=407, type=com.fibaro.binarySwitch, device=Hagervagglampa, room=Vardagsrummetnere
+[DEBUG] 08:48:04: i=408, type=com.fibaro.binarySwitch, device=Vanstervagglampa, room=Vardagsrummetnere
+[DEBUG] 08:48:04: i=412, type=com.fibaro.remoteController, device=Lampknappar, room=Vardagsrummetnere
+[DEBUG] 08:48:04: i=414, type=com.fibaro.binarySwitch, device=Ugn, room=Köket
+[DEBUG] 08:48:04: i=419, type=com.fibaro.binarySwitch, device=Mikrovagsugn, room=Köket
+[DEBUG] 08:48:04: i=436, type=com.fibaro.binarySwitch, device=TVochAppleTV, room=Vårtsovrum
+[DEBUG] 08:48:04: i=446, type=com.fibaro.binarySwitch, device=Ljusbrytareninnerga, room=Utomhus
+[DEBUG] 08:48:04: i=447, type=com.fibaro.binarySwitch, device=Innergardenbelysnin, room=Utomhus
+[DEBUG] 08:48:04: i=449, type=com.fibaro.binarySwitch, device=Belysningarbetsbank, room=Garaget
+[DEBUG] 08:48:04: i=451, type=com.fibaro.binarySwitch, device=Belysningfarradet, room=Förrådet
+[DEBUG] 08:48:04: i=455, type=com.fibaro.binarySwitch, device=HC2+varmeslinga, room=Köksförrådet
+[DEBUG] 08:48:04: i=460, type=com.fibaro.setPoint, device=Setpointgolvvarme, room=Hallen
+[DEBUG] 08:48:04: i=461, type=com.fibaro.temperatureSensor, device=Tempgolvvarme, room=Hallen
+[DEBUG] 08:48:04: i=462, type=com.fibaro.operatingMode, device=Lagegolvvarme, room=Hallen
+[DEBUG] 08:48:04: i=464, type=com.fibaro.setPoint, device=Setpointgolvvarmen, room=Toaletten
+[DEBUG] 08:48:04: i=465, type=com.fibaro.temperatureSensor, device=Temperaturgolvvarme, room=Toaletten
+[DEBUG] 08:48:05: i=466, type=com.fibaro.operatingMode, device=Modegolvvarme, room=Toaletten
+[DEBUG] 08:48:05: i=468, type=com.fibaro.setPoint, device=Setpointgolvvarme, room=Toalettuppe
+[DEBUG] 08:48:05: i=469, type=com.fibaro.temperatureSensor, device=Golvtemp, room=Toalettuppe
+[DEBUG] 08:48:05: i=470, type=com.fibaro.operatingMode, device=Modegolvvarme, room=Toalettuppe
+[DEBUG] 08:48:05: i=476, type=com.fibaro.FGMS001v2, device=Sensorvidkaminen, room=Vardagsrummetnere
+[DEBUG] 08:48:05: i=477, type=com.fibaro.temperatureSensor, device=Tempkaminen, room=Vardagsrummetnere
+[DEBUG] 08:48:05: i=478, type=com.fibaro.lightSensor, device=Ljusvidsoffan, room=Vardagsrummetnere
+[DEBUG] 08:48:05: i=482, type=com.fibaro.multilevelSwitch, device=Lampornavidsoffan, room=Vardagsrummetuppe
+[DEBUG] 08:48:05: i=484, type=virtual_device, device=StyrningAC
+[DEBUG] 08:48:05: i=485, type=virtual_device, device=Belysning
+[DEBUG] 08:48:05: i=486, type=com.fibaro.wakeOnLan, device=VackNAS, room=Skrivar-förrådet
+[DEBUG] 08:48:05: i=488, type=virtual_device, device=Startpamorgonen
+[DEBUG] 08:48:05: i=489, type=HC_user, device=Siri, room=Unallocated
+[DEBUG] 08:48:05: i=490, type=virtual_device, device=Husetsstatus
+[DEBUG] 08:48:05: i=494, type=com.fibaro.binarySwitch, device=Flaktitaket, room=Vardagsrummetnere
+[DEBUG] 08:48:05: i=497, type=com.fibaro.binarySwitch, device=Uttageniuterummet, room=Utomhus
+[DEBUG] 08:48:05: i=500, type=com.fibaro.FGD212, device=Taklampan, room=Hallen
+[DEBUG] 08:48:05: i=508, type=com.fibaro.FGD212, device=Belysningitrappen, room=Vardagsrummetuppe
+[DEBUG] 08:48:05: i=511, type=com.fibaro.colorController, device=RGBtaklampan, room=Vardagsrummetuppe
+[DEBUG] 08:48:05: global jTable created:
+[DEBUG] 08:48:05: JSON Formatter & Validator
+About
+Learn
+Bookmarklet
+Changelog
+Support
+Contact
+
+
+Paste in JSON or a URL and away you go.
+
+JSON Data/URL
+
+JSON Standard
+JSON Template
+Process
+
+
+#1
+February 3rd 2017, 8:49:45 am
+
+VALID JSON (RFC 4627)
+Formatted JSON Data
 {
-  "Toaletten": {
-    "Setpointgolvv\u00e4rmen": 464,
-    "Temperaturgolvv\u00e4rme": 465,
-    "Badrummetbelysning": 214,
-    "Toalettd\u00f6rrnere": 181,
-    "Modegolvv\u00e4rme": 466
-  },
-  "Alexsovrum": {
-    "Alexelement": 203,
-    "Rangeextender": 334,
-    "TaklampanAlex": 264
-  },
-  "\u00d6verstavinden": {
-    "Temperatur": 336,
-    "Luftfuktighet": 337
-  },
-  "Tv\u00e4ttstugan": {
-    "Taklampan": 314,
-    "Elementtv\u00e4ttstugan": 166,
-    "Tv\u00e4ttmaskin": 279,
-    "R\u00f6relsetv\u00e4ttstugan": 379,
-    "Temperatur": 380,
-    "Uttagf\u00f6rstrykj\u00e4rn": 373,
-    "Lillalampan": 316,
-    "Ljus": 381
-  },
-  "Hallen": {
-    "ACMode": 49,
-    "L\u00e4gegolvv\u00e4rme": 462,
-    "Luxhallen": 357,
-    "R\u00f6relsehallen": 355,
-    "Ytterd\u00f6rrenhallen": 178,
-    "ACSetpoint": 47,
-    "Setpointgolvv\u00e4rme": 460,
-    "ACFanmode": 50,
-    "Tempgolvv\u00e4rme": 461,
-    "Temperatur": 48,
-    "ACplug": 369,
-    "Tempfibaro": 356,
-    "Knappvidd\u00f6rren": 54
-  },
-  "V\u00e5rtsovrum": {
-    "Knappvids\u00e4ngen": 396,
-    "Dimmerf\u00e4nsterlampa": 375,
-    "Elementv\u00e5rtrum": 149,
-    "Taklampa": 251,
-    "TVochAppleTV": 436
-  },
-  "Unallocated": {
-    "Fredrik": 74,
-    "Alva": 96,
-    "Veronica": 75
-  },
-  "Toalettuppe": {
-    "Setpointgolvv\u00e4rme": 468,
-    "Modegolvv\u00e4rme": 470,
-    "Golvtemp": 469,
-    "Belysningtoauppe": 62
-  },
-  "Garaget": {
-    "Sidod\u00f6rrengaraget": 388,
-    "Brandvarnaregaraget": 353,
-    "Garagetr\u00f6relse": 32,
-    "Luftfuktighet": 35,
-    "Sidod\u00f6rrtemp": 387,
-    "Bild\u00f6rrengaraget": 377,
-    "Taklampan": 28,
-    "Belysningarbetsb\u00e4nk": 449,
-    "GaragetTemp": 33,
-    "Garagetljus": 34
-  },
-  "Skrivar-f\u00f6rr\u00e5det": {
-    "D\u00f6rrskrivarf\u00f6rr\u00e5det": 243,
-    "V\u00e4ckNAS": 486,
-    "Routerochskrivare": 441,
-    "Tempskrivarf\u00f6rr\u00e5det": 242,
-    "Lyseskrivaren": 227
-  },
-  "Vardagsrummetnere": {
-    "Sensorvidkaminen": 476,
-    "Ljusvidsoffan": 478,
-    "Tempkaminen": 477,
-    "Verandad\u00f6rren": 84,
-    "Lampknappar": 412,
-    "Elementvardagnere": 147,
-    "Temperaturd\u00f6rren": 82,
-    "Dimmerbrasan": 268,
-    "Gr\u00f6naf\u00f6nsterlampan": 288,
-    "V\u00e4nsterv\u00e4gglampa": 408,
-    "Ljusvardagsrummetn": 83,
-    "Brandvarnarenere": 300,
-    "R\u00f6relsevardagsrum": 183,
-    "H\u00f6gerv\u00e4gglampa": 407,
-    "Alarmvardagsrumn": 276
-  },
-  "Vardagsrummetuppe": {
-    "Luftfuktighetupper": 126,
-    "V\u00e4nsterelementuppe": 153,
-    "H\u00f6gerelementuppe": 155,
-    "Lampornavidsoffan": 482,
-    "F\u00f6nsterlampornauppe": 323,
-    "Ljusupper": 125,
-    "Taklampan": 57,
-    "TVochTV-spel": 249,
-    "Julbelysninguppe": 472,
-    "Temperaturuppe": 124,
-    "UVUppe": 127,
-    "R\u00f6relseUppe": 5,
-    "Brandvarnareuppe": 304,
-    "Trapplampan": 58
-  },
-  "Lillaf\u00f6rr\u00e5det": {
-    "Templillaf\u00f6rr\u00e5det": 175,
-    "D\u00f6rrlillaf\u00f6rr\u00e5det": 173,
-    "Belysninglilla": 245
-  },
-  "Theosrum": {
-    "Taklampan": 310,
-    "TVochdator": 328,
-    "Theoselement": 161
-  },
-  "K\u00f6ksf\u00f6rr\u00e5det": {
-    "HC2+v\u00e4rmeslinga": 455
-  },
-  "F\u00f6rr\u00e5det": {
-    "Ljusf\u00f6rr\u00e5det": 392,
-    "Belysningf\u00f6rr\u00e5det": 451,
-    "Tempf\u00f6rr\u00e5det": 391,
-    "Sensorf\u00f6rr\u00e5det": 390
-  },
-  "K\u00f6ket": {
-    "Ljusstakarnere": 474,
-    "Frysen": 98,
-    "L\u00e4ckagediskmaskinen": 86,
-    "Elementk\u00f6ket": 145,
-    "DiskmaskinenOFF\/ON": 88,
-    "Kaffemaskinen": 281,
-    "Mikrov\u00e5gsugn": 419,
-    "Kyl": 45,
-    "F\u00f6nsterlamporna": 21,
-    "Ugn": 414
-  },
-  "iOS": {
-    "FredriksiPhone": 76,
-    "VeronicasiPhone": 365,
-    "\"VeronicasiPhone\"": 133,
-    "AlvasiPhone": 360,
-    "FredriksiPad": 95
-  },
-  "VD": {
-    "StyrningAC": 484,
-    "Startp\u00e5morgonen": 488,
-    "Variablestates": 347,
-    "Belysning": 485
-  },
-  "Alvassovrum": {
-    "Alvasfj\u00e4rr": 92,
-    "Alvasuttag": 400,
-    "Alvaslampa": 90,
-    "Alvaselement": 151
-  },
-  "Utomhus": {
-    "Ljusbrytareninnerg\u00e5": 446,
-    "Innerg\u00e5rdenbelysnin": 447,
-    "Motorv\u00e4rmaren": 193
-  },
-  "Isasrum": {
-    "IsasTV": 292,
-    "Isaselement": 163,
-    "Isastaklampa": 306
-  },
-  "users": {
-    "Veronica": 75,
-    "Fredrik": 74,
-    "Alva": 96,
-    "SuberUser": 2
-  }
+   "Isasrum":{
+      "Isastaklampa":306,
+      "Isaselement":163,
+      "IsasTV":292
+   },
+   "Alexsovrum":{
+      "Alexelement":203,
+      "Rangeextender":334,
+      "TaklampanAlex":264
+   },
+   "Förrådet":{
+      "Belysningfarradet":451,
+      "Tempfarradet":391,
+      "Ljusfarradet":392,
+      "Sensorfarradet":390
+   },
+   "Alvassovrum":{
+      "Alvasuttag":400,
+      "Alvaslampa":90,
+      "Alvasfjarr":92,
+      "Alvaselement":151
+   },
+   "Vardagsrummetnere":{
+      "Elementvardagnere":147,
+      "Brandvarnarenere":300,
+      "Granafansterlampan":288,
+      "Alarmvardagsrumn":276,
+      "Flaktitaket":494,
+      "Verandadarren":84,
+      "Lampknappar":412,
+      "Ljusvidsoffan":478,
+      "Rarelsevardagsrum":183,
+      "Tempkaminen":477,
+      "Sensorvidkaminen":476,
+      "Temperaturdarren":82,
+      "Ljusvardagsrummetn":83,
+      "Vanstervagglampa":408,
+      "Dimmerbrasan":268,
+      "Hagervagglampa":407
+   },
+   "Unallocated":{
+      "Alva":96,
+      "Siri":489,
+      "Veronica":75,
+      "Fredrik":74
+   },
+   "Vardagsrummetuppe":{
+      "Taklampan":57,
+      "Vansterelementuppe":153,
+      "Temperaturuppe":124,
+      "RGBtaklampan":511,
+      "TVochTV-spel":249,
+      "Luftfuktighetupper":126,
+      "Belysningitrappen":508,
+      "UVUppe":127,
+      "Ljusupper":125,
+      "Brandvarnareuppe":304,
+      "Hagerelementuppe":155,
+      "Lampornavidsoffan":482,
+      "Fansterlampornauppe":323,
+      "RarelseUppe":5
+   },
+   "Garaget":{
+      "Taklampan":28,
+      "Garagetrarelse":32,
+      "Belysningarbetsbank":449,
+      "Sidodarrtemp":387,
+      "Luftfuktighet":35,
+      "Garagetljus":34,
+      "GaragetTemp":33,
+      "Sidodarrengaraget":388,
+      "Bildarrengaraget":377,
+      "Brandvarnaregaraget":353
+   },
+   "Överstavinden":{
+      "Temperatur":336,
+      "Luftfuktighet":337
+   },
+   "Lillaförrådet":{
+      "Belysninglilla":245,
+      "Darrlillafarradet":173,
+      "Templillafarradet":175
+   },
+   "Köksförrådet":{
+      "HC2+varmeslinga":455
+   },
+   "Tvättstugan":{
+      "Taklampan":314,
+      "Tvattmaskin":279,
+      "Temperatur":380,
+      "Rarelsetvattstugan":379,
+      "Elementtvattstugan":166,
+      "Ljus":381,
+      "Uttagfarstrykjarn":373,
+      "Lillalampan":316
+   },
+   "Vårtsovrum":{
+      "Taklampa":251,
+      "Knappvidsangen":396,
+      "Dimmerfansterlampa":375,
+      "TVochAppleTV":436,
+      "Elementvartrum":149
+   },
+   "Skrivar-förrådet":{
+      "Tempskrivarfarradet":242,
+      "VackNAS":486,
+      "Darrskrivarfarradet":243
+   },
+   "Hallen":{
+      "Taklampan":500,
+      "Tempfibaro":356,
+      "Temperatur":48,
+      "Setpointgolvvarme":460,
+      "ACplug":369,
+      "Tempgolvvarme":461,
+      "Luxhallen":357,
+      "Ytterdarrenhallen":178,
+      "ACSetpoint":47,
+      "ACFanmode":50,
+      "Rarelsehallen":355,
+      "Lagegolvvarme":462,
+      "ACMode":49,
+      "Knappviddarren":54
+   },
+   "Köket":{
+      "Kyl":45,
+      "Kaffemaskinen":281,
+      "Fansterlamporna":21,
+      "Ugn":414,
+      "DiskmaskinenOFF\/ON":88,
+      "Mikrovagsugn":419,
+      "Elementkaket":145,
+      "Lackagediskmaskinen":86,
+      "Frysen":98
+   },
+   "Utomhus":{
+      "Ljusbrytareninnerga":446,
+      "Innergardenbelysnin":447,
+      "Motorvarmaren":193,
+      "Uttageniuterummet":497
+   },
+   "iOS":{
+      "FredriksiPhone":76,
+      "VeronicasiPhone":365,
+      "\"VeronicasiPhone\"":133,
+      "AlvasiPhone":360,
+      "FredriksiPad":95
+   },
+   "Toaletten":{
+      "Badrummetbelysning":214,
+      "Toalettdarrnere":181,
+      "Setpointgolvvarmen":464,
+      "Temperaturgolvvarme":465,
+      "Modegolvvarme":466
+   },
+   "Theosrum":{
+      "Taklampan":310,
+      "TVochdator":328,
+      "Theoselement":161
+   },
+   "VD":{
+      "StyrningAC":484,
+      "Variablestates":347,
+      "Startpamorgonen":488,
+      "Husetsstatus":490,
+      "Belysning":485
+   },
+   "users":{
+      "Veronica":75,
+      "Alva":96,
+      "SuberUser":2,
+      "Fredrik":74
+   },
+   "Toalettuppe":{
+      "Setpointgolvvarme":468,
+      "Modegolvvarme":470,
+      "Golvtemp":469,
+      "Belysningtoauppe":62
+   }
 }
