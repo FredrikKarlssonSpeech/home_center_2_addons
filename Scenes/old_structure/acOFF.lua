@@ -84,7 +84,7 @@ if (startedManually() ) then
 elseif (fibaro:countScenes() < 2) then
     local state =0;
     while (true) do
-        state = tonumber(fibaro:getValue(341, "value");
+        state = tonumber(fibaro:getValue(341, "value"));
         -- Turn off an hour later
         myTimer( isTime("16:00", 0, 10*60 ) and  (state == 1),acOFF);
 
@@ -94,5 +94,3 @@ elseif (fibaro:countScenes() < 2) then
         fibaro:sleep(10*60*1000);
     end;
 end;
-
-
