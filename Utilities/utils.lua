@@ -6,7 +6,8 @@
 -- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment.
 -- @tparam table t A table. Only simple tables (not nested) are supported.
 
-function debugTable (t)
+function debugTable (t, indent)
+    local ind = indent or "";
     local printFunc = print
     if (fibaro or {}).debug then
        function printFunc(...)
