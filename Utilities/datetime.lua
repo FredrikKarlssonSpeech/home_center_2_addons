@@ -124,6 +124,16 @@ function isWeekDay ()
     return (not (today == 0 or today == 6));
 end;
 
+-- Simple function that returns true if tomorrow is a weekday.
+-- A weekday is defined as Monday-Friday.
+-- @treturn boolean A boolean (true/false)
+
+function isWeekDayTomorrow ()
+    local today = tonumber(os.date("%w",os.time()));
+    -- Please note that this specification is 0-6 range, sunday=0
+    return (not (today == 5 or today == 6));
+end;
+
 --- Simple function that returns true if today is part of the weekend.
 -- A weekday is defined as Saturday or Sunday
 -- @treturn boolean A boolean (true/false)
@@ -132,6 +142,16 @@ end;
 function isWeekEnd ()
     local today = tonumber(os.date("%w",os.time()));
     return (today == 0 or today == 6);
+end;
+
+--- Simple function that returns true if today is part of the weekend.
+-- A weekday is defined as Saturday or Sunday
+-- @treturn boolean A boolean (true/false)
+
+
+function isWeekEndTomorrow ()
+    local today = tonumber(os.date("%w",os.time()));
+    return (today == 5 or today == 6);
 end;
 
 --- Check whether current time is before a specified time.
@@ -341,6 +361,12 @@ function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperatur
     return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
 end;
 
+--- Convenience funtion for printing an epoch timestamp in ISO 8601:1988 format.
+-- @param timestamp a epoch time stamp, such as a time indication associated with a Fibaro event.
+-- @treturn string a text representation "YYYY-MM-DD hh:mm" of the epoch timestamp, in the local timezone.
 
+function iso8601DateTime(timestamp)
+  return(os.date("%Y-%m-%d %X",tonumber(timestamp)));
+end;
 
 return datetime;
