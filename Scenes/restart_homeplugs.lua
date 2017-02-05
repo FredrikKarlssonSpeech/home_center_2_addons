@@ -19,7 +19,7 @@ fibaro:debug("Stänger av HomePlug för TVn nere");
 fibaro:call(436, "turnOff")
 -- Fifth, the NAS
 fibaro:debug("Stänger av HomePlug för NAS");
-fibaro:call(441, "turnOff")
+fibaro:call(519, "turnOff")
 -- Sixth, Isas TV
 fibaro:debug("Stänger av HomePlug för Isas TV");
 fibaro:call(292, "turnOff")
@@ -43,9 +43,8 @@ fibaro:call(436, "turnOn")
 fibaro:sleep(1000);
 -- Fifth, the NAS
 fibaro:debug("Startar HomePlug för NAS");
-fibaro:call(441, "turnOn")
+fibaro:call(519, "turnOn")
 fibaro:sleep(1000);
 -- Sixth, Isas TV
 fibaro:debug("Startar HomePlug för Isas TV");
 fibaro:call(292, "turnOn")
-
