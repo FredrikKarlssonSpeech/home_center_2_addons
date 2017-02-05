@@ -16,15 +16,14 @@ function debugTable (t, indent)
     end
     for k, v in pairs(t) do
         if(type(v) == "table") then
-            printFunc(k.."::\t")
-            for kI, vI in pairs(v) do
-                printFunc(kI.." ".. tostring(v1));
-            end;
+            -- recursive call if table
+            debugTable(v, ind .. " - ");
         else
-            printFunc(k.." ".. tostring(v));
+            printFunc(ind .. k .." ".. tostring(v));
         end;
     end;
 end;
+
 
 --- Function that checks whether a value exists in a table
 -- @tparam table tab The table
