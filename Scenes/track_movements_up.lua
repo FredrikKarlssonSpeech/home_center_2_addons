@@ -1,6 +1,6 @@
 --[[
 %% properties
-5 lastBreached
+529 lastBreached
 %% events
 %% globals
 --]]
@@ -16,4 +16,3 @@ fibaro:setGlobal("lastMoveUp",movement);
 
 local toDebugAfter = fibaro:getGlobal("lastMoveUp")
 fibaro:debug("Senast lagrade rörelsen uppe är nu ".. toDebugAfter .. " (" .. os.date("%Y-%m-%d %X",toDebugAfter) .. ")")
-
