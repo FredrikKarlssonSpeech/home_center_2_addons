@@ -4,26 +4,102 @@
 
 --- Function that prints out the content of a table.
 -- The function works well both within  Fibaro Home center 2 and in an ordinary lua environment.
--- @tparam table t A table. Only simple tables (not nested) are supported.
+-- @tparam table node A table. Only simple tables (not nested) are supported.
+-- @author Alundaio http://stackoverflow.com/questions/9168058/lua-beginner-table-dump-to-console/42062321#42062321
 
-function debugTable (t, indent)
-    local ind = indent or "";
-    local printFunc = print
-    if (fibaro or {}).debug then
-       function printFunc(...)
-          return fibaro:debug(...)
-       end
-    end
-    for k, v in pairs(t) do
-        if(type(v) == "table") then
-            -- recursive call if table
-            debugTable(v, ind .. " - ");
-        else
-            printFunc(ind .. k .." ".. tostring(v));
-        end;
+function debugTable(node)
+  -- handing two printing functions
+  local printFunc = print
+  if (fibaro or {}).debug then
+    function printFunc(...);
+      return fibaro:debug(...);
     end;
-end;
+  end;
+  -- to make output beautiful
+  local function tab(amt)
+    local str = "";
+    for i=1,amt do
+      str = str .. "\t";
+    end;
+    return str;
+  end;
 
+  local cache, stack = {},{};
+  local depth = 1;
+  local output_str = "{\n";
+
+  while true do
+    if not (cache[node]) then
+      cache[node] = {};
+    end;
+
+    local size = 0;
+    for k,v in pairs(node) do
+      size = size + 1;
+    end;
+
+    local cur_index = 1;
+    for k,v in pairs(node) do
+      if not (cache[node][k]) then
+        cache[node][k] = {};
+      end;
+
+      -- caches results since we will be recursing child nodes
+      if (cache[node][k][v] == nil) then
+        cache[node][k][v] = true;
+
+        if (string.find(output_str,"}",output_str:len())) then
+          output_str = output_str .. ",\n";
+        elseif not (string.find(output_str,"\n",output_str:len())) then
+          output_str = output_str .. "\n";
+        end;
+
+        local key;
+        if (type(k) == "userdata") then
+          key = "[userdata]";
+        elseif (type(k) == "string") then
+          key = "['"..tostring(k).."']";
+        else
+          key = "["..tostring(k).."]";
+        end;
+
+        if (type(v) == "table") then
+          output_str = output_str .. tab(depth) .. key .. " = {\n";
+          table.insert(stack,node);
+          table.insert(stack,v);
+          break;
+        elseif (type(v) == "userdata") then
+          output_str = output_str .. tab(depth) .. key .. " = userdata";
+        elseif (type(v) == "string") then
+          output_str = output_str .. tab(depth) .. key .. " = '"..v.."'";
+        else
+          output_str = output_str .. tab(depth) .. key .. " = "..tostring(v);
+        end;
+
+        if (cur_index == size) then
+          output_str = output_str .. "\n" .. tab(depth-1) .. "}";
+        else
+          output_str = output_str .. ",";
+        end;
+      else
+        -- close the table
+        if (cur_index == size) then
+          output_str = output_str .. "\n" .. tab(depth-1) .. "}";
+        end;
+      end;
+      cur_index = cur_index + 1;
+    end;
+
+    if (#stack > 0) then
+      node = stack[#stack];
+      stack[#stack] = nil;
+      depth = cache[node] == nil and depth + 1 or depth - 1;
+    else
+      break;
+    end;
+  end;
+  printFunc(output_str);
+end;
 
 --- Function that checks whether a value exists in a table
 -- @tparam table tab The table
