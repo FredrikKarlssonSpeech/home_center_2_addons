@@ -272,7 +272,7 @@ end;
 
 
 function runIf(shouldRun, toRun, sleepSeconds )
-  local delay = sleepSeconds or 60;
+  local delay = sleepSeconds or 0;
   if (type(toRun) == "function" and shouldRun ) then
     toRun();
   elseif ( type(toRun) == "table"  and shouldRun ) then
