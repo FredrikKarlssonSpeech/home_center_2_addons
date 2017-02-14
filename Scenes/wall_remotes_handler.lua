@@ -5,7 +5,7 @@
 %% globals
 --]]
 
--- LIBRARY 
+-- LIBRARY
 nodonSceneTableVerbose = {
     [10]="Button 1 Single Press",
     [20]="Button 2 Single Press",
@@ -58,6 +58,7 @@ local windowsOffScene = 98;
 local windowsOnScene = 99;
 local externalOnScene = 81;
 local externalOffScene = 82;
+local houseOFF = 100;
 local fasadOff = {windowsOffScene, externalOffScene};
 local fasadOn = {windowsOnScene, externalOnScene};
 
@@ -65,6 +66,7 @@ local fasadOn = {windowsOnScene, externalOnScene};
 
 runIf(buttonPressed(deviceId,"Button 2 Single Press",nodonSceneTableVerbose),fasadOn,0);
 runIf(buttonPressed(deviceId,"Button 4 Single Press",nodonSceneTableVerbose),fasadOff,0);
+runIf(buttonPressed(deviceId,"Button 4 Double Press",nodonSceneTableVerbose),houseOFF,0);
 
 
 -- fibaro:debug("Passed scene activation handlers")
