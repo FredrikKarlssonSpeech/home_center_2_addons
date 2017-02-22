@@ -52,6 +52,15 @@ end;
 
 --- SETUP AND RUN
 
+function toggleAC()
+  local acOn = tonumber(fibaro:getValue(369, "value"));
+  if(acOn == 1) then
+    fibaro:startScene(64) -- run turn AC off scene
+  else
+    fibaro:startScene(63) -- run turn AC on head 25 scene
+  end;
+end;
+
 local deviceId = 396
 
 local windowsOffScene = 98;
@@ -67,6 +76,6 @@ local fasadOn = {windowsOnScene, externalOnScene};
 runIf(buttonPressed(deviceId,"Button 2 Single Press",nodonSceneTableVerbose),fasadOn,0);
 runIf(buttonPressed(deviceId,"Button 4 Single Press",nodonSceneTableVerbose),fasadOff,0);
 runIf(buttonPressed(deviceId,"Button 4 Double Press",nodonSceneTableVerbose),houseOFF,0);
-
+runIf(buttonPressed(deviceId,"Button 2 Double Press",nodonSceneTableVerbose),toggleAC,0);
 
 -- fibaro:debug("Passed scene activation handlers")
