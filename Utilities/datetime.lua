@@ -156,16 +156,19 @@ end;
 
 --- Check whether current time is before a specified time.
 -- The function is designed to work well in a chain of checks, and therefore also makes sure that
--- time is not before the start of the day.
+-- time is not before the start of the day.  This functions is primarily designed to be used with "sunriseTime" or similar variables.
 -- @tparam string time A time specification string, e.g. "08", "08:10" or "08:10:10"
 -- If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
 -- as an argument. Thus, this function will then return 'true' up until "08:09:59" .
+-- @tparam number offset an offset that should be applied to the time (in number of seconds). Negative values will cause the function to return true x seconds before the indicated time of day.
 -- @treturn boolean A truth value (true/false)
 -- @see os.time
 
-function beforeTime(time)
+function beforeTime(time, offset)
     local timeEpoch = tableToEpochtime(timestringToTable(time));
     local startOfDay = tableToEpochtime(timestringToTable("00:00"));
+    local off = offset or 0;
+    timeEpoch = timeEpoch + off;
     local now = os.time();
     return( (now < timeEpoch) and (now >= startOfDay ));
 end;
@@ -176,12 +179,15 @@ end;
 -- @tparam string time A time specification string, e.g. "08", "08:10" or "08:10:10".
 -- If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
 -- as an argument. Thus, this function will then return 'true' from "08:10:01" and onwards.
+-- @tparam number offset an offset that should be applied to the time (in number of seconds). Negative values will cause the function to return true x seconds before the indicated time of day.
 -- @treturn boolean A truth value (true/false)
 -- @see os.time
 
-function afterTime(time)
+function afterTime(time, offset)
     local timeEpoch = tableToEpochtime(timestringToTable(time));
     local endOfDay = tableToEpochtime(timestringToTable("23:59:59"));
+    local off = offset or 0;
+    timeEpoch = timeEpoch + off;
     local now = os.time();
     return( (now > timeEpoch) and (now <= endOfDay ));
 end;
