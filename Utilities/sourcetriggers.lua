@@ -1,4 +1,4 @@
---- 
+---
 -- A module joining together a group of functions that makes testing for and handling of source triggers more managable.
 -- The design of the functions allow for them to be called in a context where one would like to know if
 -- what caused the scene to trigger (i.e. in the context of an conditions testing of an if-statement ).
@@ -253,3 +253,10 @@ function onButUnplugged(id,threshold)
     return(state == 1 and pow > t);
 end;
 
+function buttonPressed(id,descriptionstring,descriptiontable)
+  local dtab = descriptiontable or nodonSceneTableVerbose;
+  local inDesc = tostring(descriptionstring) ;
+  local scene = tonumber(fibaro:getValue(id, "sceneActivation"));
+  local desc = tostring(dtab[scene]);
+  return(inDesc == desc);
+end;
