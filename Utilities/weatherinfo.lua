@@ -1,4 +1,5 @@
-
+-- Functions for weather information.
+-- @section weatherinfo
 
 --- A function that lets you access the outside temperature reported by the remote weather service set up for the Home Center 2.
 -- @return The function returns the temperature as a number. If the function could not find a temperature value due to some error in the service, a 'nil' value is returned.

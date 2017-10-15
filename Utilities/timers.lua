@@ -1,44 +1,4 @@
---- A module that fascilitates specification of times when Fibaro lua scenes should run.
 
-
---- A function that creates a @{os.date} table from the time of sunset the same day.
--- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
--- call made exactly the minute corresponding to the sunset hour.
--- @tparam string time A text representation (e.g. "08:10") of the time of today to concert to a @{os.date} date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
--- @treturn table A table with year, month,day, hour min, sec and isdst fields.
--- @see os.date
--- @usage
--- timestringToTable("08:10")
--- -- Will return 'true' when between 08:10  and 08:59
--- timestringToTable("08")
--- -- Will return 'true' the entire hour
--- timestringToTable("08:10:10")
--- -- Will return 'true' exactly at the indicated second
-function timestringToTable (time)
-    local dateTable = os.date("*t");
-    -- Get an iterator that extracts date fields
-    local g =  string.gmatch(time, "%d+");
-
-    local hour = g() ;
-    local minute = g() or 0;
-    local second = g() or 0;
-    -- Insert sunset inforation istead
-    dateTable["hour"] = hour;
-    dateTable["min"] = minute;
-    dateTable["sec"] = second;
-    return(dateTable);
-end;
-
-
--- Utility function that computes the number of seconds since Epoch from a date and time table in the form given by os.date
--- @tparam table t A time specification table with the fields year, month, day, hour, min, sec, and isdst.
--- @treturn number An integer inficating the Epoch time stamp corresponding to the date and time given in the table.
-
-function tableToEpochtime (t)
-    local now = os.date("*t");
-    local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
-    return(outTime);
-end;
 
 
 --- A function that tests whether the current time is within a specified time window from a given time.
@@ -62,6 +22,9 @@ function isTime (timeString, offsetMinutes, secondsWindow)
     local now = os.time();
     return ( math.abs(timeWithOffset - now) <= secondsWindow );
 end;
+
+--- Functions that may be used for boolean tests of current date or time.
+-- @section timetriggers
 
 --- A function that checks whether the current time is within a range given as two text strings.
 -- This function is often more convenient than 'isTime' as you don't have to calculate the time and offset yourself.
@@ -102,6 +65,9 @@ end;
 -- A call 'isDayofWeek({"Mon","Tues"})' will return true on Wednesdays and Tuesdays, but not other days.
 -- @tparam {string} dayList A list of names of weekdays in a long (e.g. "Friday") or short (e.g. "Fri") format.
 -- @treturn boolean A boolean (true /false) indicating whether the short name of today is given in the list.
+-- @usage print(isDayOfWeek{"Sun"})
+-- -- This will print "true" on Sundays, but not on other weekdays
+--  
 
 function isDayOfWeek (dayList)
     local today = os.date("%a",os.time());
@@ -144,7 +110,7 @@ function isWeekEnd ()
     return (today == 0 or today == 6);
 end;
 
---- Simple function that returns true if today is part of the weekend.
+--- Simple function that returns true if tomorrow is part of the weekend.
 -- A weekday is defined as Saturday or Sunday
 -- @treturn boolean A boolean (true/false)
 
@@ -260,19 +226,21 @@ end;
 -- The basic structure of the function is that it takes a truth value indicating whether the scene should run.
 -- The idea is that this truth value should be the result of a series of time or source evaluations combined
 -- into one evaluation by 'and' and 'or' joiners, possibly with nesting.
--- The function @{myTimer} will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'.
--- After running the function constituting the scene, a delay may be imposed.
+-- The function @{runIf} will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'. @{runIf} could also be a table of integers, which should then be the Scene IDs of scenes that should be executed.
+-- 
+-- After running the function constituting the scene, or the scenes with the scene ID's supplies as the'toRun' argument,  a delay may be imposed.
+-- 
 -- @tparam boolean shouldRun A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
--- @tparam function toRun The function summarising the actions of the scene.
--- @tparam table toRun if instead an array is passed to the function, this is assumed to be an array of scene IDs to run.
--- @tparam number sleepSeconds Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
+-- @tparam func toRun The function summarising the actions of the scene.
+-- @tparam {int} toRun if instead an array is passed to the function, this is assumed to be an array of scene IDs to run.
+-- @tparam[opt=0] int sleepSeconds Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
 -- @usage
 -- function f () fibaro:call(12,"powerON"); end
--- -- A very simple scene
--- runIf ( notCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
+-- -- A very simple scene function
+-- runIf ( sceneNotCurrentlyRunning() and isTime("08:10",0,20) and isDayOfWeek("Mon","Tues"), f, 2*60)
 -- -- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 -- -- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
--- -- or more than once, as the 2 minutes delay combined with the call to @{notCurrentlyRunning} makes
+-- -- or more than once, as the 2 minutes delay combined with the call to @{sceneNotCurrentlyRunning} makes
 -- -- sure that it is not evaluated again within the 20 seconds time window allowed by the call to @{isTime}.
 
 
@@ -294,16 +262,50 @@ function runIf(shouldRun, toRun, sleepSeconds )
   fibaro:sleep(delay*1000);
 end;
 
+--- Function that determines whether its time to turn off the heater.
+-- The determination is based on the time when the heater was turned on, an auto off time and a
+-- filter boolean that makes it possible to block turning the AC off.
+-- @tparam number heaterOnTime An Epoch time stamp indicating when the heater was turned on
+-- @tparam number autoOffTime The number of hours after which the heater should automatically be turned off.
+-- @tparam boolean blockedByOutsideTemperature A true/false value. If 'true' automatic shutoff will be blocked. The idea is that this value should be based on an expression involving the outside temperature
+-- @usage
+-- shouldStopHeater (fibaro:getModificationTime(193, "value"), 3, tonumber(fibaro:getValue(3, "Temperature")) <= -20 )
+-- -- This call will return when checked 3 hours or more after the time when the state of
+-- -- device 193 was last changed, provided that the current outside temperature is not <= -20 degrees.
+-- -- If the temperature is <= -20 degrees, the function will always return 'false'
+-- -- so that the heater is not stopped.
+
+function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)
+    local now = os.time();
+    -- Here, I negate the boolean so that a true in the block results in a false in
+    -- response to the question whether the shutoff should be blocked
+    local notblock = (not blockedByOutsideTemperature) or false;
+    return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
+end;
+
+--- Convenience funtion for printing an epoch timestamp in ISO 8601:1988 format.
+-- @param timestamp a epoch time stamp, such as a time indication associated with a Fibaro event.
+-- @treturn string a text representation "YYYY-MM-DD hh:mm" of the epoch timestamp, in the local timezone.
+
+function iso8601DateTime(timestamp)
+  return(os.date("%Y-%m-%d %X",tonumber(timestamp)));
+end;
+
+return datetime;
+
+
+
+
 --- A function that determines whether the heater of a car should be turned on.
 -- The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
 -- @tparam string readyTime A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
 -- @tparam number tempOutside The temperature outside or inside the car (if available).
 -- @tparam boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
--- @tparam boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not specified, it defaults to false.
+-- @tparam[opt=false] boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized.
 -- @treturn boolean A truth value (true/false).
 
 function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
-    local timeEpoch = tableToEpochtime(timestringToTable(readyTime));
+    local timeEpoch = datetime.tableToEpochtime(timestringToTable(readyTime));
     local now = os.time();
     local heaterStarted = heaterON or false;
     local startTime = timeEpoch;
@@ -346,33 +348,46 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
     return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch));
 end;
 
---- Function that determines whether its time to turn off the heater.
--- The determination is based on the time when the heater was turned on, an auto off time and a
--- filter boolean that makes it possible to block turning the AC off.
--- @tparam number heaterOnTime An Epoch time stamp indicating when the heater was turned on
--- @tparam number autoOffTime The number of hours after which the heater should automatically be turned off.
--- @tparam boolean blockedByOutsideTemperature A true/false value. If 'true' automatic shutoff will be blocked. The idea is that this value should be based on an expression involving the outside temperature
+--- Utility functions related to date and time conversions.
+-- These small local functions are used heavilly by the functions in the previous section, and should therefore be included in scenes as soon as they are.
+-- @section datetimeutilities
+
+--- A function that creates a @{os.date} table from the time of sunset the same day.
+-- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
+-- call made exactly the minute corresponding to the sunset hour.
+-- @tparam string time A text representation (e.g. "08:10") of the time of today to concert to a @{os.date} date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
+-- @treturn table A table with year, month,day, hour min, sec and isdst fields.
+-- @see os.date
 -- @usage
--- shouldStopHeater (fibaro:getModificationTime(193, "value"), 3, tonumber(fibaro:getValue(3, "Temperature")) <= -20 )
--- -- This call will return when checked 3 hours or more after the time when the state of
--- -- device 193 was last changed, provided that the current outside temperature is not <= -20 degrees.
--- -- If the temperature is <= -20 degrees, the function will always return 'false'
--- -- so that the heater is not stopped.
+-- timestringToTable("08:10")
+-- -- Will return 'true' when between 08:10  and 08:59
+-- timestringToTable("08")
+-- -- Will return 'true' the entire hour
+-- timestringToTable("08:10:10")
+-- -- Will return 'true' exactly at the indicated second
+local function timestringToTable (time)
+    local dateTable = os.date("*t");
+    -- Get an iterator that extracts date fields
+    local g =  string.gmatch(time, "%d+");
 
-function shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)
-    local now = os.time();
-    -- Here, I negate the boolean so that a true in the block results in a false in
-    -- response to the question whether the shutoff should be blocked
-    local notblock = (not blockedByOutsideTemperature) or false;
-    return (  notblock  or  ( now - heaterOnTime ) >= (3600 * autoOffTime) );
+    local hour = g() ;
+    local minute = g() or 0;
+    local second = g() or 0;
+    -- Insert sunset inforation istead
+    dateTable["hour"] = hour;
+    dateTable["min"] = minute;
+    dateTable["sec"] = second;
+    return(dateTable);
 end;
 
---- Convenience funtion for printing an epoch timestamp in ISO 8601:1988 format.
--- @param timestamp a epoch time stamp, such as a time indication associated with a Fibaro event.
--- @treturn string a text representation "YYYY-MM-DD hh:mm" of the epoch timestamp, in the local timezone.
 
-function iso8601DateTime(timestamp)
-  return(os.date("%Y-%m-%d %X",tonumber(timestamp)));
+-- Utility function that computes the number of seconds since Epoch from a date and time table in the form given by os.date
+-- @tparam table t A time specification table with the fields year, month, day, hour, min, sec, and isdst.
+-- @treturn number An integer inficating the Epoch time stamp corresponding to the date and time given in the table.
+
+local function tableToEpochtime (t)
+    local now = os.date("*t");
+    local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
+    return(outTime);
 end;
 
-return datetime;

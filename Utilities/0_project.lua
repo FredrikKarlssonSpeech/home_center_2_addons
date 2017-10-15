@@ -1,6 +1,8 @@
 --- The Boolean Home Automation Lua Library 
--- @module bhall
 -- @author Fredrik Karlsson https://github.com/dargosch
--- 
--- 
--- @section Date
+
+
+local BHALL_LIB_VERSION=0.1;
+
+
+

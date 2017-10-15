@@ -1,5 +1,6 @@
--- A module for handling functions related to management of lighting.
--- @module lighting
+--- Functions that maupulates lighting.
+-- @section lighting
+
 
 --- A function that manages gradual dimming up of a device.
 -- The function will see to it that  the device will gradually be dimmed up from a start level to an endpoint level within a
@@ -39,8 +40,7 @@ end;
 --- This function takes a lux level reading and a set of conditions, and selects which lights to turn on
 -- If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.
 -- @tparam number currentLuxLevel a LUX reading that should determine which lights should be turned on
--- @tparam {number,number} conditionsTable This selects ON/OFF devices based on the current lux level and a threshold for each device. The argument should be a table of {id,lux} tuples that performs the selection of devices to turn on.
--- @tparam {number,{number,number}} conditionsTable a table of {id,{lux,level}} nested tuples. If 'currentLuxLevel' is smaller than the 'lux' value in the table, the device is set to 'level'.
+-- @tparam tab conditionsTable This selects ON/OFF devices based on the current lux level and a threshold for each device. The argument should be a table of {id,lux} tuples that performs the selection of devices to turn on. Alternativelly, 'conditionsTable' can be a table of {id,{lux,level}} nested tuples. If 'currentLuxLevel' is smaller than the 'lux' value in the table, the device is set to 'level'.
 -- @treturn table an array of device IDs that should be activated.
 -- @usage a = {}; a[10] = 90; a[30] = 80;
 -- @usage debugTable(lightSelect(80,a));

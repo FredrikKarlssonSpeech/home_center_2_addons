@@ -1,12 +1,6 @@
----
--- A module joining together a group of functions that makes testing for and handling of source triggers more managable.
--- The design of the functions allow for them to be called in a context where one would like to know if
--- what caused the scene to trigger (i.e. in the context of an conditions testing of an if-statement ).
--- If called outside of a context where truth value is not evaluated, then you may get more detailed
--- on the trigger.
--- Since all values that are not 'false' or 'nil' are evaluated at true, this works.
-
-
+--- Functions that deal with triggered events.
+-- The idea of these functions is that they encapsulate the Fibaro library functions and other structures into functions that work well when applied in boolean logic sequences.
+-- @section triggers
 
 
 --- A function that tests whether the scene was started manually
@@ -20,6 +14,7 @@ end;
 --- A function that tests whether the scene was started by a change in a global variable
 -- @treturn string If started by a global variable, the name of the variable is returned.
 -- @treturn boolean If started by something else, 'false' is returned.
+
 
 function startedByVariable ()
     local startSource = fibaro:getSourceTrigger();
@@ -49,11 +44,46 @@ end;
 -- Please note that the testing is stated in the negative. What is tested is whether the scene is NOT
 -- running, as this is the most probable use case.
 -- @treturn boolean A truth value (true /false).
-function notCurrentlyRunning()
+function sceneNotCurrentlyRunning()
     local sceneCount = tonumber(fibaro:countScenes());
     return (sceneCount == 1);
 end;
 
+--- A function that checks that a device is drawing power, if on
+-- The use case for this function is for instance a car heater. If it is turned on, it should draw power.
+-- If not, it is unplugged. Of course, this function requires a device that has power reporting.
+-- @tparam number id The ID of the device.
+-- @tparam number threshold The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
+-- @treturn number A boolean indicating wheter the device is ON but not active (not plugged in)
+function onButUnplugged(id,threshold)
+    local t = threshold or 15;
+    local state = tonumber(fibaro:getValue(id, "value"));
+    local pow = tonumber(fibaro:getValue(id, "power"));
+
+    return(state == 1 and pow > t);
+end;
+
+--- A function which transforms a sceneActivation to a boolean value.
+-- The idea is that the scene developer could just specify what kind of keypress should be tested for. The function then takes a scene controller specific table
+-- in which available key presses and a description of them is stored.
+-- @tparam number id The ID of the scene controller sending sceneActivation commands.
+-- @tparam string descriptionstring A textual description of the event to look for.
+-- @tparam table descriptiontable A scene controller specific table of available codes and textual descriptions.
+-- @see nodonSceneTable
+-- @see nodonSceneTableVerbose
+-- @see zwavemeSceneTable
+-- @see zwavemeSceneTableVerbose
+
+function buttonPressed(id,descriptionstring,descriptiontable)
+  local dtab = descriptiontable or nodonSceneTableVerbose;
+  local inDesc = tostring(descriptionstring) ;
+  local scene = tonumber(fibaro:getValue(id, "sceneActivation"));
+  local desc = tostring(dtab[scene]);
+  return(inDesc == desc);
+end;
+
+--- Scene controller specific tables of available key presses and sceneActivation codes.
+-- @section sceneActivationTables
 
 --- A table of mappings between NodOn remote scene codes and a text description.
 -- @table nodonSceneTableVerbose
@@ -73,6 +103,8 @@ end;
 -- @field 21 Button 2 Hold Released
 -- @field 31 Button 3 Hold Released
 -- @field 41 Button 4 Hold Released
+-- @see buttonPressed
+-- @within sceneActivationTables
 nodonSceneTableVerbose = {
     [10]="Button 1 Single Press",
     [20]="Button 2 Single Press",
@@ -111,6 +143,7 @@ nodonSceneTableVerbose = {
 -- @field 21 (2HR) Button 2 Hold Released
 -- @field 31 (3HR) Button 3 Hold Released
 -- @field 41 (4HR) Button 4 Hold Released
+-- @see buttonPressed
 nodonSceneTable = {
     [10]="1SP",
     [20]="2SP",
@@ -156,6 +189,7 @@ nodonSceneTable = {
 -- @field 26 Button 2 Click and then Press and hold
 -- @field 36 Button 3 Click and then Press and hold
 -- @field 46 Button 4 Click and then Press and hold
+-- @see buttonPressed
 zwavemeSceneTableVerbose = {
     [11]="Button 1 Single Click",
     [21]="Button 2 Single Click",
@@ -212,6 +246,7 @@ zwavemeSceneTableVerbose = {
 -- @field 26 (1C_PLH) Button 2 Click and then Press and hold
 -- @field 36 (1C_PLH) Button 3 Click and then Press and hold
 -- @field 46 (1C_PLH) Button 4 Click and then Press and hold
+-- @see buttonPressed
 zwavemeSceneTable = {
     [11]="1SC",
     [21]="2SC",
@@ -239,24 +274,4 @@ zwavemeSceneTable = {
     [46]="1C_PLH"
 };
 
---- A function that checks that a device is drawing power, if on
--- The use case for this function is for instance a car heater. If it is turned on, it should draw power.
--- If not, it is unplugged. Of course, this function requires a device that has power reporting.
--- @tparam number id The ID of the device.
--- @tparam number threshold The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
--- @treturn number A boolean indicating wheter the device is ON but not active (not plugged in)
-function onButUnplugged(id,threshold)
-    local t = threshold or 15;
-    local state = tonumber(fibaro:getValue(id, "value"));
-    local pow = tonumber(fibaro:getValue(id, "power"));
 
-    return(state == 1 and pow > t);
-end;
-
-function buttonPressed(id,descriptionstring,descriptiontable)
-  local dtab = descriptiontable or nodonSceneTableVerbose;
-  local inDesc = tostring(descriptionstring) ;
-  local scene = tonumber(fibaro:getValue(id, "sceneActivation"));
-  local desc = tostring(dtab[scene]);
-  return(inDesc == desc);
-end;
