@@ -24,42 +24,143 @@
 
 <div id="navigation">
 <br/>
-<h1>ldoc</h1>
+<h1>The Boolean Home Automation Lua Library</h1>
 
 
 <h2>Contents</h2>
 <ul>
-<li><a href="#Functions">Functions</a></li>
-<li><a href="#Tables">Tables</a></li>
+<li><a href="#Functions_that_deal_with_sequences_of_events">Functions that deal with sequences of events </a></li>
+<li><a href="#Functions_that_maupulates_lighting">Functions that maupulates lighting </a></li>
+<li><a href="#Functions_that_deal_with_triggered_events">Functions that deal with triggered events </a></li>
+<li><a href="#Scene_controller_specific_tables_of_available_key_presses_and_sceneActivation_codes">Scene controller specific tables of available key presses and sceneActivation codes </a></li>
+<li><a href="#sceneActivationTables">sceneActivationTables</a></li>
+<li><a href="#Functions_that_may_be_used_for_boolean_tests_of_current_date_or_time">Functions that may be used for boolean tests of current date or time </a></li>
+<li><a href="#Functions_that_manages_the_defined_time_of_day">Functions that manages the defined time of day </a></li>
 </ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><strong>B-HAll</strong></li>
+  <li><strong>bhall</strong></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-<h1>Module <code>B-HAll</code></h1>
-<p>A module that fascilitates specification of times when Fibaro lua scenes should run.</p>
+<h1>Module <code>bhall</code></h1>
+<p>The Boolean Home Automation Lua Library</p>
 <p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Fredrik Karlsson https://github.com/dargosch</li>
+    </ul>
 
 
-<h2><a href="#Functions">Functions</a></h2>
+<h2><a href="#Functions_that_deal_with_sequences_of_events">Functions that deal with sequences of events </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#timestringToTable">timestringToTable (time)</a></td>
-	<td class="summary">A function that creates a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> table from the time of sunset the same day.</td>
+	<td class="name" nowrap><a href="#activationSequence">activationSequence (ids, property)</a></td>
+	<td class="summary">A function that produces a sequence of activations of devices.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#dayrecorder">dayrecorder (storageVariable)</a></td>
+	<td class="summary">This function records events to a variable in a format that can be replayed at a later time
+ The function assumes that what should be recorded is what caused the scene to run, and its state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#logLastActivity">logLastActivity (variableName)</a></td>
+	<td class="summary">A function that simply logs the time when ran last into a global variable
+ This simple function may be used in a simple "last movement seen" scene that keeps track of when
+ movement was last seen in the house.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#hasBeenActivity">hasBeenActivity (timeWindow, variableName)</a></td>
+	<td class="summary">A simple function that fascilitates checking of when the activity was last observed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#hasChangedSince">hasChangedSince (id, property, seconds, minutes, hours, debugChangeTimeEpoch)</a></td>
+	<td class="summary">A simple function that answers the question of whether a device property has been changed within a specified time window</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#riskOfMold">riskOfMold (hum, temp, levelDescriptions)</a></td>
+	<td class="summary">Function that checks whether there is a risk of mold growth, and assessess the level of threat.</td>
+	</tr>
+</table>
+<h2><a href="#Functions_that_maupulates_lighting">Functions that maupulates lighting </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#startLevelChangeWithDur">startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</a></td>
+	<td class="summary">A function that manages gradual dimming up of a device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#lightSelect">lightSelect (currentLuxLevel, conditionsTable)</a></td>
+	<td class="summary">This function takes a lux level reading and a set of conditions, and selects which lights to turn on
+ If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#runLigthingSetup">runLigthingSetup (onTable)</a></td>
+	<td class="summary">This function executes lighting commands from a table.</td>
+	</tr>
+</table>
+<h2><a href="#Functions_that_deal_with_triggered_events">Functions that deal with triggered events </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#startedManually">startedManually ()</a></td>
+	<td class="summary">A function that tests whether the scene was started manually</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startedByVariable">startedByVariable ()</a></td>
+	<td class="summary">A function that tests whether the scene was started by a change in a global variable</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startedByDevice">startedByDevice ()</a></td>
+	<td class="summary">A function that tests whether the scene was started by a change in the state or property of a device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sceneNotCurrentlyRunning">sceneNotCurrentlyRunning ()</a></td>
+	<td class="summary">A function that tests whether the scene is currently running.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#onButUnplugged">onButUnplugged (id, threshold)</a></td>
+	<td class="summary">A function that checks that a device is drawing power, if on
+ The use case for this function is for instance a car heater.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buttonPressed">buttonPressed (id, descriptionstring, descriptiontable)</a></td>
+	<td class="summary">A function which transforms a sceneActivation to a boolean value.</td>
+	</tr>
+</table>
+<h2><a href="#Scene_controller_specific_tables_of_available_key_presses_and_sceneActivation_codes">Scene controller specific tables of available key presses and sceneActivation codes </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#nodonSceneTable">nodonSceneTable</a></td>
+	<td class="summary">Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#zwavemeSceneTableVerbose">zwavemeSceneTableVerbose</a></td>
+	<td class="summary">A table for Zwave.me wall controller (actually keyfob) scene codes.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#zwavemeSceneTable">zwavemeSceneTable</a></td>
+	<td class="summary">Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#isTime">isTime (timeString, offsetMinutes, secondsWindow)</a></td>
 	<td class="summary">A function that tests whether the current time is within a specified time window from a given time.</td>
 	</tr>
+</table>
+<h2><a href="#sceneActivationTables">sceneActivationTables</a></h2>
+<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#isInTimeRange">isInTimeRange (startTimeString, endTimeString)</a></td>
+	<td class="name" nowrap><a href="#nodonSceneTableVerbose">nodonSceneTableVerbose</a></td>
+	<td class="summary">A table of mappings between NodOn remote scene codes and a text description.</td>
+	</tr>
+</table>
+<h2><a href="#Functions_that_may_be_used_for_boolean_tests_of_current_date_or_time">Functions that may be used for boolean tests of current date or time </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#timeIsInRange">timeIsInRange (startTimeString, endTimeString)</a></td>
 	<td class="summary">A function that checks whether the current time is within a range given as two text strings.</td>
 	</tr>
 	<tr>
@@ -75,11 +176,15 @@
 	<td class="summary">Simple function that returns true if today is part of the weekend.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#beforeTime">beforeTime (time)</a></td>
+	<td class="name" nowrap><a href="#isWeekEndTomorrow">isWeekEndTomorrow ()</a></td>
+	<td class="summary">Simple function that returns true if tomorrow is part of the weekend.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#beforeTime">beforeTime (time, offset)</a></td>
 	<td class="summary">Check whether current time is before a specified time.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#afterTime">afterTime (time)</a></td>
+	<td class="name" nowrap><a href="#afterTime">afterTime (time, offset)</a></td>
 	<td class="summary">Check whether current time is after a specified time.</td>
 	</tr>
 	<tr>
@@ -93,56 +198,46 @@
  What is supplied to the function is a time in a standard format (eg "08:25", "8:25", "08:25:05").</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#myTimer">myTimer (shouldRun, functionToRun, sleepSeconds)</a></td>
+	<td class="name" nowrap><a href="#runIf">runIf (shouldRun, toRun, toRun[, sleepSeconds=0])</a></td>
 	<td class="summary">Function that simplifies running a scene on a timer and specify the delay needed.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#timeToStartCarHeater">timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)</a></td>
-	<td class="summary">A function that determines whether the heater of a car should be turned on.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#shouldStopHeater">shouldStopHeater (heaterOnTime, autoOffTime, blockedByOutsideTemperature)</a></td>
 	<td class="summary">Function that determines whether its time to turn off the heater.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#entryCounter">entryCounter (activatedID, moveInsideID, moveOutsideID, doorID, variableName)</a></td>
-	<td class="summary">This module collects functions that make it easier to reason about events.</td>
+	<td class="name" nowrap><a href="#iso8601DateTime">iso8601DateTime (timestamp)</a></td>
+	<td class="summary">Convenience funtion for printing an epoch timestamp in ISO 8601:1988 format.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#activationSequence">activationSequence (ids, property)</a></td>
-	<td class="summary">A function that produces a sequence of activations of devices.</td>
+	<td class="name" nowrap><a href="#timeToStartCarHeater">timeToStartCarHeater (readyTime, tempOutside, eco[, heaterON=false])</a></td>
+	<td class="summary">A function that determines whether the heater of a car should be turned on.</td>
+	</tr>
+</table>
+<h2><a href="#Functions_that_manages_the_defined_time_of_day">Functions that manages the defined time of day </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#isDaytime">isDaytime ()</a></td>
+	<td class="summary">A function that checks whether it is daytime or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Day" if true.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#riskOfMold">riskOfMold (hum, temp, levelDescriptions)</a></td>
-	<td class="summary">Function that checks whether there is a risk of mold growth, and assessess the level of threat.</td>
+	<td class="name" nowrap><a href="#isNighttime">isNighttime ()</a></td>
+	<td class="summary">A function that checks whether it is nighttime or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Night" if true.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#startLevelChangeWithDur">startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</a></td>
-	<td class="summary">A function that manages gradual dimming up of a device.</td>
+	<td class="name" nowrap><a href="#isMorning">isMorning ()</a></td>
+	<td class="summary">A function that checks whether it is morning or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Morning" if true.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#startedManually">startedManually ()</a></td>
-	<td class="summary">A function that tests whether the scene was started manually</td>
+	<td class="name" nowrap><a href="#isEvening">isEvening ()</a></td>
+	<td class="summary">A function that checks whether it is morning or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Evening" if true.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#startedByVariable">startedByVariable ()</a></td>
-	<td class="summary">A function that tests whether the scene was started by a change in a global variable</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#startedByDevice">startedByDevice ()</a></td>
-	<td class="summary">A function that tests whether the scene was started by a change in the state or property of a device.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#notCurrentlyRunning">notCurrentlyRunning ()</a></td>
-	<td class="summary">A function that tests whether the scene is currently running.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#onButUnplugged">onButUnplugged (id, threshold)</a></td>
-	<td class="summary">A function that checks that a device is drawing power, if on
- The use case for this function is for instance a car heater.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#debugTable">debugTable (t)</a></td>
+	<td class="name" nowrap><a href="#debugTable">debugTable (node)</a></td>
 	<td class="summary">Function that prints out the content of a table.</td>
 	</tr>
 	<tr>
@@ -161,24 +256,49 @@
 	<td class="name" nowrap><a href="#tableToTable">tableToTable (t)</a></td>
 	<td class="summary">Utility function that changes keys to values and vise versa for a table.</td>
 	</tr>
-</table>
-<h2><a href="#Tables">Tables</a></h2>
-<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#nodonSceneTableVerbose">nodonSceneTableVerbose</a></td>
-	<td class="summary">A table of mappings between NodOn remote scene codes and a text description.</td>
+	<td class="name" nowrap><a href="#arrayContainsValue">arrayContainsValue (tab, value)</a></td>
+	<td class="summary">A simple utility function which checks whether a value exists within an array</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#nodonSceneTable">nodonSceneTable</a></td>
-	<td class="summary">Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.</td>
+	<td class="name" nowrap><a href="#arrayContainsKey">arrayContainsKey (tab, key)</a></td>
+	<td class="summary">A simple utility function which checks whether a key exists in an array</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#zwavemeSceneTableVerbose">zwavemeSceneTableVerbose</a></td>
-	<td class="summary">A table for Zwave.me wall controller (actually keyfob) scene codes.</td>
+	<td class="name" nowrap><a href="#loadHomeTable">loadHomeTable (variableName)</a></td>
+	<td class="summary">This utility function manages the loading of content from a HomeTable variable</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#zwavemeSceneTable">zwavemeSceneTable</a></td>
-	<td class="summary">Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.</td>
+	<td class="name" nowrap><a href="#getOutSideTemperature">getOutSideTemperature ()</a></td>
+	<td class="summary">A function that lets you access the outside temperature reported by the remote weather service set up for the Home Center 2.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getOutSideHumidity">getOutSideHumidity ()</a></td>
+	<td class="summary">A function that lets you access the outside humidity reported by the remote weather service set up for the Home Center 2.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#weatherIsClear">weatherIsClear ()</a></td>
+	<td class="summary">A function that checks whether weather conditions are "clear".</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#weatherIsCloudy">weatherIsCloudy ()</a></td>
+	<td class="summary">A function that checks whether weather conditions are "cloudy".</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isRainyWeather">isRainyWeather ()</a></td>
+	<td class="summary">A function that checks whether it is currently raining.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isSnowing">isSnowing ()</a></td>
+	<td class="summary">A function that checks it is currently snowing.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isStorming">isStorming ()</a></td>
+	<td class="summary">A function that checks whether there is a storm outside.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isFog">isFog ()</a></td>
+	<td class="summary">A function that checks whether there is a fog outside.</td>
 	</tr>
 </table>
 
@@ -186,24 +306,26 @@
 <br/>
 
 
-    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+    <h2 class="section-header "><a name="Functions_that_deal_with_sequences_of_events"></a>Functions that deal with sequences of events </h2>
 
     <dl class="function">
     <dt>
-    <a name = "timestringToTable"></a>
-    <strong>timestringToTable (time)</strong>
+    <a name = "activationSequence"></a>
+    <strong>activationSequence (ids, property)</strong>
     </dt>
     <dd>
-    A function that creates a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> table from the time of sunset the same day.
- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
- call made exactly the minute corresponding to the sunset hour.
+    A function that produces a sequence of activations of devices.
 
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">time</span>
+        <li><span class="parameter">ids</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         An array of device IDs.
+        </li>
+        <li><span class="parameter">property</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         A text representation (e.g. "08:10") of the time of today to concert to a <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a> date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
+         The property to check modication times of.
         </li>
     </ul>
 
@@ -211,25 +333,724 @@
     <ol>
 
            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-        A table with year, month,day, hour min, sec and isdst fields.
+        A table of
     </ol>
 
 
-    <h3>See also:</h3>
+
+
+</dd>
+    <dt>
+    <a name = "dayrecorder"></a>
+    <strong>dayrecorder (storageVariable)</strong>
+    </dt>
+    <dd>
+    This function records events to a variable in a format that can be replayed at a later time
+ The function assumes that what should be recorded is what caused the scene to run, and its state.
+
+
+    <h3>Parameters:</h3>
     <ul>
-         <a href="http://www.lua.org/manual/5.2/manual.html#pdf-os.date">os.date</a>
+        <li><span class="parameter">storageVariable</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the global variable into which the sequence of events should be recorded
+        </li>
     </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "logLastActivity"></a>
+    <strong>logLastActivity (variableName)</strong>
+    </dt>
+    <dd>
+    A function that simply logs the time when ran last into a global variable
+ This simple function may be used in a simple "last movement seen" scene that keeps track of when
+ movement was last seen in the house.  This information may then be used to check wheter movement has been observerved
+ in X minutes or so by a different function "hasBeenActivity".
+<p> This function requires an "ACTIVITY_LAST_SEEN" global variable.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">variableName</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         an optional name of a global variable to be used. Defailts to "ACTIVITY_LAST_SEEN"
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hasBeenActivity"></a>
+    <strong>hasBeenActivity (timeWindow, variableName)</strong>
+    </dt>
+    <dd>
+    A simple function that fascilitates checking of when the activity was last observed.
+ What the function will do is to
+ This function requires an "ACTIVITY_LAST_SEEN" global variable.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">timeWindow</span>
+            <span class="types"><span class="type">number</span></span>
+         the number of minutes to go back to check activity.
+        </li>
+        <li><span class="parameter">variableName</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         an optional name of a global variable to be used. Defailts to "ACTIVITY_LAST_SEEN"
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        has there been activity in the last 'timeWindow' minutes?
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hasChangedSince"></a>
+    <strong>hasChangedSince (id, property, seconds, minutes, hours, debugChangeTimeEpoch)</strong>
+    </dt>
+    <dd>
+    A simple function that answers the question of whether a device property has been changed within a specified time window
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">number</span></span>
+         the id of the device to be checked.
+        </li>
+        <li><span class="parameter">property</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the property to be checked.
+        </li>
+        <li><span class="parameter">seconds</span>
+            <span class="types"><span class="type">number</span></span>
+          the number of seconds to go back when checking for a change in the property value.
+        </li>
+        <li><span class="parameter">minutes</span>
+            <span class="types"><span class="type">number</span></span>
+          an optional number of minutes to go back when checking for a change in the property value. Defaults to zero.
+        </li>
+        <li><span class="parameter">hours</span>
+            <span class="types"><span class="type">number</span></span>
+          an optional number of hours to go back when checking for a change in the property value. Defaults to zero.
+        </li>
+        <li><span class="parameter">debugChangeTimeEpoch</span>
+            <span class="types"><span class="type">number</span></span>
+         a time point used when debugging the function. If this time point, specified as an Epoch time stamp, is given, the function will not check the device property modification time, but instead check whether the time point given here is within the time window counted from current time.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        has a change occured in the property later than 'seconds', 'minutes' and 'hours' ago?
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="global">print</span>(hasChangedSince(<span class="number">1</span>,<span class="string">"dded"</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="global">tonumber</span>(<span class="global">os</span>.time())- <span class="number">4</span>));</pre></li>
+        <li><pre class="example"><span class="global">print</span>(hasChangedSince(<span class="number">1</span>,<span class="string">"dded"</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="global">tonumber</span>(<span class="global">os</span>.time())- <span class="number">4</span>));</pre></li>
+        <li><pre class="example"><span class="global">print</span>(hasChangedSince(<span class="number">1</span>,<span class="string">"dded"</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="global">tonumber</span>(<span class="global">os</span>.time())- <span class="number">4</span>));</pre></li>
+        <li><pre class="example"><span class="global">print</span>(hasChangedSince(<span class="number">1</span>,<span class="string">"dded"</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="global">tonumber</span>(<span class="global">os</span>.time())- <span class="number">4</span>));</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "riskOfMold"></a>
+    <strong>riskOfMold (hum, temp, levelDescriptions)</strong>
+    </dt>
+    <dd>
+    Function that checks whether there is a risk of mold growth, and assessess the level of threat.
+ The calculations are based on temperature and humidity estimates, as well as a rough mathmatical approximation of risk regions.
+ developed from this http://www.penthon.com/wp-content/uploads/2014/08/Mogelriskdiagram.png image.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">hum</span>
+            <span class="types"><span class="type">number</span></span>
+         the humidity percentage, measured at the site where a mold growth risk estimate should be computed.
+        </li>
+        <li><span class="parameter">temp</span>
+            <span class="types"><span class="type">number</span></span>
+         the temperature at the location where the humidity measure was made.
+        </li>
+        <li><span class="parameter">levelDescriptions</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table of risk names. Defaults to {"Risk of mold growth","Mold growth happening (8v)","Mold growth happening (4v)"}.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        'false' if there is no risk of mould, and a string value describing the level of risk if there is one.
+    </ol>
+
+
 
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
- timestringToTable(<span class="string">"08:10"</span>)
- <span class="comment">-- Will return 'true' when between 08:10  and 08:59
-</span> timestringToTable(<span class="string">"08"</span>)
- <span class="comment">-- Will return 'true' the entire hour
-</span> timestringToTable(<span class="string">"08:10:10"</span>)
- -- Will <span class="keyword">return</span> <span class="string">'true'</span> exactly at the indicated second</pre>
+ &gt; <span class="global">print</span>(riskOfMold(<span class="number">77</span>,<span class="number">10</span>)) <span class="comment">-- results in a "false" printout.
+</span> &gt; <span class="global">print</span>(riskOfMold(<span class="number">82</span>,<span class="number">10</span>)) -- results <span class="keyword">in</span> a <span class="string">""</span>Risk of mold growth" printout.</pre>
     </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Functions_that_maupulates_lighting"></a>Functions that maupulates lighting </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "startLevelChangeWithDur"></a>
+    <strong>startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</strong>
+    </dt>
+    <dd>
+    A function that manages gradual dimming up of a device.
+ The function will see to it that  the device will gradually be dimmed up from a start level to an endpoint level within a
+ specified time frame.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dimmerID</span>
+            <span class="types"><span class="type">number</span></span>
+         The ID of the dimmer device.
+        </li>
+        <li><span class="parameter">startLevel</span>
+            <span class="types"><span class="type">number</span></span>
+         The dimmer level set at the onset of the sequence.
+        </li>
+        <li><span class="parameter">stopLevel</span>
+            <span class="types"><span class="type">number</span></span>
+         The dimmer level to reach.
+        </li>
+        <li><span class="parameter">durationSeconds</span>
+            <span class="types"><span class="type">number</span></span>
+         The time window for reaching the stopLevel.
+        </li>
+        <li><span class="parameter">delayBetweenSteps</span>
+            <span class="types"><span class="type">number</span></span>
+         Optional parameter inficating the time inbetwen steps. Defaults to 2. If you specify this, the time frame calculations will not be correct.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lightSelect"></a>
+    <strong>lightSelect (currentLuxLevel, conditionsTable)</strong>
+    </dt>
+    <dd>
+    This function takes a lux level reading and a set of conditions, and selects which lights to turn on
+ If the 'luxLevel' is less or equal to the *lux* in on of the subtables of this parameter, the coresponding id will be returned.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">currentLuxLevel</span>
+            <span class="types"><span class="type">number</span></span>
+         a LUX reading that should determine which lights should be turned on
+        </li>
+        <li><span class="parameter">conditionsTable</span>
+            <span class="types"><span class="type">tab</span></span>
+         This selects ON/OFF devices based on the current lux level and a threshold for each device. The argument should be a table of {id,lux} tuples that performs the selection of devices to turn on. Alternativelly, 'conditionsTable' can be a table of {id,{lux,level}} nested tuples. If 'currentLuxLevel' is smaller than the 'lux' value in the table, the device is set to 'level'.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        an array of device IDs that should be activated.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">a = {}; a[<span class="number">10</span>] = <span class="number">90</span>; a[<span class="number">30</span>] = <span class="number">80</span>;</pre></li>
+        <li><pre class="example">debugTable(lightSelect(<span class="number">80</span>,a));</pre></li>
+        <li><pre class="example">debugTable(lightSelect(<span class="number">85</span>,a));</pre></li>
+        <li><pre class="example">debugTable(lightSelect(<span class="number">100</span>,a));</pre></li>
+        <li><pre class="example">b = {}; b[<span class="number">10</span>] = {<span class="number">90</span>,<span class="number">40</span>}; b[<span class="number">30</span>] = <span class="number">80</span>;</pre></li>
+        <li><pre class="example">debugTable(lightSelect(<span class="number">20</span>,b));</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "runLigthingSetup"></a>
+    <strong>runLigthingSetup (onTable)</strong>
+    </dt>
+    <dd>
+    This function executes lighting commands from a table.
+ This function will take a set of numeric IDs or a {id, level} tuple, or a mix of numerics and tuples, and execute the lighting commands. If the table entry is a numeric ID, then the corrensponding device will be turned ON. If the table entry is a tuple, then the device will be dimmed to the corresponding level.
+ This function is designed to work from the output of the @lightSelect function.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">onTable</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         a table containing either IDs numeric values or or {id,level} tuples (tables).
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Functions_that_deal_with_triggered_events"></a>Functions that deal with triggered events </h2>
+
+          <div class="section-description">
+
+ The idea of these functions is that they encapsulate the Fibaro library functions and other structures into functions that work well when applied in boolean logic sequences.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "startedManually"></a>
+    <strong>startedManually ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started manually
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "startedByVariable"></a>
+    <strong>startedByVariable ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started by a change in a global variable
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        If started by a global variable, the name of the variable is returned.</li>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        If started by something else, 'false' is returned.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "startedByDevice"></a>
+    <strong>startedByDevice ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene was started by a change in the state or property of a device.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A table containting two fields:
+  'deviceID', indicating the ID of the triggering device
+  'propertyName' the property of the device that changed, causing the scene to trigger.</li>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false).</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sceneNotCurrentlyRunning"></a>
+    <strong>sceneNotCurrentlyRunning ()</strong>
+    </dt>
+    <dd>
+    A function that tests whether the scene is currently running.
+ Please note that the testing is stated in the negative. What is tested is whether the scene is NOT
+ running, as this is the most probable use case.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true /false).
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "onButUnplugged"></a>
+    <strong>onButUnplugged (id, threshold)</strong>
+    </dt>
+    <dd>
+    A function that checks that a device is drawing power, if on
+ The use case for this function is for instance a car heater.  If it is turned on, it should draw power.
+ If not, it is unplugged. Of course, this function requires a device that has power reporting.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">number</span></span>
+         The ID of the device.
+        </li>
+        <li><span class="parameter">threshold</span>
+            <span class="types"><span class="type">number</span></span>
+         The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        A boolean indicating wheter the device is ON but not active (not plugged in)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buttonPressed"></a>
+    <strong>buttonPressed (id, descriptionstring, descriptiontable)</strong>
+    </dt>
+    <dd>
+    A function which transforms a sceneActivation to a boolean value.
+ The idea is that the scene developer could just specify what kind of keypress should be tested for. The function then takes a scene controller specific table
+ in which available key presses and a description of them is stored.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">number</span></span>
+         The ID of the scene controller sending sceneActivation commands.
+        </li>
+        <li><span class="parameter">descriptionstring</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A textual description of the event to look for.
+        </li>
+        <li><span class="parameter">descriptiontable</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         A scene controller specific table of available codes and textual descriptions.
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <li><a href="index.html#nodonSceneTable">nodonSceneTable</a></li>
+         <li><a href="index.html#nodonSceneTableVerbose">nodonSceneTableVerbose</a></li>
+         <li><a href="index.html#zwavemeSceneTable">zwavemeSceneTable</a></li>
+         <li><a href="index.html#zwavemeSceneTableVerbose">zwavemeSceneTableVerbose</a></li>
+    </ul>
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Scene_controller_specific_tables_of_available_key_presses_and_sceneActivation_codes"></a>Scene controller specific tables of available key presses and sceneActivation codes </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "nodonSceneTable"></a>
+    <strong>nodonSceneTable</strong>
+    </dt>
+    <dd>
+    Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.
+ In the short forms stored, the 'SP' indicates a single press, 'DP' a double press. 'HP' indicates that the button is pressed and held, and 'HR' that it is released.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">10</span>
+         (1SP) Button 1 Single Press
+        </li>
+        <li><span class="parameter">20</span>
+         (2SP) Button 2 Single Press
+        </li>
+        <li><span class="parameter">30</span>
+         (3SP) Button 3 Single Press
+        </li>
+        <li><span class="parameter">40</span>
+         (4SP) Button 4 Single Press
+        </li>
+        <li><span class="parameter">13</span>
+         (1DP) Button 1 Double Press
+        </li>
+        <li><span class="parameter">23</span>
+         (2DP) Button 2 Double Press
+        </li>
+        <li><span class="parameter">33</span>
+         (3DP) Button 3 Double Press
+        </li>
+        <li><span class="parameter">43</span>
+         (4DP) Button 4 Double Press
+        </li>
+        <li><span class="parameter">12</span>
+         (1HP) Button 1 Hold Press
+        </li>
+        <li><span class="parameter">22</span>
+         (2HP) Button 2 Hold Press
+        </li>
+        <li><span class="parameter">32</span>
+         (3HP) Button 3 Hold Press
+        </li>
+        <li><span class="parameter">42</span>
+         (4HP) Button 4 Hold Press
+        </li>
+        <li><span class="parameter">11</span>
+         (1HR) Button 1 Hold Released
+        </li>
+        <li><span class="parameter">21</span>
+         (2HR) Button 2 Hold Released
+        </li>
+        <li><span class="parameter">31</span>
+         (3HR) Button 3 Hold Released
+        </li>
+        <li><span class="parameter">41</span>
+         (4HR) Button 4 Hold Released
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#buttonPressed">buttonPressed</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "zwavemeSceneTableVerbose"></a>
+    <strong>zwavemeSceneTableVerbose</strong>
+    </dt>
+    <dd>
+    A table for Zwave.me wall controller (actually keyfob) scene codes.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">11</span>
+         Button 1 Single Click
+        </li>
+        <li><span class="parameter">21</span>
+         Button 2 Single Click
+        </li>
+        <li><span class="parameter">31</span>
+         Button 3 Single Click
+        </li>
+        <li><span class="parameter">41</span>
+         Button 4 Single Click
+        </li>
+        <li><span class="parameter">12</span>
+         Button 1 Double Click
+        </li>
+        <li><span class="parameter">22</span>
+         Button 2 Double Click
+        </li>
+        <li><span class="parameter">32</span>
+         Button 3 Double Click
+        </li>
+        <li><span class="parameter">42</span>
+         Button 4 Double Click
+        </li>
+        <li><span class="parameter">13</span>
+         Button 1 Press and hold
+        </li>
+        <li><span class="parameter">23</span>
+         Button 2 Press and hold
+        </li>
+        <li><span class="parameter">33</span>
+         Button 3 Press and hold
+        </li>
+        <li><span class="parameter">43</span>
+         Button 4 Press and hold
+        </li>
+        <li><span class="parameter">14</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">24</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">34</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">44</span>
+         Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">15</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">25</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">35</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">45</span>
+         Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">16</span>
+         Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">26</span>
+         Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">36</span>
+         Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">46</span>
+         Button 4 Click and then Press and hold
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#buttonPressed">buttonPressed</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "zwavemeSceneTable"></a>
+    <strong>zwavemeSceneTable</strong>
+    </dt>
+    <dd>
+    Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.
+ In the short forms stored, the 'SC' indicates a single click, 'DC' a double click. 'PH' indicates that the button is pressed and held. In cases when two actions are performed, like in the case of a click followed by a press that is held, then the two actions are separated by a '_' in the code.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">11</span>
+         (1SC) Button 1 Single Click
+        </li>
+        <li><span class="parameter">21</span>
+         (2SC) Button 2 Single Click
+        </li>
+        <li><span class="parameter">31</span>
+         (3SC) Button 3 Single Click
+        </li>
+        <li><span class="parameter">41</span>
+         (4SC) Button 4 Single Click
+        </li>
+        <li><span class="parameter">12</span>
+         (1DC) Button 1 Double Click
+        </li>
+        <li><span class="parameter">22</span>
+         (2DC) Button 2 Double Click
+        </li>
+        <li><span class="parameter">32</span>
+         (3DC) Button 3 Double Click
+        </li>
+        <li><span class="parameter">42</span>
+         (4DC) Button 4 Double Click
+        </li>
+        <li><span class="parameter">13</span>
+         (1PH) Button 1 Press and hold
+        </li>
+        <li><span class="parameter">23</span>
+         (2PH) Button 2 Press and hold
+        </li>
+        <li><span class="parameter">33</span>
+         (3PH) Button 3 Press and hold
+        </li>
+        <li><span class="parameter">43</span>
+         (4PH) Button 4 Press and hold
+        </li>
+        <li><span class="parameter">14</span>
+         (1C_PH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">24</span>
+         (2C_PH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">34</span>
+         (3C_PH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">44</span>
+         (4C_PH) Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">15</span>
+         (1PLH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">25</span>
+         (2PLH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">35</span>
+         (3PLH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">45</span>
+         (4PLH) Button 4 Click and then Press and hold
+        </li>
+        <li><span class="parameter">16</span>
+         (1C_PLH) Button 1 Click and then Press and hold
+        </li>
+        <li><span class="parameter">26</span>
+         (1C_PLH) Button 2 Click and then Press and hold
+        </li>
+        <li><span class="parameter">36</span>
+         (1C_PLH) Button 3 Click and then Press and hold
+        </li>
+        <li><span class="parameter">46</span>
+         (1C_PLH) Button 4 Click and then Press and hold
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#buttonPressed">buttonPressed</a>
+    </ul>
+
 
 </dd>
     <dt>
@@ -273,9 +1094,86 @@
 
 
 </dd>
+</dl>
+    <h2 class="section-header "><a name="sceneActivationTables"></a>sceneActivationTables</h2>
+
+    <dl class="function">
     <dt>
-    <a name = "isInTimeRange"></a>
-    <strong>isInTimeRange (startTimeString, endTimeString)</strong>
+    <a name = "nodonSceneTableVerbose"></a>
+    <strong>nodonSceneTableVerbose</strong>
+    </dt>
+    <dd>
+    A table of mappings between NodOn remote scene codes and a text description.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">10</span>
+         Button 1 Single Press
+        </li>
+        <li><span class="parameter">20</span>
+         Button 2 Single Press
+        </li>
+        <li><span class="parameter">30</span>
+         Button 3 Single Press
+        </li>
+        <li><span class="parameter">40</span>
+         Button 4 Single Press
+        </li>
+        <li><span class="parameter">13</span>
+         Button 1 Double Press
+        </li>
+        <li><span class="parameter">23</span>
+         Button 2 Double Press
+        </li>
+        <li><span class="parameter">33</span>
+         Button 3 Double Press
+        </li>
+        <li><span class="parameter">43</span>
+         Button 4 Double Press
+        </li>
+        <li><span class="parameter">12</span>
+         Button 1 Hold Press
+        </li>
+        <li><span class="parameter">22</span>
+         Button 2 Hold Press
+        </li>
+        <li><span class="parameter">32</span>
+         Button 3 Hold Press
+        </li>
+        <li><span class="parameter">42</span>
+         Button 4 Hold Press
+        </li>
+        <li><span class="parameter">11</span>
+         Button 1 Hold Released
+        </li>
+        <li><span class="parameter">21</span>
+         Button 2 Hold Released
+        </li>
+        <li><span class="parameter">31</span>
+         Button 3 Hold Released
+        </li>
+        <li><span class="parameter">41</span>
+         Button 4 Hold Released
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#buttonPressed">buttonPressed</a>
+    </ul>
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Functions_that_may_be_used_for_boolean_tests_of_current_date_or_time"></a>Functions that may be used for boolean tests of current date or time </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "timeIsInRange"></a>
+    <strong>timeIsInRange (startTimeString, endTimeString)</strong>
     </dt>
     <dd>
     A function that checks whether the current time is within a range given as two text strings.
@@ -334,6 +1232,12 @@
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"> <span class="global">print</span>(isDayOfWeek{<span class="string">"Sun"</span>})
+ <span class="comment">-- This will print "true" on Sundays, but not on other weekdays
+</span>  </pre>
+    </ul>
 
 </dd>
     <dt>
@@ -379,13 +1283,34 @@
 
 </dd>
     <dt>
+    <a name = "isWeekEndTomorrow"></a>
+    <strong>isWeekEndTomorrow ()</strong>
+    </dt>
+    <dd>
+    Simple function that returns true if tomorrow is part of the weekend.
+ A weekday is defined as Saturday or Sunday
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        A boolean (true/false)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "beforeTime"></a>
-    <strong>beforeTime (time)</strong>
+    <strong>beforeTime (time, offset)</strong>
     </dt>
     <dd>
     Check whether current time is before a specified time.
  The function is designed to work well in a chain of checks, and therefore also makes sure that
- time is not before the start of the day.
+ time is not before the start of the day.  This functions is primarily designed to be used with "sunriseTime" or similar variables.
 
 
     <h3>Parameters:</h3>
@@ -395,6 +1320,10 @@
          A time specification string, e.g. "08", "08:10" or "08:10:10"
  If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
  as an argument. Thus, this function will then return 'true' up until "08:09:59" .
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         an offset that should be applied to the time (in number of seconds). Negative values will cause the function to return true x seconds before the indicated time of day.
         </li>
     </ul>
 
@@ -415,7 +1344,7 @@
 </dd>
     <dt>
     <a name = "afterTime"></a>
-    <strong>afterTime (time)</strong>
+    <strong>afterTime (time, offset)</strong>
     </dt>
     <dd>
     Check whether current time is after a specified time.
@@ -430,6 +1359,10 @@
          A time specification string, e.g. "08", "08:10" or "08:10:10".
  If not specified, seconds is assumed to be 00, so that "08:10" is equivalent to giving "08:10:00"
  as an argument. Thus, this function will then return 'true' from "08:10:01" and onwards.
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         an offset that should be applied to the time (in number of seconds). Negative values will cause the function to return true x seconds before the indicated time of day.
         </li>
     </ul>
 
@@ -525,16 +1458,18 @@
 
 </dd>
     <dt>
-    <a name = "myTimer"></a>
-    <strong>myTimer (shouldRun, functionToRun, sleepSeconds)</strong>
+    <a name = "runIf"></a>
+    <strong>runIf (shouldRun, toRun, toRun[, sleepSeconds=0])</strong>
     </dt>
     <dd>
     Function that simplifies running a scene on a timer and specify the delay needed.
  The basic structure of the function is that it takes a truth value indicating whether the scene should run.
  The idea is that this truth value should be the result of a series of time or source evaluations combined
  into one evaluation by 'and' and 'or' joiners, possibly with nesting.
- The function <a href="index.html#myTimer">myTimer</a> will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'.
- After running the function constituting the scene, a delay may be imposed.
+ The function <a href="index.html#runIf">runIf</a> will then evaluate the function supplied as the second argument, if the first argument is evaluated to 'true'. <a href="index.html#runIf">runIf</a> could also be a table of integers, which should then be the Scene IDs of scenes that should be executed.
+
+ After running the function constituting the scene, or the scenes with the scene ID's supplies as the'toRun' argument,  a delay may be imposed.
+
 
 
     <h3>Parameters:</h3>
@@ -543,13 +1478,18 @@
             <span class="types"><span class="type">boolean</span></span>
          A truth value. If evaluated to 'true', then the function will be run and the delay imposed.
         </li>
-        <li><span class="parameter">functionToRun</span>
-            <span class="types"><span class="type">function</span></span>
-         The function summarising the actions of the scene.
+        <li><span class="parameter">toRun</span>
+            <span class="types"><span class="type">{int}</span></span>
+         if instead an array is passed to the function, this is assumed to be an array of scene IDs to run.
+        </li>
+        <li><span class="parameter">toRun</span>
+            <span class="types"><span class="type">{int}</span></span>
+         if instead an array is passed to the function, this is assumed to be an array of scene IDs to run.
         </li>
         <li><span class="parameter">sleepSeconds</span>
-            <span class="types"><span class="type">number</span></span>
+            <span class="types"><span class="type">int</span></span>
          Optional number of seconds delay that should be imposed after having performed the scene (defaults to 60). If the scene is not executed, there is not delay. Please note that the whole scene is put to sleep 'sleepSeconds' seconds, which may affect the execution of other timers.
+         (<em>default</em> 0)
         </li>
     </ul>
 
@@ -560,53 +1500,13 @@
     <ul>
         <pre class="example">
  <span class="keyword">function</span> f () fibaro:call(<span class="number">12</span>,<span class="string">"powerON"</span>); <span class="keyword">end</span>
- <span class="comment">-- A very simple scene
-</span> myTimer ( notCurrentlyRunning() <span class="keyword">and</span> isTime(<span class="string">"08:10"</span>,<span class="number">0</span>,<span class="number">20</span>) <span class="keyword">and</span> isDayOfWeek(<span class="string">"Mon"</span>,<span class="string">"Tues"</span>), f, <span class="number">2</span>*<span class="number">60</span>)
+ <span class="comment">-- A very simple scene function
+</span> runIf ( sceneNotCurrentlyRunning() <span class="keyword">and</span> isTime(<span class="string">"08:10"</span>,<span class="number">0</span>,<span class="number">20</span>) <span class="keyword">and</span> isDayOfWeek(<span class="string">"Mon"</span>,<span class="string">"Tues"</span>), f, <span class="number">2</span>*<span class="number">60</span>)
  <span class="comment">-- This call will turn on switch 12 when tested from 08:09:40 to 08:10:20 on Mondays and Tuesdays
 </span> <span class="comment">-- and then sleep for 2 minutes in order to ensure that the scene is not run constantly,
-</span> <span class="comment">-- or more than once, as the 2 minutes delay combined with the call to <a href="index.html#notCurrentlyRunning">notCurrentlyRunning</a> makes
+</span> <span class="comment">-- or more than once, as the 2 minutes delay combined with the call to <a href="index.html#sceneNotCurrentlyRunning">sceneNotCurrentlyRunning</a> makes
 </span> -- sure that it is <span class="keyword">not</span> evaluated again within the <span class="number">20</span> seconds time window allowed by the call to @{isTime}.</pre>
     </ul>
-
-</dd>
-    <dt>
-    <a name = "timeToStartCarHeater"></a>
-    <strong>timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)</strong>
-    </dt>
-    <dd>
-    A function that determines whether the heater of a car should be turned on.
- The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">readyTime</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
-        </li>
-        <li><span class="parameter">tempOutside</span>
-            <span class="types"><span class="type">number</span></span>
-         The temperature outside or inside the car (if available).
-        </li>
-        <li><span class="parameter">eco</span>
-            <span class="types"><span class="type">boolean</span></span>
-         Should eco settings be used? If not, the car motor health will be considered more important.
-        </li>
-        <li><span class="parameter">heaterON</span>
-            <span class="types"><span class="type">boolean</span></span>
-         An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized. If not specified, it defaults to false.
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><span class="type">boolean</span></span>
-        A truth value (true/false).
-    </ol>
-
-
-
 
 </dd>
     <dt>
@@ -650,186 +1550,25 @@
 
 </dd>
     <dt>
-    <a name = "entryCounter"></a>
-    <strong>entryCounter (activatedID, moveInsideID, moveOutsideID, doorID, variableName)</strong>
+    <a name = "iso8601DateTime"></a>
+    <strong>iso8601DateTime (timestamp)</strong>
     </dt>
     <dd>
-    This module collects functions that make it easier to reason about events.
+    Convenience funtion for printing an epoch timestamp in ISO 8601:1988 format.
 
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">activatedID</span>
-
-        </li>
-        <li><span class="parameter">moveInsideID</span>
-
-        </li>
-        <li><span class="parameter">moveOutsideID</span>
-
-        </li>
-        <li><span class="parameter">doorID</span>
-
-        </li>
-        <li><span class="parameter">variableName</span>
-
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "activationSequence"></a>
-    <strong>activationSequence (ids, property)</strong>
-    </dt>
-    <dd>
-    A function that produces a sequence of activations of devices.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">ids</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         An array of device IDs.
-        </li>
-        <li><span class="parameter">property</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         The property to check modication times of.
+        <li><span class="parameter">timestamp</span>
+         a epoch time stamp, such as a time indication associated with a Fibaro event.
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-        A table of
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "riskOfMold"></a>
-    <strong>riskOfMold (hum, temp, levelDescriptions)</strong>
-    </dt>
-    <dd>
-    Function that checks whether there is a risk of mold growth, and assessess the level of threat.
- The calculations are based on temperature and humidity estimates, as well as a rough mathmatical approximation of risk regions.
- developed from this http://www.penthon.com/wp-content/uploads/2014/08/Mogelriskdiagram.png image.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">hum</span>
-            <span class="types"><span class="type">number</span></span>
-         the humidity percentage, measured at the site where a mold growth risk estimate should be computed.
-        </li>
-        <li><span class="parameter">temp</span>
-            <span class="types"><span class="type">number</span></span>
-         the temperature at the location where the humidity measure was made.
-        </li>
-        <li><span class="parameter">levelDescriptions</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         A table of risk names. Defaults to {"Risk of mold growth","Mold growth happening (8v)","Mold growth happening (4v)"}.
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        'false' if there is no risk of mould, and a string value describing the level of risk if there is one.
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
- &gt; <span class="global">print</span>(riskOfMold(<span class="number">77</span>,<span class="number">10</span>)) <span class="comment">-- results in a "false" printout.
-</span> &gt; <span class="global">print</span>(riskOfMold(<span class="number">82</span>,<span class="number">10</span>)) -- results <span class="keyword">in</span> a <span class="string">""</span>Risk of mold growth" printout.</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "startLevelChangeWithDur"></a>
-    <strong>startLevelChangeWithDur (dimmerID, startLevel, stopLevel, durationSeconds, delayBetweenSteps)</strong>
-    </dt>
-    <dd>
-    A function that manages gradual dimming up of a device.
- The function will see to it that  the device will gradually be dimmed up from a start level to an endpoint level within a
- specified time frame.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">dimmerID</span>
-            <span class="types"><span class="type">number</span></span>
-         The ID of the dimmer device.
-        </li>
-        <li><span class="parameter">startLevel</span>
-            <span class="types"><span class="type">number</span></span>
-         The dimmer level set at the onset of the sequence.
-        </li>
-        <li><span class="parameter">stopLevel</span>
-            <span class="types"><span class="type">number</span></span>
-         The dimmer level to reach.
-        </li>
-        <li><span class="parameter">durationSeconds</span>
-            <span class="types"><span class="type">number</span></span>
-         The time window for reaching the stopLevel.
-        </li>
-        <li><span class="parameter">delayBetweenSteps</span>
-            <span class="types"><span class="type">number</span></span>
-         Optional parameter inficating the time inbetwen steps. Defaults to 2. If you specify this, the time frame calculations will not be correct.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "startedManually"></a>
-    <strong>startedManually ()</strong>
-    </dt>
-    <dd>
-    A function that tests whether the scene was started manually
-
-
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><span class="type">boolean</span></span>
-        A truth value (true /false)
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "startedByVariable"></a>
-    <strong>startedByVariable ()</strong>
-    </dt>
-    <dd>
-    A function that tests whether the scene was started by a change in a global variable
-
-
-
-    <h3>Returns:</h3>
-    <ol>
-        <li>
            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-        If started by a global variable, the name of the variable is returned.</li>
-        <li>
-           <span class="types"><span class="type">boolean</span></span>
-        If started by something else, 'false' is returned.</li>
+        a text representation "YYYY-MM-DD hh:mm" of the epoch timestamp, in the local timezone.
     </ol>
 
 
@@ -837,79 +1576,128 @@
 
 </dd>
     <dt>
-    <a name = "startedByDevice"></a>
-    <strong>startedByDevice ()</strong>
+    <a name = "timeToStartCarHeater"></a>
+    <strong>timeToStartCarHeater (readyTime, tempOutside, eco[, heaterON=false])</strong>
     </dt>
     <dd>
-    A function that tests whether the scene was started by a change in the state or property of a device.
-
-
-
-    <h3>Returns:</h3>
-    <ol>
-        <li>
-           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         A table containting two fields:
-  'deviceID', indicating the ID of the triggering device
-  'propertyName' the property of the device that changed, causing the scene to trigger.</li>
-        <li>
-           <span class="types"><span class="type">boolean</span></span>
-        A truth value (true /false).</li>
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "notCurrentlyRunning"></a>
-    <strong>notCurrentlyRunning ()</strong>
-    </dt>
-    <dd>
-    A function that tests whether the scene is currently running.
- Please note that the testing is stated in the negative. What is tested is whether the scene is NOT
- running, as this is the most probable use case.
-
-
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><span class="type">boolean</span></span>
-        A truth value (true /false).
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "onButUnplugged"></a>
-    <strong>onButUnplugged (id, threshold)</strong>
-    </dt>
-    <dd>
-    A function that checks that a device is drawing power, if on
- The use case for this function is for instance a car heater.  If it is turned on, it should draw power.
- If not, it is unplugged. Of course, this function requires a device that has power reporting.
+    A function that determines whether the heater of a car should be turned on.
+ The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
 
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">id</span>
-            <span class="types"><span class="type">number</span></span>
-         The ID of the device.
+        <li><span class="parameter">readyTime</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
         </li>
-        <li><span class="parameter">threshold</span>
+        <li><span class="parameter">tempOutside</span>
             <span class="types"><span class="type">number</span></span>
-         The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.
+         The temperature outside or inside the car (if available).
+        </li>
+        <li><span class="parameter">eco</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Should eco settings be used? If not, the car motor health will be considered more important.
+        </li>
+        <li><span class="parameter">heaterON</span>
+            <span class="types"><span class="type">boolean</span></span>
+         An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized.
+         (<em>default</em> false)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">number</span></span>
-        A boolean indicating wheter the device is ON but not active (not plugged in)
+           <span class="types"><span class="type">boolean</span></span>
+        A truth value (true/false).
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Functions_that_manages_the_defined_time_of_day"></a>Functions that manages the defined time of day </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "isDaytime"></a>
+    <strong>isDaytime ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether it is daytime or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Day" if true.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        An indication whether it currently is daytime or not.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isNighttime"></a>
+    <strong>isNighttime ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether it is nighttime or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Night" if true.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        An indication whether it currently is nighttime or not.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isMorning"></a>
+    <strong>isMorning ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether it is morning or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Morning" if true.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        An indication whether it currently is morning or not.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isEvening"></a>
+    <strong>isEvening ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether it is morning or not
+ This function checks the "TimeOfDay" global variable, and expects that the answer is "Evening" if true.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        An indication whether it currently is evening or not.
     </ol>
 
 
@@ -918,7 +1706,7 @@
 </dd>
     <dt>
     <a name = "debugTable"></a>
-    <strong>debugTable (t)</strong>
+    <strong>debugTable (node)</strong>
     </dt>
     <dd>
     Function that prints out the content of a table.
@@ -927,7 +1715,7 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">t</span>
+        <li><span class="parameter">node</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
          A table. Only simple tables (not nested) are supported.
         </li>
@@ -1056,315 +1844,261 @@
 
 
 </dd>
-</dl>
-    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
-
-    <dl class="function">
     <dt>
-    <a name = "nodonSceneTableVerbose"></a>
-    <strong>nodonSceneTableVerbose</strong>
+    <a name = "arrayContainsValue"></a>
+    <strong>arrayContainsValue (tab, value)</strong>
     </dt>
     <dd>
-    A table of mappings between NodOn remote scene codes and a text description.
+    A simple utility function which checks whether a value exists within an array
 
 
-    <h3>Fields:</h3>
+    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">10</span>
-         Button 1 Single Press
+        <li><span class="parameter">tab</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the array.
         </li>
-        <li><span class="parameter">20</span>
-         Button 2 Single Press
-        </li>
-        <li><span class="parameter">30</span>
-         Button 3 Single Press
-        </li>
-        <li><span class="parameter">40</span>
-         Button 4 Single Press
-        </li>
-        <li><span class="parameter">13</span>
-         Button 1 Double Press
-        </li>
-        <li><span class="parameter">23</span>
-         Button 2 Double Press
-        </li>
-        <li><span class="parameter">33</span>
-         Button 3 Double Press
-        </li>
-        <li><span class="parameter">43</span>
-         Button 4 Double Press
-        </li>
-        <li><span class="parameter">12</span>
-         Button 1 Hold Press
-        </li>
-        <li><span class="parameter">22</span>
-         Button 2 Hold Press
-        </li>
-        <li><span class="parameter">32</span>
-         Button 3 Hold Press
-        </li>
-        <li><span class="parameter">42</span>
-         Button 4 Hold Press
-        </li>
-        <li><span class="parameter">11</span>
-         Button 1 Hold Released
-        </li>
-        <li><span class="parameter">21</span>
-         Button 2 Hold Released
-        </li>
-        <li><span class="parameter">31</span>
-         Button 3 Hold Released
-        </li>
-        <li><span class="parameter">41</span>
-         Button 4 Hold Released
+        <li><span class="parameter">value</span>
+         the value to check the presence of.
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        is the value present in 'tab'?
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">a={};<span class="global">table</span>.insert(a,<span class="number">10</span>);</pre></li>
+        <li><pre class="example"><span class="global">print</span>(arrayContainsValue(a,<span class="number">10</span>));</pre></li>
+        <li><pre class="example"><span class="global">print</span>(arrayContainsValue(a,<span class="number">120</span>));</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "arrayContainsKey"></a>
+    <strong>arrayContainsKey (tab, key)</strong>
+    </dt>
+    <dd>
+    A simple utility function which checks whether a key exists in an array
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tab</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the array.
+        </li>
+        <li><span class="parameter">key</span>
+         the value to check the presence of.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        is the value present in 'tab'?
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">a={};a[<span class="string">"10"</span>]=<span class="number">90</span>;a[<span class="string">"20"</span>]=<span class="number">80</span>;</pre></li>
+        <li><pre class="example"><span class="global">print</span>(arrayContainsKey(a,<span class="number">10</span>));</pre></li>
+        <li><pre class="example"><span class="global">print</span>(arrayContainsKey(a,<span class="number">120</span>));</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "loadHomeTable"></a>
+    <strong>loadHomeTable (variableName)</strong>
+    </dt>
+    <dd>
+    This utility function manages the loading of content from a HomeTable variable
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">variableName</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         an optional name of a variable from which the structure should be collected.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        a nested structure containing the HomeTable information.</li>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        return value is false if the function fails to load any information, or the HomeTable is empty.</li>
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "nodonSceneTable"></a>
-    <strong>nodonSceneTable</strong>
+    <a name = "getOutSideTemperature"></a>
+    <strong>getOutSideTemperature ()</strong>
     </dt>
     <dd>
-    Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.
- In the short forms stored, the 'SP' indicates a single press, 'DP' a double press. 'HP' indicates that the button is pressed and held, and 'HR' that it is released.
+    A function that lets you access the outside temperature reported by the remote weather service set up for the Home Center 2.
 
 
-    <h3>Fields:</h3>
-    <ul>
-        <li><span class="parameter">10</span>
-         (1SP) Button 1 Single Press
-        </li>
-        <li><span class="parameter">20</span>
-         (2SP) Button 2 Single Press
-        </li>
-        <li><span class="parameter">30</span>
-         (3SP) Button 3 Single Press
-        </li>
-        <li><span class="parameter">40</span>
-         (4SP) Button 4 Single Press
-        </li>
-        <li><span class="parameter">13</span>
-         (1DP) Button 1 Double Press
-        </li>
-        <li><span class="parameter">23</span>
-         (2DP) Button 2 Double Press
-        </li>
-        <li><span class="parameter">33</span>
-         (3DP) Button 3 Double Press
-        </li>
-        <li><span class="parameter">43</span>
-         (4DP) Button 4 Double Press
-        </li>
-        <li><span class="parameter">12</span>
-         (1HP) Button 1 Hold Press
-        </li>
-        <li><span class="parameter">22</span>
-         (2HP) Button 2 Hold Press
-        </li>
-        <li><span class="parameter">32</span>
-         (3HP) Button 3 Hold Press
-        </li>
-        <li><span class="parameter">42</span>
-         (4HP) Button 4 Hold Press
-        </li>
-        <li><span class="parameter">11</span>
-         (1HR) Button 1 Hold Released
-        </li>
-        <li><span class="parameter">21</span>
-         (2HR) Button 2 Hold Released
-        </li>
-        <li><span class="parameter">31</span>
-         (3HR) Button 3 Hold Released
-        </li>
-        <li><span class="parameter">41</span>
-         (4HR) Button 4 Hold Released
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        The function returns the temperature as a number. If the function could not find a temperature value due to some error in the service, a 'nil' value is returned.
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "zwavemeSceneTableVerbose"></a>
-    <strong>zwavemeSceneTableVerbose</strong>
+    <a name = "getOutSideHumidity"></a>
+    <strong>getOutSideHumidity ()</strong>
     </dt>
     <dd>
-    A table for Zwave.me wall controller (actually keyfob) scene codes.
+    A function that lets you access the outside humidity reported by the remote weather service set up for the Home Center 2.
 
 
-    <h3>Fields:</h3>
-    <ul>
-        <li><span class="parameter">11</span>
-         Button 1 Single Click
-        </li>
-        <li><span class="parameter">21</span>
-         Button 2 Single Click
-        </li>
-        <li><span class="parameter">31</span>
-         Button 3 Single Click
-        </li>
-        <li><span class="parameter">41</span>
-         Button 4 Single Click
-        </li>
-        <li><span class="parameter">12</span>
-         Button 1 Double Click
-        </li>
-        <li><span class="parameter">22</span>
-         Button 2 Double Click
-        </li>
-        <li><span class="parameter">32</span>
-         Button 3 Double Click
-        </li>
-        <li><span class="parameter">42</span>
-         Button 4 Double Click
-        </li>
-        <li><span class="parameter">13</span>
-         Button 1 Press and hold
-        </li>
-        <li><span class="parameter">23</span>
-         Button 2 Press and hold
-        </li>
-        <li><span class="parameter">33</span>
-         Button 3 Press and hold
-        </li>
-        <li><span class="parameter">43</span>
-         Button 4 Press and hold
-        </li>
-        <li><span class="parameter">14</span>
-         Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">24</span>
-         Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">34</span>
-         Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">44</span>
-         Button 4 Click and then Press and hold
-        </li>
-        <li><span class="parameter">15</span>
-         Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">25</span>
-         Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">35</span>
-         Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">45</span>
-         Button 4 Click and then Press and hold
-        </li>
-        <li><span class="parameter">16</span>
-         Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">26</span>
-         Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">36</span>
-         Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">46</span>
-         Button 4 Click and then Press and hold
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        The function returns the temperature as a number. If the function could not find a temperature value due to some error in the service, a 'nil' value is returned.
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "zwavemeSceneTable"></a>
-    <strong>zwavemeSceneTable</strong>
+    <a name = "weatherIsClear"></a>
+    <strong>weatherIsClear ()</strong>
     </dt>
     <dd>
-    Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.
- In the short forms stored, the 'SC' indicates a single click, 'DC' a double click. 'PH' indicates that the button is pressed and held. In cases when two actions are performed, like in the case of a click followed by a press that is held, then the two actions are separated by a '_' in the code.
+    A function that checks whether weather conditions are "clear".
 
 
-    <h3>Fields:</h3>
-    <ul>
-        <li><span class="parameter">11</span>
-         (1SC) Button 1 Single Click
-        </li>
-        <li><span class="parameter">21</span>
-         (2SC) Button 2 Single Click
-        </li>
-        <li><span class="parameter">31</span>
-         (3SC) Button 3 Single Click
-        </li>
-        <li><span class="parameter">41</span>
-         (4SC) Button 4 Single Click
-        </li>
-        <li><span class="parameter">12</span>
-         (1DC) Button 1 Double Click
-        </li>
-        <li><span class="parameter">22</span>
-         (2DC) Button 2 Double Click
-        </li>
-        <li><span class="parameter">32</span>
-         (3DC) Button 3 Double Click
-        </li>
-        <li><span class="parameter">42</span>
-         (4DC) Button 4 Double Click
-        </li>
-        <li><span class="parameter">13</span>
-         (1PH) Button 1 Press and hold
-        </li>
-        <li><span class="parameter">23</span>
-         (2PH) Button 2 Press and hold
-        </li>
-        <li><span class="parameter">33</span>
-         (3PH) Button 3 Press and hold
-        </li>
-        <li><span class="parameter">43</span>
-         (4PH) Button 4 Press and hold
-        </li>
-        <li><span class="parameter">14</span>
-         (1C_PH) Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">24</span>
-         (2C_PH) Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">34</span>
-         (3C_PH) Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">44</span>
-         (4C_PH) Button 4 Click and then Press and hold
-        </li>
-        <li><span class="parameter">15</span>
-         (1PLH) Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">25</span>
-         (2PLH) Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">35</span>
-         (3PLH) Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">45</span>
-         (4PLH) Button 4 Click and then Press and hold
-        </li>
-        <li><span class="parameter">16</span>
-         (1C_PLH) Button 1 Click and then Press and hold
-        </li>
-        <li><span class="parameter">26</span>
-         (1C_PLH) Button 2 Click and then Press and hold
-        </li>
-        <li><span class="parameter">36</span>
-         (1C_PLH) Button 3 Click and then Press and hold
-        </li>
-        <li><span class="parameter">46</span>
-         (1C_PLH) Button 4 Click and then Press and hold
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if the weather is clear, 'false' if not
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "weatherIsCloudy"></a>
+    <strong>weatherIsCloudy ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether weather conditions are "cloudy".
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if the weather is cloudy, 'false' if not
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isRainyWeather"></a>
+    <strong>isRainyWeather ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether it is currently raining.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if it is raining, 'false' if not
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isSnowing"></a>
+    <strong>isSnowing ()</strong>
+    </dt>
+    <dd>
+    A function that checks it is currently snowing.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if it is snowing, 'false' if not
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isStorming"></a>
+    <strong>isStorming ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether there is a storm outside.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if a storm is reported, 'false' if not
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isFog"></a>
+    <strong>isFog ()</strong>
+    </dt>
+    <dd>
+    A function that checks whether there is a fog outside.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        'true' if a fog is reported by the weather service, 'false' if not
+    </ol>
 
 
 
@@ -1377,7 +2111,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-12-27 11:27:50 </i>
+<i style="float:right;">Last updated 2017-10-15 22:42:13 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
