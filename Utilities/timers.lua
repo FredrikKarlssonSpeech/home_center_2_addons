@@ -295,19 +295,16 @@ return datetime;
 
 
 
-
 --- A function that determines whether the heater of a car should be turned on.
 -- The determination is base on the time when you want to leave, the temperature outside and an optional value indicating whether the heater is on already or not.
 -- @tparam string readyTime A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
 -- @tparam number tempOutside The temperature outside or inside the car (if available).
--- @tparam boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
--- @tparam[opt=false] boolean heaterON An optional value indicating whether the heater is already started or not. This may be used to flexibly check whether the heater has been started already, perhaps from a global variable, so that that traffic on the z-wave network may be minimized.
+-- @tparam[opt=true] boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
 -- @treturn boolean A truth value (true/false).
 
-function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
-    local timeEpoch = datetime.tableToEpochtime(timestringToTable(readyTime));
+function timeToStartCarHeater (readyTime, tempOutside, eco)
+    local timeEpoch = tableToEpochtime(timestringToTable(readyTime));
     local now = os.time();
-    local heaterStarted = heaterON or false;
     local startTime = timeEpoch;
     if (eco) then
         if (tempOutside <= -15) then
@@ -345,7 +342,7 @@ function timeToStartCarHeater (readyTime, tempOutside, eco, heaterON)
         end;
     end;
     -- Now calculate whether the heater should start NOW
-    return ( (not heaterON) and (startTime <= now) and (now <= timeEpoch));
+    return (  (startTime <= now) and (now <= timeEpoch));
 end;
 
 --- Utility functions related to date and time conversions.
