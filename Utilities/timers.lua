@@ -262,6 +262,16 @@ function runIf(shouldRun, toRun, sleepSeconds )
   fibaro:sleep(delay*1000);
 end;
 
+--- A small function that just makes the script wait intil the start of the next minute.
+-- Actually, the function name is a misnomer as the function rarely waits exactly one minute. 
+-- It just waits until the next minute starts.
+
+function waitAMinute()
+    local currSec = os.time() % 60;
+    local toWait = 60 - currSec;
+    fibaro:sleep(toWait *1000);
+end;
+
 --- Function that determines whether its time to turn off the heater.
 -- The determination is based on the time when the heater was turned on, an auto off time and a
 -- filter boolean that makes it possible to block turning the AC off.
@@ -290,8 +300,6 @@ end;
 function iso8601DateTime(timestamp)
   return(os.date("%Y-%m-%d %X",tonumber(timestamp)));
 end;
-
-return datetime;
 
 
 
