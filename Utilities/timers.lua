@@ -1,5 +1,7 @@
 
 
+--- These functions are used to either run something at a specific time, or to determine whether some action should be performed based on time information.
+-- @section timers 
 
 --- A function that tests whether the current time is within a specified time window from a given time.
 -- In order to work well with the output of fibaro:call(1,"sunsetHour") and similar use cases, time is specified in the
@@ -394,5 +396,90 @@ local function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
     return(outTime);
+end;
+
+
+--- Functions that together provide a timed auto-off/on functionality, and other housekeeping type actions.
+-- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
+-- These functions all require that a HOUSEKEEPING variable is set up.
+-- @section housekeeping
+
+--- Utility function to check the integrety of hte HOUSEKEEPING variable.
+
+
+function checkHousekeepingIntegrity()
+    local houseVariable = tostring(fibaro:getGlobalValue("HOUSEKEEPING"));
+    local parsedVariable = json.decode(houseVariable);
+end;
+
+function initiateHousekeepingVariable()
+    fibaro:debug("Initiating the variable HOUSEKEEPING to {}")
+    fibaro:setGlobal('HOUSEKEEPING','{"turnOff"={}}')
+end;
+
+
+--- This function sets a housekeeping task schedule for a set of devices.
+-- The function requires that a HOUSEKEEPING global variable is initiated using the {@initiateHousekeepingVariable} and is fully functional.
+-- This function will then insert a time when the task 'command' should be performed on devices. The time is specified by the user as a delay (relative to the current time).
+-- The housekeeping task will then be performed after 'delaySeconds' seconds has elapsed, or whenever the houekeeping routine is performed after that. This makes sure that timers are not interrupted if you decide to restart your Home Center when timers are running.
+-- @param deviceIDs A singe device ID or an array of IDs which should recieve the 'command' command after  'delaySeconds' seconds.
+-- @tparam int selaySeconds The number of seconds that should pass before the 'command' is sent.
+-- @tparam[opt='turnOff'] string command The command to be sent. The command could also be a {commad,value} tuple.
+-- @usage
+-- registerHousekeepingTask({10,11,13},25,"turnOn")
+-- -- This will turn devices 10,11 and 13 on after 25 seconds.
+-- registerHousekeepingTask({10,11,13},25,"turnOn")
+-- -- This will turn devices 10,11 and 13 on after 25 seconds.
+
+
+function registerHousekeepingTask(deviceIDs, delaySeconds, command )
+    local command = command or "turnOff";
+    -- handle tuples of the type "{setValue, 20}" by concatenation
+    if type(command) == "table" then
+        command = tostring(command[1] .. "_" .. command[2]);
+    end;
+    local timeToSet = (os.time() + delaySeconds);
+    -- Reinitiate variable if it is not parable as json and is well structured
+    if not pcall(checkHousekeepingIntegrity) then 
+        initiateHousekeepingVariable();
+    end;
+    -- Get data
+    local houseVariable = tostring(fibaro:getGlobalValue('HOUSEKEEPING'));
+    local parsedVariable = json.decode(houseVariable)  ; 
+    -- FOR DEBUG : '{"turnOff":{"10":25,"20":100}}'
+
+    if ( parsedVariable[command] ) then
+        -- If the command sublist exist, then just get the list of ID,time pairs stored in it
+        devList = parsedVariable[command] ;
+    else 
+        devList = {};
+    end;
+    -- now set or insert the new time for the device ID
+    -- for a table of IDs 
+    if type(deviceIDs) == "table" then
+        for i,id in pairs(deviceIDs) do
+            devList[id] = timeToSet;
+        end;
+    else 
+        -- in case of a single ID
+        devList[deviceIDs] = timeToSet;
+    end;
+    -- now insert the constructed list into the old one with "command" as key.
+    -- old data will be overwritten
+    parsedVariable[command] = devList;
+
+    local outString = json.encode(parsedVariable);
+    fibaro:debug("Setting Housekeeping tasks: "..outString);
+    fibaro:setGlobal('HOUSEKEEPING',outString);
+end;
+
+initiateHousekeepingVariable();
+registerHousekeepingTask(11,11,"turnOff");
+
+
+
+
+function printHouseKeeing()
+    fibaro:debug(tostring(fibaro:getGlobalValue("HOUSEKEEPING")));
 end;
 
