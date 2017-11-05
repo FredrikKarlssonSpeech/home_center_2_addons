@@ -414,7 +414,9 @@ end;
 
 function initiateHousekeepingVariable()
     fibaro:debug("Initiating the variable HOUSEKEEPING to {}")
-    fibaro:setGlobal('HOUSEKEEPING','{"turnOff"={}}')
+    local EMPTY = {};
+    EMPTY["turnOff"] = {};
+    fibaro:setGlobal('HOUSEKEEPING',json.encode(EMPTY))
 end;
 
 
@@ -430,7 +432,7 @@ end;
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
 -- registerHousekeepingTask({10,11,13},25,"turnOn")
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
-
+-- TODO: kolla så att denna funktion verkligen fungerar!
 
 function registerHousekeepingTask(deviceIDs, delaySeconds, command )
     local command = command or "turnOff";
@@ -473,13 +475,9 @@ function registerHousekeepingTask(deviceIDs, delaySeconds, command )
     fibaro:setGlobal('HOUSEKEEPING',outString);
 end;
 
-initiateHousekeepingVariable();
-registerHousekeepingTask(11,11,"turnOff");
 
 
-
-
-function printHouseKeeing()
-    fibaro:debug(tostring(fibaro:getGlobalValue("HOUSEKEEPING")));
+function printHousekeeing()
+    debugTable(json.decode(tostring(fibaro:getGlobalValue("HOUSEKEEPING"))));
 end;
 
