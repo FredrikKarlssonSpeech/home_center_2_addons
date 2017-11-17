@@ -326,10 +326,28 @@ end;
 -- Actually, the function name is a misnomer as the function rarely waits exactly one minute. 
 -- It just waits until the next minute starts.
 
-function waitAMinute()
+function waitUntilNextMinute()
     local currSec = os.time() % 60;
     local toWait = 60 - currSec;
     fibaro:sleep(toWait *1000);
+end;
+
+--- This function provides the basic functionality for timer schenes.
+-- Essentially, it runs forever (or until the scene is stopped) and executed the supplied function every minute.
+-- @tparam function fun A function that describes a set of actions to be performed. Usually this function contains a series of {runIf} calls. Please note that the argument is a function, not a call to a function. See Usage below.
+-- @usage
+-- funciton myFun() 
+--   runIf(isWeekEnd() and timeIs("09:00"),99,0); -- Runs scene with ID 99 at 09:00 on weekends
+--   runIf(isWeekEnd() and timeIs("06:30"),99,0); -- Runs scene with ID 99 at 07:30 on weekdays
+-- end;
+-- runEveryMinute(myFun);
+
+
+function runEveryMinute(fun)
+    while(true) do
+        fun();
+        waitUntilNextMinute();
+    end;
 end;
 
 --- Function that determines whether its time to turn off the heater.
