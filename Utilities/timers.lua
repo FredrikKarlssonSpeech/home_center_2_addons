@@ -160,6 +160,64 @@ function afterTime(time, offset)
     return( (now > timeEpoch) and (now <= endOfDay ));
 end;
 
+--- A function that selects the earlierst time specification from a list of times.
+-- @param ... a list of times in string format, e.g. "HH:MM" or "HH:MM:SS". 
+-- @return The time that occurs earliest in the day.
+-- @usage
+-- print(earliest("22","20:30:01","21","20:30"));
+-- -- will return "20:30" since tis is synonumous with "20:30:00"
+-- sunsetHour = tostring(fibaro:getValue(1, "sunsetHour") or "22:30:01");
+-- -- This code then selects the time that occurs earliest - sunset or 22:30.
+-- print(earliest(sunsetHour,"22:30"));
+
+function earliest(...)
+    local arg = {...};
+    local out = nil;
+    local currEpoch = nil;
+    local outEpoch = nil;
+    for k,time in ipairs(arg) do
+        if out == nil then
+            out = time;
+            outEpoch = tableToEpochtime(timestringToTable(time));
+        else
+            currEpoch = tableToEpochtime(timestringToTable(time));
+            if currEpoch < outEpoch then
+                out = time;
+            end;
+        end;
+    end;
+    return(out);
+end;
+
+--- A function that selects the latest time specification from a list of times.
+-- @param ... a list of times in string format, e.g. "HH:MM" or "HH:MM:SS". 
+-- @return The time that occurs latest in the day.
+-- @usage
+-- print(earliest("22","20:30:01","21","20:30"));
+-- -- will return "22".
+-- sunsetHour = tostring(fibaro:getValue(1, "sunsetHour") or "22:30:01");
+-- -- This code then selects the time that occurs latest - sunset or 22:30.
+-- print(earliest(sunsetHour,"22:30"));
+
+function latest(...)
+    local arg = {...};
+    local out = nil;
+    local currEpoch = nil;
+    local outEpoch = nil;
+    for k,time in ipairs(arg) do
+        if out == nil then
+            out = time;
+            outEpoch = tableToEpochtime(timestringToTable(time));
+        else
+            currEpoch = tableToEpochtime(timestringToTable(time));
+            if currEpoch > outEpoch then
+                out = time;
+            end;
+        end;
+    end;
+    return(out);
+end;
+
 --- A function that lets you specify date and time in a very flexible way through a table
 -- The table should use only fields that are returned by a call to @{os.time} (year, month, day, hour, min, sec), 'wday' (1-7 scale, Sunday is 1) or 'yday' (day within the year, Jan 1st is 1).
 -- @tparam table dateTable A table giving a time specification.  For instance, {day=6,hour=15} returns 'true' on Sundays at 3 pm, {year=2016,month=2, hour=9} will return 'true' every day in February 2016 at 9 am, and 'false' at any time where parts of specification is not met. In each field, a table may be given, in which case any one of the options given will be accepted.
@@ -359,9 +417,8 @@ end;
 -- These small local functions are used heavilly by the functions in the previous section, and should therefore be included in scenes as soon as they are.
 -- @section datetimeutilities
 
---- A function that creates a @{os.date} table from the time of sunset the same day.
+--- A function that creates a @{os.date} table from a time specified as a string. 
 -- Provided that the function is not called exactly at midnight, the function will return a table that mathces the output of an os.date("*t")
--- call made exactly the minute corresponding to the sunset hour.
 -- @tparam string time A text representation (e.g. "08:10") of the time of today to concert to a @{os.date} date table. Allowed formats are "HH", "HH:MM" or "HH:MM:SS". "HH" is a short form for "HH:00" and "HH:MM" is a short for "HH:MM:00".
 -- @treturn table A table with year, month,day, hour min, sec and isdst fields.
 -- @see os.date
@@ -372,7 +429,7 @@ end;
 -- -- Will return 'true' the entire hour
 -- timestringToTable("08:10:10")
 -- -- Will return 'true' exactly at the indicated second
-local function timestringToTable (time)
+function timestringToTable (time)
     local dateTable = os.date("*t");
     -- Get an iterator that extracts date fields
     local g =  string.gmatch(time, "%d+");
@@ -392,7 +449,7 @@ end;
 -- @tparam table t A time specification table with the fields year, month, day, hour, min, sec, and isdst.
 -- @treturn number An integer inficating the Epoch time stamp corresponding to the date and time given in the table.
 
-local function tableToEpochtime (t)
+function tableToEpochtime (t)
     local now = os.date("*t");
     local outTime = os.time{year=t.year or now.year, month=t.month or now.month,day=t.day or now.day,hour=t.hour or now.hour,min=t.min or now.min,sec=t.sec or now.sec,isdst=t.isdst or now.isdst};
     return(outTime);
