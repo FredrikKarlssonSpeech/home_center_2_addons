@@ -386,19 +386,21 @@ end;
 -- @tparam string readyTime A time specification where the cars should be ready, e.g. "07:30" for half past 7 in the morning.
 -- @tparam number tempOutside The temperature outside or inside the car (if available).
 -- @tparam[opt=true] boolean eco Should eco settings be used? If not, the car motor health will be considered more important.
+-- @tparam[opt=0] number manualMinutesOffset A manual offset in number of minutes. Should be negative if the heater should start ahead of time, and positive if starting should be delayed some minutes.
 -- @treturn boolean A truth value (true/false).
 
-function timeToStartCarHeater (readyTime, tempOutside, eco)
+function timeToStartCarHeater (readyTime, tempOutside, eco,manualMinutesOffset)
     local timeEpoch = tableToEpochtime(timestringToTable(readyTime));
+    local offset = manualMinutesOffset or 0;
     local now = os.time();
     local startTime = timeEpoch;
     if (eco) then
         if (tempOutside <= -15) then
             -- 2 Hours before time
-            startTime = timeEpoch - (3600*2);
+            startTime = timeEpoch - (3600*2) ;
         elseif (tempOutside <= -10) then
             -- 1 Hour before time
-            startTime = timeEpoch - (3600*1);
+            startTime = timeEpoch - (3600*1) ;
         elseif (tempOutside <= 0) then
             -- 1 Hours before time
             startTime = timeEpoch - (3600*1);
@@ -428,7 +430,7 @@ function timeToStartCarHeater (readyTime, tempOutside, eco)
         end;
     end;
     -- Now calculate whether the heater should start NOW
-    return (  (startTime <= now) and (now <= timeEpoch));
+    return (  ( (startTime- manualMinutesOffset*60) <= now) and (now <= timeEpoch));
 end;
 
 --- Utility functions related to date and time conversions.
