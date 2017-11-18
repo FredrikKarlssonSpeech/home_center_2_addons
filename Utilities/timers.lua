@@ -430,7 +430,7 @@ function timeToStartCarHeater (readyTime, tempOutside, eco,manualMinutesOffset)
         end;
     end;
     -- Now calculate whether the heater should start NOW
-    return (  ( (startTime- manualMinutesOffset*60) <= now) and (now <= timeEpoch));
+    return (  ( (startTime + manualMinutesOffset*60) <= now) and (now <= timeEpoch));
 end;
 
 --- Utility functions related to date and time conversions.
