@@ -2,7 +2,7 @@
 -- @section timeofday
 
 --- An example time of day scheme that may be used as a default
--- or altered to fit the indivdual's need.
+-- or altered to fit the indivdual's need. 
 DEFAULT_TIME_OF_DAY = {
 	{["days"]={2,3,4,5,6},["time"]="06:30",["tod"]="Morning"},
 	{["days"]={1,7},["time"]="06:30",["tod"]="Morning"},
@@ -116,5 +116,27 @@ function daytimeStartsToday()
 		if tableValueExists(str["days"],wday) and str["tod"] == "Day" then
 			return(str["time"]);
 		end;
+	end;
+end;
+
+
+--- More derived, small, utility functions that just makes life simpler
+-- @section timeofday_utils
+
+--- A untility function that answers the question of whether it is currently dark outside, but not Nighttime (as defined by the user).
+-- @tparam number sunsetOffsetMinutes The numbber minutes that should be used as an offset relative to sunset time. That is, a value of -45 here will result in subnset being considered to occur 45 minutes before actual sunset occurs when calculated from astronomical data.
+-- @rreturn boolean An indication of whether it is currently after the, possibly adjusted, sunset but also before the defined Nighttime.
+
+function darkButNotNight(sunsetOffsetMinutes)
+	local nightTime = nightTimeToday();
+	local offset = sunsetOffsetMinutes or 0;
+	local sunsetTime = stringTimeAdjust( tostring(fibaro:getValue(1, "sunsetHour")), offset );
+	-- check if sunset occurs before the defined night time, and then check whether the current time is inbetween these times 
+	if earliest(sunsetTime,nightTime) == sunsetTime then
+		return(timeIsInRange(sunsetTime,nightTime));
+	else
+		-- By definition not true then
+		return(false);
+
 	end;
 end;
