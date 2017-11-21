@@ -125,7 +125,7 @@ end;
 
 --- A untility function that answers the question of whether it is currently dark outside, but not Nighttime (as defined by the user).
 -- @tparam number sunsetOffsetMinutes The numbber minutes that should be used as an offset relative to sunset time. That is, a value of -45 here will result in subnset being considered to occur 45 minutes before actual sunset occurs when calculated from astronomical data.
--- @rreturn boolean An indication of whether it is currently after the, possibly adjusted, sunset but also before the defined Nighttime.
+-- @treturn boolean An indication of whether it is currently after the, possibly adjusted, sunset but also before the defined Nighttime.
 
 function darkButNotNight(sunsetOffsetMinutes)
 	local nightTime = nightTimeToday();

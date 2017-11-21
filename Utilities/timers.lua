@@ -536,7 +536,7 @@ end;
 -- This function will then insert a time when the task 'command' should be performed on devices. The time is specified by the user as a delay (relative to the current time).
 -- The housekeeping task will then be performed after 'delaySeconds' seconds has elapsed, or whenever the houekeeping routine is performed after that. This makes sure that timers are not interrupted if you decide to restart your Home Center when timers are running.
 -- @param deviceIDs A singe device ID or an array of IDs which should recieve the 'command' command after  'delaySeconds' seconds.
--- @tparam int selaySeconds The number of seconds that should pass before the 'command' is sent.
+-- @tparam int delaySeconds The number of seconds that should pass before the 'command' is sent.
 -- @tparam[opt='turnOff'] string command The command to be sent. The command could also be a {commad,value} tuple.
 -- @usage
 -- registerHousekeepingTask({10,11,13},25,"turnOn")

@@ -223,10 +223,6 @@ function loadHomeTable (variableName)
 end;
 
 
--- function syslogserver(msg, hostname)
---   local host = hostname or "10.0.1.60";
---   udpsocket = Net.FUdpSocket();
---   local sendmsg = (host .. ' ' .. msg)
---   udpsocket:write(sendmsg, SYSIP, 514);
--- end;
+
+
 
