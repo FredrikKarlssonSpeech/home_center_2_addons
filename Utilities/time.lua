@@ -77,7 +77,7 @@ function wakeupTimeToday()
 	end;
 end;
 
---- A utility function that returns the time today defined when Evetning is defined to start.
+--- A utility function that returns the time today defined when Nighttime is defined to start.
 -- @treturn string The time in text format (e.g. "23:30") that has been defined by the day and time structure that you supplied to @{\setTimeOfDay}.
 -- @see setTimeOfDay
 
@@ -86,6 +86,34 @@ function nightTimeToday()
 	local wday = os.date("*t")["wday"];
 	for k,str in pairs(todStr) do
 		if tableValueExists(str["days"],wday) and str["tod"] == "Night" then
+			return(str["time"]);
+		end;
+	end;
+end;
+
+--- A utility function that returns the time today defined when Evening is defined to start.
+-- @treturn string The time in text format (e.g. "18:30") that has been defined by the day and time structure that you supplied to @{\setTimeOfDay}.
+-- @see setTimeOfDay
+
+function eveningStartsToday()
+	local todStr = todStructure or DEFAULT_TIME_OF_DAY;
+	local wday = os.date("*t")["wday"];
+	for k,str in pairs(todStr) do
+		if tableValueExists(str["days"],wday) and str["tod"] == "Evening" then
+			return(str["time"]);
+		end;
+	end;
+end;
+
+--- A utility function that returns the time today defined when Daytime is defined to start.
+-- @treturn string The time in text format (e.g. "18:30") that has been defined by the day and time structure that you supplied to @{\setTimeOfDay}.
+-- @see setTimeOfDay
+
+function daytimeStartsToday()
+	local todStr = todStructure or DEFAULT_TIME_OF_DAY;
+	local wday = os.date("*t")["wday"];
+	for k,str in pairs(todStr) do
+		if tableValueExists(str["days"],wday) and str["tod"] == "Day" then
 			return(str["time"]);
 		end;
 	end;
