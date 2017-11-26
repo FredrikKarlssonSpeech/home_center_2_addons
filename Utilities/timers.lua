@@ -482,33 +482,31 @@ end;
 -- @section housekeeping
 
 
---- Utility function to check the integrety of hte HOUSEKEEPING variable.
--- The structure of the table should be 
--- {[<deviceId>]={["timestamp"]=<timestamp>,["cmd"]=<command>}}, 
--- {[<deviceId>]={["timestamp"]=<timestamp>,["cmd"]=<command>,["value"]=<value>}}, or 
--- {[<deviceId>]={["timestamp"]=<timestamp>,["cmd"]=<command>,["arg1"]=<argument1>,["arg2"]=<argument2>}}
--- depending on the command to be executed.
--- @treturn boolean An answer to the question of whether the HOUSEKEEPING variable has the appropriate structure.
+--- Functions that together provide a timed auto-off/on functionality, and other housekeeping type actions.
+-- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
+-- These functions all require that a HOUSEKEEPING variable is set up.
+-- @section housekeeping
 
-function isHousekeepingWellStructured()
+
+--- Utility function to check the integrety of the HOUSEKEEPING variable.
+function checkHousekeepingIntegrity()
     local houseVariable = tostring(fibaro:getGlobalValue("HOUSEKEEPING"));
     local parsedVariable = json.decode(houseVariable);
-    -- Quickly handle the special case of an empty list structure
-    if #parsedVariable == 0 then return(true);end;
-
-    for id,cmdList in pairs(parsedVariable) do
+    for time,cmdList in pairs(parsedVariable) do
         -- check that all keys are interpertable as epoch time stamps 
-
+        if tonumber(k) == nil then
+            return(false);
+        end;
         for k,cmdL in pairs(cmdList) do
             -- Check that the load is a table and that it has the manditory fields
-            if type(cmdL) ~= "table" and cmdL["timestamp"] == nil or cmdL["cmd"] == nil then
+            if type(cmdL) ~= "table" and cmdL["id"] == nil or cmdL["cmd"] == nil then
                 return(false);
             end;
             -- basic checks of structure:
             -- here we check that the time stamp is a number, and that it is larger than the 
             -- time stamp of the time when the function was written
             -- which is unlikely to be an epoch rep. of a time event that should be executed. 
-            if tonumber(cmdL["id"]) == nil or tonumber(cmdL["timestamp"]) <= 1510469428 then
+            if tonumber(cmdL["id"]) == nil or tonumber(time) <= 1510469428 then
                 return(false);
             end;
             -- Check that commands that require a paramter gets one
@@ -525,7 +523,7 @@ function isHousekeepingWellStructured()
             end;
         end       
     end;
-    -- If the function has not returned due to en error before, the structure seems fine.
+    -- Is the function has not returned due to en error before, the structure seems fine.
     return(true);
 end;
 
@@ -547,17 +545,15 @@ end;
 -- @tparam int delaySeconds The number of seconds that should pass before the 'command' is sent.
 -- @tparam[opt='turnOff'] string command The command to be sent. The command could also be a {commad,value} tuple.
 -- @usage
--- registerHousekeepingTask(12,25,"turnOn")
--- -- This will turn device 12 on after 25 seconds.
 -- registerHousekeepingTask({10,11,13},25,"turnOn")
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
 -- registerHousekeepingTask({10,11,13},25,"turnOn")
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
 -- TODO: kolla så att denna funktion verkligen fungerar!
 
-function registerHousekeepingTask(deviceIDs, delaySeconds, command, arguments )
+function registerHousekeepingTask(deviceIDs, delaySeconds, command )
     local command = command or "turnOff";
-    local args = arguments or {};
+
     local timeToSet = (os.time() + delaySeconds);
     -- Reinitiate variable if it is not parable as json and is well structured
     if not pcall(checkHousekeepingIntegrity) then 
@@ -570,22 +566,24 @@ function registerHousekeepingTask(deviceIDs, delaySeconds, command, arguments )
     if type(deviceIDs) ~= "table" then
         deviceIDs = {deviceIDs};
     end;
-    local cmdTable = {};
+    local cmdList = {};
     for k,id in pairs(deviceIDs) do
         -- command to be inserted
-        cmdTable = {["timestamp"]=tonumber(timeToSet),["cmd"]=tostring(command)};
+        local cmdTable = {["id"]=command};
+        cmdTable = {["cmd"]=command};
         -- This is for one argument commands
-        if  #args == 1 then
-            cmdTable["value"] = args[1];
+        if type(command) == "table" and #command == 2 then
+            cmdTable["value"] = command[2];
         end;
-        -- This is for two argument commands
-        if  #args == 2 then
-            cmdTable["arg1"] = args[1];
-            cmdTable["arg2"] = args[2];
+        if type(command) == "table" and #command == 3 then
+            cmdTable["arg1"] = command[2];
+            cmdTable["arg2"] = commant[3];
         end;
-        parsedVariable[tostring(id)] = cmdTable;
-
+        cmdList[#cmdList+1] = cmdTable;
     end;
+    -- insert the new schedule
+    parsedVariable[tostring(timeToSet)] = cmdList;
+    -- print and store housekeeping 
     local outString = json.encode(parsedVariable);
     fibaro:debug("Setting Housekeeping tasks: "..outString);
     fibaro:setGlobal('HOUSEKEEPING',outString);
@@ -604,14 +602,13 @@ function doHousekeeping()
     -- Get data
     local houseVariable = tostring(fibaro:getGlobalValue('HOUSEKEEPING'));
     local parsedVariable = json.decode(houseVariable) ; 
-    for id,cmdStruct in pairs(parsedvariable) do
+    for time,cmdStruct in pairs(parsedvariable) do
         now = os.time();
-        time = cmdStruct["timestamp"];
         -- check whether the stored execution time is now or has passed.
         if tonumber(time) <= now then
-            if #cmdStruct == 2 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]));
-            elseif #cmdStruct == 3 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
-            elseif #cmdStruct == 4 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
+            if #cmdStruct == 1 then fibaro:call(tonumber(cmdStruct["id"]),tostring(cmdStruct["cmd"]));
+            elseif #cmdStruct == 2 then fibaro:call(tonumber(cmdStruct["id"]),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
+            elseif #cmdStruct == 3 then fibaro:call(tonumber(cmdStruct["id"]),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
             else
                 fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
                 printHousekeeing();
