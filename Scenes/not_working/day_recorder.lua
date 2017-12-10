@@ -40,21 +40,21 @@ function startedByDevice ()
 end;
 
 
-function dayrecorder( storageVariable)
-    local startOfDayEpoch = tableToEpochtime(timestringToTable("00:00:01"));
-    local startSource = startedByDevice();
-    local id = tonumber(startSource["deviceID"]);
-    local property = tostring(startSource["propertyName"]);
-    local value, modificationTime = fibaro:get(id, property);
-    local adjModTime = modificationTime - startOfDayEpoch;
-    local toStore = {id,property, value};
-    -- Now insert the event into the global variable
-    fibaro:debug("Storing value ".. value .. " of property ".. property .. " for device " .. id);
-    local storageTable = json.decode(fibaro:getGlobal(tostring(storageVariable))) or {};
-    table.insert(storageTable,toStore);
-    local out = json.encode(storageTable);
-    fibaro:setGlobal(tostring(storageVariable),out);
-    fibaro:debug("Stored value ".. value .. " of property ".. property .. " for device " .. id);
-end;
+-- function dayrecorder( storageVariable)
+--     local startOfDayEpoch = tableToEpochtime(timestringToTable("00:00:01"));
+--     local startSource = startedByDevice();
+--     local id = tonumber(startSource["deviceID"]);
+--     local property = tostring(startSource["propertyName"]);
+--     local value, modificationTime = fibaro:get(id, property);
+--     local adjModTime = modificationTime - startOfDayEpoch;
+--     local toStore = {id,property, value};
+--     -- Now insert the event into the global variable
+--     fibaro:debug("Storing value ".. value .. " of property ".. property .. " for device " .. id);
+--     local storageTable = json.decode(fibaro:getGlobal(tostring(storageVariable))) or {};
+--     table.insert(storageTable,toStore);
+--     local out = json.encode(storageTable);
+--     fibaro:setGlobal(tostring(storageVariable),out);
+--     fibaro:debug("Stored value ".. value .. " of property ".. property .. " for device " .. id);
+-- end;
 
 dayrecorder("RECORDED_DAY");

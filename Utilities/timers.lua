@@ -482,6 +482,7 @@ end;
 -- @section housekeeping
 
 
+<<<<<<< HEAD
 --- Functions that together provide a timed auto-off/on functionality, and other housekeeping type actions.
 -- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
 -- These functions all require that a HOUSEKEEPING variable is set up.
@@ -489,6 +490,9 @@ end;
 
 
 --- Utility function to check the integrety of the HOUSEKEEPING variable.
+=======
+--- Utility function to check the integrety of hte HOUSEKEEPING variable.
+>>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
 function checkHousekeepingIntegrity()
     local houseVariable = tostring(fibaro:getGlobalValue("HOUSEKEEPING"));
     local parsedVariable = json.decode(houseVariable);
@@ -506,7 +510,11 @@ function checkHousekeepingIntegrity()
             -- here we check that the time stamp is a number, and that it is larger than the 
             -- time stamp of the time when the function was written
             -- which is unlikely to be an epoch rep. of a time event that should be executed. 
+<<<<<<< HEAD
             if tonumber(cmdL["id"]) == nil or tonumber(time) <= 1510469428 then
+=======
+            if tonumber(cmdL["id"]) == nil or tonumber(cmdL["id"]) <= 1510469428 then
+>>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
                 return(false);
             end;
             -- Check that commands that require a paramter gets one

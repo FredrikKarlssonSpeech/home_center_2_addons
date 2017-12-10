@@ -4,22 +4,6 @@
 		"selected_items":
 		[
 			[
-				"print",
-				"printResult"
-			],
-			[
-				"last",
-				"lastActivity"
-			],
-			[
-				"risk",
-				"riskOfMold"
-			],
-			[
-				"level",
-				"levelDescriptions"
-			],
-			[
 				"else",
 				"elseif"
 			],
@@ -224,77 +208,58 @@
 	"buffers":
 	[
 		{
-			"file": "Scenes/track_movements_down.lua",
+			"file": "Utilities/home_states.lua",
 			"settings":
 			{
-				"buffer_size": 693,
+				"buffer_size": 5579,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scenes/track_movements_up.lua",
+			"file": "Utilities/utils.lua",
 			"settings":
 			{
-				"buffer_size": 619,
-				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "--[["
-			}
-		},
-		{
-			"file": "Scenes/set_state.lua",
-			"settings":
-			{
-				"buffer_size": 1122,
-				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "--[["
-			}
-		},
-		{
-			"file": "Scenes/restart_homeplugs.lua",
-			"settings":
-			{
-				"buffer_size": 1201,
+				"buffer_size": 7013,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Utilities/datetime.lua",
+			"file": "Utilities/devices.lua",
 			"settings":
 			{
-				"buffer_size": 18595,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scenes/car_heater.lua",
-			"settings":
-			{
-				"buffer_size": 4559,
+				"buffer_size": 1251,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "--- \n-- A module joining together a group of functions that makes testing for and handling of source triggers more managable.\n-- The design of the functions allow for them to be called in a context where one would like to know if\n-- what caused the scene to trigger (i.e. in the context of an conditions testing of an if-statement ).\n-- If called outside of a context where truth value is not evaluated, then you may get more detailed\n-- on the trigger.\n-- Since all values that are not 'false' or 'nil' are evaluated at true, this works.\n\n\n\n\n--- A function that tests whether the scene was started manually\n-- @treturn boolean A truth value (true /false)\n\nfunction startedManually ()\n    local startSource = fibaro:getSourceTrigger();\n    return( startSource[\"type\"] == \"other\");\nend;\n\n--- A function that tests whether the scene was started by a change in a global variable\n-- @treturn string If started by a global variable, the name of the variable is returned.\n-- @treturn boolean If started by something else, 'false' is returned.\n\nfunction startedByVariable ()\n    local startSource = fibaro:getSourceTrigger();\n    if startSource[\"type\"] == \"global\" then\n        return (startSource[\"name\"]);\n    else\n        return false;\n    end;\nend;\n\n--- A function that tests whether the scene was started by a change in the state or property of a device.\n-- @treturn table A table containting two fields:\n--  'deviceID', indicating the ID of the triggering device\n--  'propertyName' the property of the device that changed, causing the scene to trigger.\n-- @treturn boolean A truth value (true /false).\nfunction startedByDevice ()\n    local startSource = fibaro:getSourceTrigger();\n    -- startSource ={type=\"property\",deviceID=\"11\",propertyName=\"tet\"}\n    if startSource[\"type\"] == \"property\" then\n        return ({deviceID=startSource[\"deviceID\"], propertyName=startSource[\"propertyName\"]});\n    else\n        return false;\n    end;\nend;\n\n--- A function that tests whether the scene is currently running.\n-- Please note that the testing is stated in the negative. What is tested is whether the scene is NOT\n-- running, as this is the most probable use case.\n-- @treturn boolean A truth value (true /false).\nfunction notCurrentlyRunning()\n    local sceneCount = tonumber(fibaro:countScenes());\n    return (sceneCount == 1);\nend;\n\n\n--- A table of mappings between NodOn remote scene codes and a text description.\n-- @table nodonSceneTableVerbose\n-- @field 10 Button 1 Single Press\n-- @field 20 Button 2 Single Press\n-- @field 30 Button 3 Single Press\n-- @field 40 Button 4 Single Press\n-- @field 13 Button 1 Double Press\n-- @field 23 Button 2 Double Press\n-- @field 33 Button 3 Double Press\n-- @field 43 Button 4 Double Press\n-- @field 12 Button 1 Hold Press\n-- @field 22 Button 2 Hold Press\n-- @field 32 Button 3 Hold Press\n-- @field 42 Button 4 Hold Press\n-- @field 11 Button 1 Hold Released\n-- @field 21 Button 2 Hold Released\n-- @field 31 Button 3 Hold Released\n-- @field 41 Button 4 Hold Released\nnodonSceneTableVerbose = {\n    [10]=\"Button 1 Single Press\",\n    [20]=\"Button 2 Single Press\",\n    [30]=\"Button 3 Single Press\",\n    [40]=\"Button 4 Single Press\",\n    [13]=\"Button 1 Double Press\",\n    [23]=\"Button 2 Double Press\",\n    [33]=\"Button 3 Double Press\",\n    [43]=\"Button 4 Double Press\",\n    [12]=\"Button 1 Hold Press\",\n    [22]=\"Button 2 Hold Press\",\n    [32]=\"Button 3 Hold Press\",\n    [42]=\"Button 4 Hold Press\",\n    [11]=\"Button 1 Hold Released\",\n    [21]=\"Button 2 Hold Released\",\n    [31]=\"Button 3 Hold Released\",\n    [41]=\"Button 4 Hold Released\"\n};\n\n--- Compressed table for mappings between scene codes and NodOn button pressed, and manner in which it was pressed.\n-- In the short forms stored, the 'SP' indicates a single press, 'DP' a double press. 'HP' indicates that the button is pressed and held, and 'HR' that it is released.\n-- @table nodonSceneTable\n-- @field 10 (1SP) Button 1 Single Press\n-- @field 20 (2SP) Button 2 Single Press\n-- @field 30 (3SP) Button 3 Single Press\n-- @field 40 (4SP) Button 4 Single Press\n-- @field 13 (1DP) Button 1 Double Press\n-- @field 23 (2DP) Button 2 Double Press\n-- @field 33 (3DP) Button 3 Double Press\n-- @field 43 (4DP) Button 4 Double Press\n-- @field 12 (1HP) Button 1 Hold Press\n-- @field 22 (2HP) Button 2 Hold Press\n-- @field 32 (3HP) Button 3 Hold Press\n-- @field 42 (4HP) Button 4 Hold Press\n-- @field 11 (1HR) Button 1 Hold Released\n-- @field 21 (2HR) Button 2 Hold Released\n-- @field 31 (3HR) Button 3 Hold Released\n-- @field 41 (4HR) Button 4 Hold Released\nnodonSceneTable = {\n    [10]=\"1SP\",\n    [20]=\"2SP\",\n    [30]=\"3SP\",\n    [40]=\"4SP\",\n    [13]=\"1DP\",\n    [23]=\"2DP\",\n    [33]=\"3DP\",\n    [43]=\"4DP\",\n    [12]=\"1HP\",\n    [22]=\"2HP\",\n    [32]=\"3HP\",\n    [42]=\"4HP\",\n    [11]=\"1HR\",\n    [21]=\"2HR\",\n    [31]=\"3HR\",\n    [41]=\"4HR\"\n};\n\n--- A table for Zwave.me wall controller (actually keyfob) scene codes.\n-- @table zwavemeSceneTableVerbose\n-- @field 11 Button 1 Single Click\n-- @field 21 Button 2 Single Click\n-- @field 31 Button 3 Single Click\n-- @field 41 Button 4 Single Click\n-- @field 12 Button 1 Double Click\n-- @field 22 Button 2 Double Click\n-- @field 32 Button 3 Double Click\n-- @field 42 Button 4 Double Click\n-- @field 13 Button 1 Press and hold\n-- @field 23 Button 2 Press and hold\n-- @field 33 Button 3 Press and hold\n-- @field 43 Button 4 Press and hold\n-- @field 14 Button 1 Click and then Press and hold\n-- @field 24 Button 2 Click and then Press and hold\n-- @field 34 Button 3 Click and then Press and hold\n-- @field 44 Button 4 Click and then Press and hold\n-- @field 15 Button 1 Click and then Press and hold\n-- @field 25 Button 2 Click and then Press and hold\n-- @field 35 Button 3 Click and then Press and hold\n-- @field 45 Button 4 Click and then Press and hold\n-- @field 16 Button 1 Click and then Press and hold\n-- @field 26 Button 2 Click and then Press and hold\n-- @field 36 Button 3 Click and then Press and hold\n-- @field 46 Button 4 Click and then Press and hold\nzwavemeSceneTableVerbose = {\n    [11]=\"Button 1 Single Click\",\n    [21]=\"Button 2 Single Click\",\n    [31]=\"Button 3 Single Click\",\n    [41]=\"Button 4 Single Click\",\n    [12]=\"Button 1 Double Click\",\n    [22]=\"Button 2 Double Click\",\n    [32]=\"Button 3 Double Click\",\n    [42]=\"Button 4 Double Click\",\n    [13]=\"Button 1 Press and hold\",\n    [23]=\"Button 2 Press and hold\",\n    [33]=\"Button 3 Press and hold\",\n    [43]=\"Button 4 Press and hold\",\n    [14]=\"Button 1 Click and then Press and hold\",\n    [24]=\"Button 2 Click and then Press and hold\",\n    [34]=\"Button 3 Click and then Press and hold\",\n    [44]=\"Button 4 Click and then Press and hold\",\n    [15]=\"Button 1 Click and then Press and hold\",\n    [25]=\"Button 2 Click and then Press and hold\",\n    [35]=\"Button 3 Click and then Press and hold\",\n    [45]=\"Button 4 Click and then Press and hold\",\n    [16]=\"Button 1 Click and then Press and hold long time\",\n    [26]=\"Button 2 Click and then Press and hold long time\",\n    [36]=\"Button 3 Click and then Press and hold long time\",\n    [46]=\"Button 4 Click and then Press and hold long time\"\n};\n\n\n\n--- Compressed table for mappings between scene codes and Zwave.me button pressed, and manner in which it was pressed.\n-- In the short forms stored, the 'SC' indicates a single click, 'DC' a double click. 'PH' indicates that the button is pressed and held. In cases when two actions are performed, like in the case of a click followed by a press that is held, then the two actions are separated by a '_' in the code.\n-- @table zwavemeSceneTable\n-- @field 11 (1SC) Button 1 Single Click\n-- @field 21 (2SC) Button 2 Single Click\n-- @field 31 (3SC) Button 3 Single Click\n-- @field 41 (4SC) Button 4 Single Click\n-- @field 12 (1DC) Button 1 Double Click\n-- @field 22 (2DC) Button 2 Double Click\n-- @field 32 (3DC) Button 3 Double Click\n-- @field 42 (4DC) Button 4 Double Click\n-- @field 13 (1PH) Button 1 Press and hold\n-- @field 23 (2PH) Button 2 Press and hold\n-- @field 33 (3PH) Button 3 Press and hold\n-- @field 43 (4PH) Button 4 Press and hold\n-- @field 14 (1C_PH) Button 1 Click and then Press and hold\n-- @field 24 (2C_PH) Button 2 Click and then Press and hold\n-- @field 34 (3C_PH) Button 3 Click and then Press and hold\n-- @field 44 (4C_PH) Button 4 Click and then Press and hold\n-- @field 15 (1PLH) Button 1 Click and then Press and hold\n-- @field 25 (2PLH) Button 2 Click and then Press and hold\n-- @field 35 (3PLH) Button 3 Click and then Press and hold\n-- @field 45 (4PLH) Button 4 Click and then Press and hold\n-- @field 16 (1C_PLH) Button 1 Click and then Press and hold\n-- @field 26 (1C_PLH) Button 2 Click and then Press and hold\n-- @field 36 (1C_PLH) Button 3 Click and then Press and hold\n-- @field 46 (1C_PLH) Button 4 Click and then Press and hold\nzwavemeSceneTable = {\n    [11]=\"1SC\",\n    [21]=\"2SC\",\n    [31]=\"3SC\",\n    [41]=\"4SC\",\n    [12]=\"1DC\",\n    [22]=\"2DC\",\n    [32]=\"3DC\",\n    [42]=\"4DC\",\n    [13]=\"1PH\",\n    [23]=\"2PH\",\n    [33]=\"3PH\",\n    [43]=\"4PH\",\n    [14]=\"1C_PH\",\n    [24]=\"2C_PH\",\n    [34]=\"3C_PH\",\n    [44]=\"4C_PH\",\n    [15]=\"1PLH\",\n    [25]=\"2PLH\",\n    [35]=\"3PLH\",\n    [45]=\"4PLH\",\n    [16]=\"1C_PLH\",\n    [26]=\"1C_PLH\",\n    [36]=\"1C_PLH\",\n    [46]=\"1C_PLH\"\n};\n\n--- A function that checks that a device is drawing power, if on\n-- The use case for this function is for instance a car heater. If it is turned on, it should draw power.\n-- If not, it is unplugged. Of course, this function requires a device that has power reporting.\n-- @tparam number id The ID of the device.\n-- @tparam number threshold The power consumption threshold. If the power consumption is above this value, it is regarded to draw power. Defaults to 15W.\n-- @treturn number A boolean indicating wheter the device is ON but not active (not plugged in)\nfunction onButUnplugged(id,threshold)\n    local t = threshold or 15;\n    local state = tonumber(fibaro:getValue(id, \"value\"));\n    local pow = tonumber(fibaro:getValue(id, \"power\"));\n\n    return(state == 1 and pow > t);\nend;\n\n\n\n",
-			"file": "Utilities/sourcetriggers.lua",
-			"file_size": 9956,
-			"file_write_time": 131289389320000000,
+			"file": "Utilities/timers.lua",
 			"settings":
 			{
-				"buffer_size": 9958,
+				"buffer_size": 31813,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Misc/HomeTable.json",
+			"file": "Utilities/time.lua",
 			"settings":
 			{
-				"buffer_size": 4268,
+				"buffer_size": 5716,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\n\n--- These functions handle presence of people in the house and similar things. \n-- Presence detection also, and exactly who is present.\n-- @section people\n\n\nfunction some()\n\tlocal stat = tostring(fibaro:getGlobalValue(\"TimeOfDay\"));\n\treturn(sting.lower(stat) == \"day\");\nend;",
+			"file": "Utilities/occupants.lua",
+			"file_size": 124,
+			"file_write_time": 131561902604580111,
+			"settings":
+			{
+				"buffer_size": 276,
 				"line_ending": "Unix"
 			}
 		}
@@ -306,49 +271,81 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 107.0,
-		"last_filter": "install",
+		"height": 392.0,
+		"last_filter": "comm",
 		"selected_items":
 		[
-			[
-				"install",
-				"Package Control: Install Package"
-			],
 			[
 				"comm",
 				"Git: Quick Commit (current file)"
 			],
 			[
-				"commit",
-				"Git: Quick Commit (current file)"
+				"rever",
+				"Git: Show Previous Version of Current File"
 			],
 			[
-				"commi",
+				"commit",
+				"Git: Commit history"
+			],
+			[
+				"amm",
+				"Git: Amend Commit"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"gi",
 				"Git: Commit"
 			],
 			[
-				"add",
-				"Git: Add Current File"
+				"json",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"rev",
+				"TodoReview: Open Files"
+			],
+			[
+				"todo",
+				"SimpleTODO: Add TODO"
+			],
+			[
+				"GT",
+				"Git: Push Current Branch"
 			],
 			[
 				"com",
-				"Git: Commit"
-			],
-			[
-				"amme",
-				"Git: Amend Commit"
-			],
-			[
-				"git",
-				"Git: Amend Commit"
+				"Git: Quick Commit (current file)"
 			],
 			[
 				"quic",
 				"Git: Quick Commit"
 			],
 			[
+				"add",
+				"Git: Add Current File"
+			],
+			[
 				"qui",
 				"Git: Quick Commit"
+			],
+			[
+				"commi",
+				"Git: Commit"
 			],
 			[
 				"qu",
@@ -375,8 +372,8 @@
 				"Set Syntax: Lua"
 			],
 			[
-				"todo",
-				"Show TODOs: Project and open files"
+				"git",
+				"Git: Quick Commit"
 			],
 			[
 				"haskell",
@@ -457,10 +454,6 @@
 			[
 				"hde",
 				"Show TODOs: Project and open files"
-			],
-			[
-				"remove",
-				"Package Control: Remove Package"
 			],
 			[
 				"pref hask",
@@ -547,7 +540,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 449.0
+		"width": 420.0
 	},
 	"console":
 	{
@@ -570,56 +563,57 @@
 	[
 		"/Users/frkkan96/Documents/src/home_center_2_addons",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/lib",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Misc",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities"
 	],
 	"file_history":
 	[
-		"/Volumes/docker/homebridge/config.json",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/event_management.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/dimmer_wall_lights_sync.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/utils.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/datetime.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/lighting_utils.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/AM_diskmaskin.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/HomeTable.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_on.lua",
-		"/Users/frkkan96/Downloads/Heizung_manuell_v0/Heizung_manuell.lua",
-		"/Users/frkkan96/Desktop/Anette/SS.xml",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/day_recorder.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/sourcetriggers.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/humidity_temperature.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/humwatcher_vinden.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/child_night_light.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_off.lua",
-		"/Users/frkkan96/Downloads/Alarm_Clock_2.2.vfib.json",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/alert_no_carheating.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/wall_lights.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/users.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/dishwasher_alert.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/wakeup_light.lua",
-		"/Users/frkkan96/Desktop/ämnen_studenter_handledare.csv",
-		"/Users/frkkan96/Desktop/Vowel space dispersion.opml",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/acON.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/bedroom_light_on.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/acOFF.lua",
-		"/Users/frkkan96/Downloads/Wallplug_Color.vfib",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/0_project.lua",
+		"/Users/frkkan96/Desktop/Mitt jättebra projekt/SpeechRecPrompts_2.dtd",
+		"/Users/frkkan96/Desktop/Mitt jättebra projekt/RECS/0001/M10001demo_002_annot.json",
+		"/Users/frkkan96/CloudStation/CloudStation/Domotics/HC2 snmp.webarchive",
+		"/Users/frkkan96/Desktop/testar",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/test_housekeeping.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/lib/config.ld",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/time.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/Makefile",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/timers.lua",
+		"/Users/frkkan96/Documents/forskning/Parkinson/ddkrythm/PD_NC_classification.md",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/weatherinfo.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/utils.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/lighting.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/humidity_temperature.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/lib/fk_lib.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/sourcetriggers.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/event_management.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/users.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/config.ld",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/lib/bhall.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/lib/B-HAll.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/carheater.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Misc/weatherinfo.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/ac.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/coffee_alert.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/washing_alert.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/timeofday.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/fireplace_watcher.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/project.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/lighting_utils.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/datetime.lua",
+		"/Volumes/docker/homebridge/config.json",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_external_lights_timer.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/car_heater_off.lua",
-		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/all_off.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/car_heater.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/wakeup_light.lua",
+		"/Users/frkkan96/CloudStation/CloudStation/Domotics/OH1backup20160815/openhab/configurations/items/ikketeru.items",
+		"/Users/frkkan96/Documents/forskning/Essentiell_tremor/voice tremor acoustics/Fredrik_VT_ALVIN/FK.res",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/AV_inside_lights.lua",
+		"/Users/frkkan96/Desktop/aaa.TextGrid",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/all_off.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_off.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/window_lights_on.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/Motion_light_scenes/Smart-Lights-V1.6.7-Online.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/temperatur_nu.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/vardagsrummet_nere_motion_lights.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/closet_timer.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/fk_lib.lua",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/test.lua",
+		"/Users/frkkan96/Documents/src/home_center_2_addons/Scenes/ac.lua",
 		"/Users/frkkan96/Documents/admin/Institutionen för klinisk vetenskap/Forskningsansvar/Bibliometri12-14/Citation report/scopus2012-2014.csv",
 		"/Users/frkkan96/Documents/admin/Institutionen för klinisk vetenskap/Forskningsansvar/Bibliometri12-14/Citation report/scopus2012-2016.csv",
 		"/Users/frkkan96/Documents/src/home_center_2_addons/Utilities/triggers.lua",
@@ -701,13 +695,11 @@
 		"/Users/frkkan96/Documents/src/umecore_hs/UmeQueryParser.hs",
 		"/Users/frkkan96/Documents/src/umecore_hs/QueryGenerator.hs",
 		"/Users/frkkan96/Documents/src/umecore_hs/UmeDatabase.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/textgrid_import.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/TextgridParser.hs",
-		"/Users/frkkan96/Documents/src/umecore_hs/SegmentList.hs"
+		"/Users/frkkan96/Documents/src/umecore_hs/textgrid_import.hs"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 39.0
 	},
 	"find_in_files":
 	{
@@ -722,14 +714,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"/\n",
-			"userID",
-			"HomeTable",
-			"notC",
-			"acONHeat22",
-			"Coffe_mashine",
-			"--[[\n%% properties\n279 power\n%% events\n%% globals\n--]]\n\nif (fibaro:countScenes() > 1) then\n  fibaro:abort();\nend\n\nlocal consumption = tonumber(fibaro:getValue(279, \"power\"));\nlocal prev = tostring(fibaro:getGlobal(\"Washing\"));\n  \nfibaro:debug(\"Current consumption is\"..consumption.. \"W\");\n\n-- Check state by current power consumption\nif (consumption < 50 ) then\n  fibaro:setGlobal(\"Washing\", \"Not running\");\nelse\n  fibaro:setGlobal(\"Washing\", \"Running\");\nend;\n-- Check every 10 minutes\nfibaro:sleep(5*60*1000);\nlocal curr = tostring(fibaro:getGlobal(\"Washing\"));\n-- Check whether the state has changed!\n-- If it has, then do something about is, depending on the nature of the change!\n-- This provides a nice separation of logic. Could have easilly gone into the prev if clause.\nif ( curr ~= prev) then\n    if prev == \"Running\" then\n        -- In this case, the washing was running, but is not any more\n        fibaro:debug(\"Washing done!\");\n    else\n        fibaro:debug(\"Washing started...\");\n    end;\nend;\n",
-			"24",
+			"fibaro:call(",
+			"=.*,[\\n$]",
+			"@example",
+			"notCurr",
+			"notCurrentlyRunning",
+			"datatime.",
+			"Function ",
+			"function ",
+			"136",
 			"--.*",
 			"\",",
 			"--.*",
@@ -848,8 +841,7 @@
 			"SECONDARY",
 			"TARGET",
 			"F.",
-			"utterance_id",
-			"selectFirst"
+			"utterance_id"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -874,57 +866,29 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scenes/track_movements_down.lua",
+					"file": "Utilities/home_states.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 693,
+						"buffer_size": 5579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								400,
-								400
+								4730,
+								4730
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Lua/Lua.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "Scenes/track_movements_up.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 619,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								161,
-								161
-							]
-						],
-						"settings":
-						{
-							"auto_name": "--[[",
+							"auto_name": "",
 							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
@@ -935,57 +899,89 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "Scenes/set_state.lua",
+					"buffer": 1,
+					"file": "Utilities/utils.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1122,
+						"buffer_size": 7013,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								1122
+								412,
+								2860
 							]
 						],
 						"settings":
 						{
-							"auto_name": "--[[",
-							"syntax": "Packages/Lua/Lua.sublime-syntax"
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 39.0,
+						"translation.y": 965.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "Scenes/restart_homeplugs.lua",
+					"buffer": 2,
+					"file": "Utilities/devices.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1201,
+						"buffer_size": 1251,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								859,
-								859
+								1133,
+								1133
 							]
 						],
 						"settings":
 						{
+							"auto_name": "",
 							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 194.0,
+						"translation.y": 87.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Utilities/timers.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 31813,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25163,
+								25163
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8622.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -993,29 +989,27 @@
 				},
 				{
 					"buffer": 4,
-					"file": "Utilities/datetime.lua",
+					"file": "Utilities/time.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18595,
+						"buffer_size": 5716,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6638,
-								6366
+								1352,
+								1230
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Lua/Lua.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1365.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -1023,26 +1017,25 @@
 				},
 				{
 					"buffer": 5,
-					"file": "Scenes/car_heater.lua",
+					"file": "Utilities/occupants.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4559,
+						"buffer_size": 276,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2622,
-								2350
+								157,
+								157
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Lua/Lua.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"auto_name": "",
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1050,83 +1043,17 @@
 					},
 					"stack_index": 1,
 					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "Utilities/sourcetriggers.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9958,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9957,
-								9957
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Lua/Lua.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 7,
-					"file": "Misc/HomeTable.json",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4268,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2314,
-								2317
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 957.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
 				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 23.0
 	},
 	"input":
 	{
-		"height": 31.0
+		"height": 35.0
 	},
 	"layout":
 	{
@@ -1137,12 +1064,6 @@
 				0,
 				1,
 				1
-			],
-			[
-				0,
-				1,
-				1,
-				2
 			]
 		],
 		"cols":
@@ -1153,7 +1074,6 @@
 		"rows":
 		[
 			0.0,
-			0.599427857807,
 			1.0
 		]
 	},
@@ -1174,11 +1094,11 @@
 	{
 		"height": 100.0
 	},
-	"pinned_build_system": "Packages/Haskell/Haskell.sublime-build",
+	"pinned_build_system": "Packages/User/Praat/Praat.sublime-build",
 	"project": "hc2.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1201,10 +1121,14 @@
 	},
 	"select_symbol":
 	{
-		"height": 107.0,
-		"last_filter": "fina",
+		"height": 392.0,
+		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"not",
+				"notCurrentlyRunning"
+			],
 			[
 				"fina",
 				"finalizeUmeQuery"
@@ -1224,7 +1148,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 282.0,
+	"side_bar_width": 364.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
