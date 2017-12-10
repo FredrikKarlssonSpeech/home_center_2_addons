@@ -492,6 +492,9 @@ end;
 --- Utility function to check the integrety of the HOUSEKEEPING variable.
 =======
 --- Utility function to check the integrety of hte HOUSEKEEPING variable.
+<<<<<<< HEAD
+>>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
+=======
 >>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
 function checkHousekeepingIntegrity()
     local houseVariable = tostring(fibaro:getGlobalValue("HOUSEKEEPING"));
@@ -511,7 +514,11 @@ function checkHousekeepingIntegrity()
             -- time stamp of the time when the function was written
             -- which is unlikely to be an epoch rep. of a time event that should be executed. 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if tonumber(cmdL["id"]) == nil or tonumber(time) <= 1510469428 then
+=======
+            if tonumber(cmdL["id"]) == nil or tonumber(cmdL["id"]) <= 1510469428 then
+>>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
 =======
             if tonumber(cmdL["id"]) == nil or tonumber(cmdL["id"]) <= 1510469428 then
 >>>>>>> parent of e361e2e... New structure of HOUSEKEEPING that is easier to maintain. ["id"]={["timestamp"]=..,["cmd"]=...,["value"]=..} or with arg1 and arg2 parameters instead of "value". One such row per device id.
