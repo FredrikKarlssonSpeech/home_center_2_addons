@@ -480,20 +480,14 @@ end;
 -- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
 -- These functions all require that a HOUSEKEEPING variable is set up.
 -- @section housekeeping
-
-
-<<<<<<< HEAD
---- Functions that together provide a timed auto-off/on functionality, and other housekeeping type actions.
--- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
--- These functions all require that a HOUSEKEEPING variable is set up.
--- @section housekeeping
+-- TODO: Check the whole housekeeping structure
 
 
 --- Utility function to check the integrety of hte HOUSEKEEPING variable.
 function checkHousekeepingIntegrity()
     local houseVariable = tostring(fibaro:getGlobalValue("HOUSEKEEPING"));
     local parsedVariable = json.decode(houseVariable);
-    for if,cmdList in pairs(parsedVariable) do
+    for id,cmdList in pairs(parsedVariable) do
         -- check that all keys are interpertable as epoch time stamps 
         if tonumber(k) == nil then
             return(false);
@@ -501,31 +495,30 @@ function checkHousekeepingIntegrity()
         for k,cmdL in pairs(cmdList) do
             -- Check that the load is a table and that it has the manditory fields
             if type(cmdL) ~= "table" and cmdL["time"] == nil or cmdL["cmd"] == nil then
-                return(false);
+                error("The command table is not well formed or does not contain manditory fields cmd and time!");
             end;
             -- basic checks of structure:
             -- here we check that the time stamp is a number, and that it is larger than the 
             -- time stamp of the time when the function was written
             -- which is unlikely to be an epoch rep. of a time event that should be executed. 
             if tonumber(cmdL["time"]) == nil or tonumber(cmdL["time"]) <= 1510469428 then
-                return(false);
+                error("The time field is not a number!");
             end;
             -- Check that commands that require a paramter gets one
             -- commnads I know about are these: 
             local oneArg ={"setValue","setSetpointMode","setMode","setFanMode","setVolume","setInterval","pressButton","setFanMode"};
             if tableValueExists(oneArg,cmdL["cmd"] ) and cmdL["value"] == nil then
-                return(false);
+                error("The cmd is one that takes one argument, but this is not supplied correctly!");
             end; 
             -- commands that I know have 2 arguments
             -- these should have a "arg1" and "arg2" specification in the command structure
             local twoArgs ={"setThermostatSetpoint","setSlider","setProperty"};
             if tableValueExists(twoArgs,cmdL["cmd"] ) and (cmdL["arg1"] == nil or cmdL["arg2"] == nil) then
-                return(false);
+                error("The cmd is one that takes two arguments, but they are not supplied correctly!");
+
             end;
         end       
     end;
-    -- Is the function has not returned due to en error before, the structure seems fine.
-    return(true);
 end;
 
 
@@ -602,8 +595,10 @@ function doHousekeeping()
     end;
     -- Get data
     local houseVariable = tostring(fibaro:getGlobalValue('HOUSEKEEPING'));
-    local parsedVariable = json.decode(houseVariable) ; 
-    for id,cmdStruct in pairs(parsedvariable) do
+    fibaro:debug("GOT: " .. houseVariable);
+    local parsedVariable = json.decode(houseVariable) ;
+    debugTable(parsedVariable) ;
+    for id,cmdStruct in pairs(parsedVariable) do
         now = os.time();
         local time = cmdStruct["time"];
         -- check whether the stored execution time is now or has passed.
@@ -615,8 +610,14 @@ function doHousekeeping()
                 fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
                 printHousekeeing();
             end;
+            -- Now remove the executed schedule
+            parsedVariable[tostring(id)]  = nil;
         end;
     end;
+    -- print and store the modified housekeeping scedule
+    local outString = json.encode(parsedVariable);
+    fibaro:debug("Setting Housekeeping tasks: "..outString);
+    fibaro:setGlobal('HOUSEKEEPING',outString);
 end;
 
 --- A utility function that may be used for printing the current housekeeping schedule.
