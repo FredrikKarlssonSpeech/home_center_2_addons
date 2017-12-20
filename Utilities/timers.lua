@@ -603,9 +603,12 @@ function doHousekeeping()
         local time = cmdStruct["time"];
         -- check whether the stored execution time is now or has passed.
         if time ~= nil and tonumber(time) <= now then
-            if #cmdStruct == 1 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]));
-            elseif #cmdStruct == 2 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
-            elseif #cmdStruct == 3 then fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
+            if cmdStruct["cmd"] ~= nil and cmdStruct["arg1"] ~= nil and cmdStruct["arg2"] ~= nil then
+                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
+            elseif cmdStruct["cmd"] ~= nil and cmdStruct["value"] ~= nil then
+                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
+            elseif cmdStruct["cmd"] ~= nil then
+                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]));
             else
                 fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
                 printHousekeeing();
