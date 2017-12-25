@@ -63,64 +63,7 @@ function timeIsInRange (startTimeString, endTimeString)
     return ( (startTimeEpoch <= now ) and (endTimeEpoch >= now));
 end;
 
---- A function that indicates whether today is one of the weekdays named in the given list.
--- A call 'isDayofWeek({"Mon","Tues"})' will return true on Wednesdays and Tuesdays, but not other days.
--- @tparam {string} dayList A list of names of weekdays in a long (e.g. "Friday") or short (e.g. "Fri") format.
--- @treturn boolean A boolean (true /false) indicating whether the short name of today is given in the list.
--- @usage print(isDayOfWeek{"Sun"})
--- -- This will print "true" on Sundays, but not on other weekdays
---  
 
-function isDayOfWeek (dayList)
-    local today = os.date("%a",os.time());
-    local longToday = os.date("%A",os.time());
-    for i, v in ipairs(dayList) do
-        if today == v or longToday == v then
-            return(true);
-        end;
-    end;
-    return(false);
-end;
-
---- Simple function that returns true if today is a weekday.
--- A weekday is defined as Monday-Friday.
--- @treturn boolean A boolean (true/false)
-
-function isWeekDay ()
-    local today = tonumber(os.date("%w",os.time()));
-    -- Please note that this specification is 0-6 range, sunday=0
-    return (not (today == 0 or today == 6));
-end;
-
--- Simple function that returns true if tomorrow is a weekday.
--- A weekday is defined as Monday-Friday.
--- @treturn boolean A boolean (true/false)
-
-function isWeekDayTomorrow ()
-    local today = tonumber(os.date("%w",os.time()));
-    -- Please note that this specification is 0-6 range, sunday=0
-    return (not (today == 5 or today == 6));
-end;
-
---- Simple function that returns true if today is part of the weekend.
--- A weekday is defined as Saturday or Sunday
--- @treturn boolean A boolean (true/false)
-
-
-function isWeekEnd ()
-    local today = tonumber(os.date("%w",os.time()));
-    return (today == 0 or today == 6);
-end;
-
---- Simple function that returns true if tomorrow is part of the weekend.
--- A weekday is defined as Saturday or Sunday
--- @treturn boolean A boolean (true/false)
-
-
-function isWeekEndTomorrow ()
-    local today = tonumber(os.date("%w",os.time()));
-    return (today == 5 or today == 6);
-end;
 
 --- Check whether current time is before a specified time.
 -- The function is designed to work well in a chain of checks, and therefore also makes sure that
@@ -480,8 +423,7 @@ end;
 -- Useful for devices that do not have this functionality themselves, or for delayed OFF or ON that are outside of the time range offered by the device internally.
 -- These functions all require that a HOUSEKEEPING variable is set up.
 -- @section housekeeping
--- TODO: Check the whole housekeeping structure
-
+-- TODO: gör om strukturen så att man även kan säta en variabel till ett värde
 
 --- Utility function to check the integrety of hte HOUSEKEEPING variable.
 function checkHousekeepingIntegrity()
@@ -489,9 +431,10 @@ function checkHousekeepingIntegrity()
     local parsedVariable = json.decode(houseVariable);
     for id,cmdList in pairs(parsedVariable) do
         -- check that all keys are interpertable as epoch time stamps 
-        if tonumber(k) == nil then
-            return(false);
+        if tonumber(id) == nil or fibaro:getGlobal(id) == nil then
+            error("The 'id' field must be either a device ID or the name of a global variable!");
         end;
+
         for k,cmdL in pairs(cmdList) do
             -- Check that the load is a table and that it has the manditory fields
             if type(cmdL) ~= "table" and cmdL["time"] == nil or cmdL["cmd"] == nil then
@@ -542,7 +485,7 @@ end;
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
 -- registerHousekeepingTask({10,11,13},25,"turnOn")
 -- -- This will turn devices 10,11 and 13 on after 25 seconds.
--- TODO: kolla så att denna funktion verkligen fungerar!
+-- TODO: gör om strukturen så att man även kan säta en variabel till ett värde
 
 function registerHousekeepingTask(deviceIDs, delaySeconds, command )
     local command = command or "turnOff";
@@ -586,7 +529,7 @@ end;
 --- A procedure that performs housekeeping tasks
 -- It uses the HOUSEKEEPING variable and interprets the time schedule in there. Keys in the table should be the time when tasks should be perfomrmed.
 -- The value should be a list of command specifications.
-
+-- TODO: kolla så att denna funktion verkligen fungerar!
 function doHousekeeping()
     if not pcall(checkHousekeepingIntegrity) then 
         fibaro:debug("ERROR: HOUSEKEEPING tasks are not well structured. Performing reset. No taks will be performed, so you need to initiate them again.")
@@ -603,16 +546,29 @@ function doHousekeeping()
         local time = cmdStruct["time"];
         -- check whether the stored execution time is now or has passed.
         if time ~= nil and tonumber(time) <= now then
-            if cmdStruct["cmd"] ~= nil and cmdStruct["arg1"] ~= nil and cmdStruct["arg2"] ~= nil then
-                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
-            elseif cmdStruct["cmd"] ~= nil and cmdStruct["value"] ~= nil then
-                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
-            elseif cmdStruct["cmd"] ~= nil then
-                fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]));
+            -- section for device commands
+            if tonumber(id) ~= nil then
+                if cmdStruct["cmd"] ~= nil and cmdStruct["arg1"] ~= nil and cmdStruct["arg2"] ~= nil then
+                    fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["arg1"]),tostring(cmdStruct["arg2"]));
+                elseif cmdStruct["cmd"] ~= nil and cmdStruct["value"] ~= nil then
+                    fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]),tostring(cmdStruct["value"]));
+                elseif cmdStruct["cmd"] ~= nil then
+                    fibaro:call(tonumber(id),tostring(cmdStruct["cmd"]));
+                else
+                    fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
+                    printHousekeeing();
+                end;
             else
-                fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
-                printHousekeeing();
+                -- in this case, the ID is a string, which means that it is a variable
+                if cmdStruct["cmd"] ~= nil then
+                    local value = tostring(cmdStruct["cmd"]);
+                    fibaro:setGlobal(id,value);
+                else
+                    fibaro:debug("ERROR: The HOUSEKEEPING structure is not well formed. Please check the one associated with time ".. tostring(time));
+                    printHousekeeing();
+                end;
             end;
+
             -- Now remove the executed schedule
             parsedVariable[tostring(id)]  = nil;
         end;
