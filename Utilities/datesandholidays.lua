@@ -1,5 +1,14 @@
 
--- TODO: check these functions in HC2
+
+--- The function below are concerned with parsing and handling of dates, and with holidays.
+-- @section holidayanddates
+
+
+--- A holiday structure template that works for Sweden in 2018.
+-- @table THIS_YEARS_HOLIDAYS
+-- @field name The name of the holiday
+-- @field start The date on which the holiday starts. It could be specified in a full specification "YYYY-MM-DD" or in a yearless format "DD/MM". 
+-- @field end The date on which the holiday starts. It could be specified in a full specification "YYYY-MM-DD" or in a yearless format "DD/MM". The ending date is inclusive and will be interpreted correctly until "23:59:59" that day.
 THIS_YEARS_HOLIDAYS = {
     {["name"]="Jul",["start"]="24/12",["end"]="26/12"},
     {["name"]="Nyår",["start"]="31/12",["end"]="1/1"},
@@ -21,11 +30,11 @@ THIS_YEARS_HOLIDAYS = {
 function setHolidayStates(holidayStructure)
     local setValue =tostring(fibaro:getGlobalValue("PartOfWeekToday"));
     if isHoliday(holidayStructure) and setValue ~= "Holiday" then
-        fibaro:setGlobalValue("PartOfWeekToday","Holiday");
+        fibaro:setGlobal("PartOfWeekToday","Holiday");
     end;
     setValue =tostring(fibaro:getGlobalValue("PartOfWeekTomorrow"))
     if isHolidayTomorrow(holidayStructure) and setValue ~= "Holiday" then
-        fibaro:setGlobalValue("PartOfWeekTomorrow","Holiday");
+        fibaro:setGlobal("PartOfWeekTomorrow","Holiday");
     end;
 end;
 
