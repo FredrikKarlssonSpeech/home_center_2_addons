@@ -1,4 +1,4 @@
--- TODO: do documentation for this file
+
 -- TODO: check these functions in HC2
 THIS_YEARS_HOLIDAYS = {
     {["name"]="Jul",["start"]="24/12",["end"]="26/12"},
@@ -13,18 +13,25 @@ THIS_YEARS_HOLIDAYS = {
     {["name"]="Alla helgons dag",["start"]="2018-11-03",["end"]="2018-11-03"},
 }
 
+--- The main function for setting Holiday mode for the house.
+-- Input to the function is a structure containg the specifications of which days are holidays this year. 
+-- An example structure is priovided in @{\\THIS_YEARS_HOLIDAYS}.
+-- @tparam table holidayStructure An array of tables, where each subtable should have "name", "start" and "end" fields.
+
 function setHolidayStates(holidayStructure)
-    local setValue =tostring(fibaro:getGlobalValue("PartOfWeekToday"))
+    local setValue =tostring(fibaro:getGlobalValue("PartOfWeekToday"));
     if isHoliday(holidayStructure) and setValue ~= "Holiday" then
-        fibaro:setGlobalValue("PartOfWeekToday","Holiday")
+        fibaro:setGlobalValue("PartOfWeekToday","Holiday");
     end;
     setValue =tostring(fibaro:getGlobalValue("PartOfWeekTomorrow"))
     if isHolidayTomorrow(holidayStructure) and setValue ~= "Holiday" then
-        fibaro:setGlobalValue("PartOfWeekTomorrow","Holiday")
+        fibaro:setGlobalValue("PartOfWeekTomorrow","Holiday");
     end;
 end;
 
-
+--- Gets the name of the Holiday that is currently celebrated according to the _holidayStructure_ structure.
+-- @tparam table holidayStructure An array of tables, where each subtable should have "name", "start" and "end" fields.
+-- @return The name of the currently celebrated holiday, or _nil_ if we are not having a special celebration.
 function getHoliday(holidayStructure)
     for k,hstr in pairs(holidayStructure) do
         if isBetweenDates(today(),hstr["start"],hstr["end"]) then
@@ -34,6 +41,9 @@ function getHoliday(holidayStructure)
     return(nil);
 end;
 
+--- Answers the question of whether today is a holiday.
+-- @tparam table holidayStructure An array of tables, where each subtable should have "name", "start" and "end" fields.
+-- @treturn boolean An answer to the question of whether today is a holiday.
 function isHoliday(holidayStructure)
 
     for k,hstr in pairs(holidayStructure) do
@@ -44,6 +54,9 @@ function isHoliday(holidayStructure)
     return(false);
 end;
 
+--- Answers the question of whether tomorrow is a holiday.
+-- @tparam table holidayStructure An array of tables, where each subtable should have "name", "start" and "end" fields.
+-- @treturn boolean An answer to the question of whether tomorrow is a holiday.
 function isHolidayTomorrow(holidayStructure)  
     for k,hstr in pairs(holidayStructure) do
         if isBetweenDates(tomorrow(),hstr["start"],hstr["end"]) then
@@ -53,10 +66,13 @@ function isHolidayTomorrow(holidayStructure)
     return(false);
 end;
 
-
-function parseDate (datestring,startOfDay)
+--- A simple date parser.
+-- @tparam string dateString The date to be parser. Could either be in the format "YYYY-MM-DD" for a specific date, or "DD/MM" for a date that is valid every year. The date formats are how you usually specify dates in Swedish.
+-- @tparam boolean startOfDay The structure returned by this function will contain 'hour', 'min' and 'sec' in addition to 'year', 'day' and 'month'. This argument tells the function whether the _time_ speficication should be based on the _beginning_ ("00:00:00") of the day (true) or end of the day ("23:59:59") (false).
+-- @treturn table A structure containging 'year', 'day', 'month', 'hour', 'min' and 'sec' fields  corresponding with the supplied arguments.
+function parseDate (dateString,startOfDay)
     -- Get an iterator that extracts date fields
-    local g =  string.gmatch(datestring, "%d+");
+    local g =  string.gmatch(dateString, "%d+");
 
     local first = g() ;
     local second = g();
@@ -88,6 +104,12 @@ function parseDate (datestring,startOfDay)
     return(dateTable);
 end;
 
+--- A function that answers the question of whether a date is inbetween two other dates.
+-- @tparam string date A date specification, either as "YYYY-MM-DD" or "DD/MM". 
+-- @tparam string startDateString The starting date of the interval, either as "YYYY-MM-DD" or "DD/MM".
+-- @tparam string endDateString The ending date of the interval, either as "YYYY-MM-DD" or "DD/MM".
+-- @see parseDate
+
 function isBetweenDates (date,startDateString, endDateString)
     local startDateTable = parseDate(startDateString,true);
     local endDateTable = parseDate(endDateString,false);
@@ -98,14 +120,27 @@ function isBetweenDates (date,startDateString, endDateString)
     return ( (startDateEpoch <= now ) and (endDateEpoch >= now));
 end;
 
+--- Correctly formated description of todays date.
+-- @treturn string A date corrensponding to today in the "YYYY-MM-DD" format.
 function today()
   return(os.date("%Y-%m-%d",tonumber(os.time())));
 end;
 
+
+--- Correctly formated description of tomorrows date.
+-- @treturn string A date corrensponding to tomorrow in the "YYYY-MM-DD" format.
 function tomorrow()
   return(os.date("%Y-%m-%d",tonumber(os.time()+24*3600)));
 end;
 
+--- Correctly formated description of todays date, but in a yearless format.
+-- @treturn string A date corrensponding to today in the "DD/MM" format.
 function todayMD()
   return(os.date("%d/%m",tonumber(os.time())));
+end;
+
+--- Correctly formated description of tomorrows date, but in a yearless format.
+-- @treturn string A date corrensponding to tomorrow in the "DD/MM" format.
+function tomorrowMD()
+  return(os.date("%d/%m",tonumber(os.time()+24*3600)));
 end;
